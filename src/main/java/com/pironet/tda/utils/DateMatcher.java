@@ -27,6 +27,8 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JOptionPane;
 
+import com.google.common.base.Strings;
+
 /**
  * @author irockel
  */
@@ -39,7 +41,7 @@ public class DateMatcher {
 
     public DateMatcher() {
         // set date parsing pattern.
-        if ((PrefManager.get().getDateParsingRegex() != null) && !PrefManager.get().getDateParsingRegex().trim().equals("")) {
+        if ((PrefManager.get().getDateParsingRegex() != null) && !Strings.isNullOrEmpty(PrefManager.get().getDateParsingRegex().trim())) {
             try {
                 regexPattern = Pattern.compile(PrefManager.get().getDateParsingRegex().trim());
                 defaultPattern = Pattern.compile("(\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d\\s\\d\\d:\\d\\d:\\d\\d).*");

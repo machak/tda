@@ -82,33 +82,29 @@ public class EditFilterDialog extends JDialog {
         buttonPanel.add(cancelButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (frame != null) {
-                    frame.setEnabled(true);
-                }
-                if (!isAdd) {
-                    Filter filter = (Filter)filterList.getModel().getElementAt(filterList.getSelectedIndex());
-                    applyFilter(filter);
-                    // reset to fire change event.
-                    ((DefaultListModel)filterList.getModel()).setElementAt(filter, filterList.getSelectedIndex());
-
-                } else {
-                    Filter filter = new Filter();
-                    applyFilter(filter);
-                    addToList(filter);
-                }
-                dispose();
+        okButton.addActionListener(e -> {
+            if (frame != null) {
+                frame.setEnabled(true);
             }
+            if (!isAdd) {
+                Filter filter = (Filter)filterList.getModel().getElementAt(filterList.getSelectedIndex());
+                applyFilter(filter);
+                // reset to fire change event.
+                ((DefaultListModel)filterList.getModel()).setElementAt(filter, filterList.getSelectedIndex());
+
+            } else {
+                Filter filter = new Filter();
+                applyFilter(filter);
+                addToList(filter);
+            }
+            dispose();
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (frame != null) {
-                    frame.setEnabled(true);
-                }
-                dispose();
+        cancelButton.addActionListener(e -> {
+            if (frame != null) {
+                frame.setEnabled(true);
             }
+            dispose();
         });
         reset();
     }

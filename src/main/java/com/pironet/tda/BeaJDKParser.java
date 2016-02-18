@@ -40,6 +40,7 @@ import com.pironet.tda.utils.IconFactory;
  * @author irockel
  */
 public class BeaJDKParser extends AbstractDumpParser {
+    private static final Pattern AT_PATTERN = Pattern.compile("@");
     private MutableTreeNode nextDump = null;
     private Map threadStore = null;
     private int counter = 1; // Number of the thread dump
@@ -201,7 +202,7 @@ public class BeaJDKParser extends AbstractDumpParser {
             String begin = line.substring(0, line.indexOf('@'));
             String monitor = line.substring(line.indexOf('@'), line.indexOf('[') + 1);
             String end = line.substring(line.indexOf('>') + 1);
-            monitor = monitor.replaceAll("@", "<a href=\"monitor://" + monitor + "\">&lt;");
+            monitor = AT_PATTERN.matcher(monitor).replaceAll("<a href=\"monitor://" + monitor + "\">&lt;");
             monitor = monitor.substring(0, monitor.length() - 1) + "&gt;</a>";
             return (begin + monitor + end);
         } else {

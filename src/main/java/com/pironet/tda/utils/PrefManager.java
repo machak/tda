@@ -34,6 +34,7 @@ import java.util.prefs.Preferences;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
+import com.google.common.base.Strings;
 import com.pironet.tda.CustomCategory;
 import com.pironet.tda.filter.Filter;
 import com.pironet.tda.filter.FilterChecker;
@@ -191,7 +192,7 @@ public class PrefManager {
 
     public String[] getDateParsingRegexs() {
         String elems = toolPrefs.get("dateParsingRegexs", "(\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d\\s\\d\\d:\\d\\d:\\d\\d).*");
-        if (elems.equals("")) {
+        if (Strings.isNullOrEmpty(elems)) {
             elems = getDateParsingRegex();
         }
         return (elems.split(PARAM_DELIM));
@@ -202,7 +203,7 @@ public class PrefManager {
     }
 
     private String regexsToString(ListModel regexs) {
-        StringBuffer elems = new StringBuffer();
+        StringBuilder elems = new StringBuilder();
         for (int i = 0; i < regexs.getSize(); i++) {
             elems.append(regexs.getElementAt(i));
             if (i + 1 < regexs.getSize()) {
@@ -218,7 +219,7 @@ public class PrefManager {
         // only add files already in it
         if (!hasInRecentFiles(file, currentFiles)) {
             int start = currentFiles.length == 10 ? 1 : 0;
-            StringBuffer recentFiles = new StringBuffer();
+            StringBuilder recentFiles = new StringBuilder();
 
             for (int i = start; i < currentFiles.length; i++) {
                 recentFiles.append(currentFiles[i]);
@@ -286,14 +287,14 @@ public class PrefManager {
     /**
      * temporary storage for filters to not to have them be parsed again
      */
-    private final java.util.List cachedFilters = new ArrayList();
+    private final java.util.List<Filter> cachedFilters = new ArrayList<>();
 
     public ListModel getFilters() {
-        DefaultListModel filters = null;
+        DefaultListModel<Filter> filters = null;
         if (this.cachedFilters.isEmpty()) {
             String filterString = toolPrefs.get("filters", "");
             if (filterString.length() > 0) {
-                filters = new DefaultListModel();
+                filters = new DefaultListModel<>();
                 String[] sFilters = filterString.split(PARAM_DELIM);
                 filters.ensureCapacity(sFilters.length);
                 try {
@@ -327,9 +328,8 @@ public class PrefManager {
      */
     private DefaultListModel getCachedFilters() {
         DefaultListModel modelFilters = new DefaultListModel();
-        Iterator it = this.cachedFilters.iterator();
-        while (it.hasNext()) {
-            modelFilters.addElement(it.next());
+        for (final Object cachedFilter : this.cachedFilters) {
+            modelFilters.addElement(cachedFilter);
         }
         return modelFilters;
     }
@@ -446,9 +446,9 @@ public class PrefManager {
     /**
      * generate the default filter set.
      */
-    private DefaultListModel getPredefinedFilters() {
+    private DefaultListModel<Filter> getPredefinedFilters() {
         Filter newFilter = new Filter("System Thread Exclusion Filter", ".*at\\s.*", Filter.HAS_IN_STACK_RULE, true, false, false);
-        DefaultListModel filters = new DefaultListModel();
+        DefaultListModel<Filter> filters = new DefaultListModel<>();
         filters.ensureCapacity(2);
         filters.add(0, newFilter);
         newFilter = new Filter("Idle Threads Filter", "", Filter.SLEEPING_RULE, true, true, false);
@@ -458,7 +458,7 @@ public class PrefManager {
 
     public void setFilters(DefaultListModel filters) {
         // store into cache
-        StringBuffer filterString = new StringBuffer();
+        StringBuilder filterString = new StringBuilder();
         for (int i = 0; i < filters.getSize(); i++) {
             if (i > 0) {
                 filterString.append(PARAM_DELIM);

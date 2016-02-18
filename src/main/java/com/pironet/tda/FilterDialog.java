@@ -80,13 +80,10 @@ public class FilterDialog extends JDialog {
         //buttonPanel.add(cancelButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        closeButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                frame.setEnabled(true);
-                filterPanel.saveSettings();
-                dispose();
-            }
+        closeButton.addActionListener(e -> {
+            frame.setEnabled(true);
+            filterPanel.saveSettings();
+            dispose();
         });
         reset();
     }

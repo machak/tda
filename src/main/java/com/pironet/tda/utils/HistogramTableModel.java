@@ -24,8 +24,11 @@
 package com.pironet.tda.utils;
 
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import javax.swing.table.AbstractTableModel;
+
+import com.google.common.base.Strings;
 
 /**
  * Provides table data model for the display of class histograms.
@@ -33,6 +36,9 @@ import javax.swing.table.AbstractTableModel;
  * @author irockel
  */
 public class HistogramTableModel extends AbstractTableModel {
+    private static final Pattern LT_PATTERN = Pattern.compile("<");
+    private static final Pattern GT_PATTERN = Pattern.compile(">");
+    private static final Pattern BR_PATTERN = Pattern.compile("\\[\\]");
     private static int DEFINED_ROWS = 3;
 
     private Vector elements = new Vector();
@@ -154,7 +160,7 @@ public class HistogramTableModel extends AbstractTableModel {
             value = value.toLowerCase();
         }
 
-        if (((value) == null || value.equals("")) && isShowHotspotClasses()) {
+        if (Strings.isNullOrEmpty(value) && isShowHotspotClasses()) {
             filteredElements = null;
         } else {
             filteredElements = new Vector();
@@ -164,7 +170,7 @@ public class HistogramTableModel extends AbstractTableModel {
                         filteredElements.add(elements.get(i));
                     }
                 } else {
-                    if (isNotHotspotClass(((Entry)elements.get(i)).className) && (value.equals("") || (((Entry)elements.get(i)).className.indexOf(value) >= 0))) {
+                    if (isNotHotspotClass(((Entry)elements.get(i)).className) && (Strings.isNullOrEmpty(value) || (((Entry)elements.get(i)).className.indexOf(value) >= 0))) {
                         filteredElements.add(elements.get(i));
                     }
                 }
@@ -235,8 +241,8 @@ public class HistogramTableModel extends AbstractTableModel {
             } else if (className.trim().endsWith("[L")) {
                 result = "<html><body><b>long[]</b></body></html>";
             } else if (className.trim().startsWith("<")) {
-                className = className.replaceAll("<", "&lt;");
-                className = className.replaceAll(">", "&gt;");
+                className = LT_PATTERN.matcher(className).replaceAll("&lt;");
+                className = GT_PATTERN.matcher(className).replaceAll("&gt;");
                 result = "<html><body><i><b>" + className + "</i></b> [internal HotSpot]</i></body></html>";
             } else if (className.lastIndexOf('.') > 0) {
                 /*if(className.indexOf("OutOfMemory") >= 0) {
@@ -247,7 +253,7 @@ public class HistogramTableModel extends AbstractTableModel {
                         className.substring(className.lastIndexOf('.') + 1) + "</b></body></html>";
             }
             if (className.trim().startsWith("[[")) {
-                result = result.replaceAll("\\[\\]", "[][]");
+                result = BR_PATTERN.matcher(result).replaceAll("[][]");
             }
 
             return (result);

@@ -83,11 +83,7 @@ public class InfoDialog extends JDialog {
         getContentPane().add(new JLabel(""), BorderLayout.EAST);
         getContentPane().add(new JLabel(""), BorderLayout.WEST);
         JButton okButton = new JButton("Close");
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        okButton.addActionListener(e -> dispose());
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(okButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);

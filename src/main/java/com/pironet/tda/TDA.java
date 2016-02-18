@@ -107,6 +107,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.google.common.base.Strings;
 import com.pironet.tda.jconsole.MBeanDumper;
 import com.pironet.tda.utils.AppInfo;
 import com.pironet.tda.utils.Browser;
@@ -250,54 +251,51 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         emptyPane.setEditable(false);
 
         htmlPane.addHyperlinkListener(
-                new HyperlinkListener() {
-                    public void hyperlinkUpdate(HyperlinkEvent evt) {
-                        // if a link was clicked
-                        if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                            if (evt.getDescription().startsWith("monitor")) {
-                                navigateToMonitor(evt.getDescription());
-                            } else if (evt.getDescription().startsWith("dump")) {
-                                navigateToDump();
-                            } else if (evt.getDescription().startsWith("wait")) {
-                                navigateToChild("Threads waiting");
-                            } else if (evt.getDescription().startsWith("sleep")) {
-                                navigateToChild("Threads sleeping");
-                            } else if (evt.getDescription().startsWith("dead")) {
-                                navigateToChild("Deadlocks");
-                            } else if (evt.getDescription().startsWith("threaddump")) {
-                                addMXBeanDump();
-                            } else if (evt.getDescription().startsWith("openlogfile") && !evt.getDescription().endsWith("//")) {
-                                File[] files = {new File(evt.getDescription().substring(14))};
-                                openFiles(files, false);
-                            } else if (evt.getDescription().startsWith("openlogfile")) {
-                                chooseFile();
-                            } else if (evt.getDescription().startsWith("opensession") && !evt.getDescription().endsWith("//")) {
-                                File file = new File(evt.getDescription().substring(14));
-                                openSession(file, true);
-                            } else if (evt.getDescription().startsWith("opensession")) {
-                                openSession();
-                            } else if (evt.getDescription().startsWith("preferences")) {
-                                showPreferencesDialog();
-                            } else if (evt.getDescription().startsWith("filters")) {
-                                showFilterDialog();
-                            } else if (evt.getDescription().startsWith("categories")) {
-                                showCategoriesDialog();
-                            } else if (evt.getDescription().startsWith("overview")) {
-                                showHelp();
-                            } else if (evt.getURL() != null) {
-                                try {
-                                    // launch a browser with the appropriate URL
-                                    Browser.open(evt.getURL().toString());
-                                } catch (InterruptedException e) {
-                                    System.out.println("Error launching external browser.");
-                                } catch (IOException e) {
-                                    System.out.println("I/O error launching external browser." + e.getMessage());
-                                    e.printStackTrace();
-                                }
+                evt -> {
+                    // if a link was clicked
+                    if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                        if (evt.getDescription().startsWith("monitor")) {
+                            navigateToMonitor(evt.getDescription());
+                        } else if (evt.getDescription().startsWith("dump")) {
+                            navigateToDump();
+                        } else if (evt.getDescription().startsWith("wait")) {
+                            navigateToChild("Threads waiting");
+                        } else if (evt.getDescription().startsWith("sleep")) {
+                            navigateToChild("Threads sleeping");
+                        } else if (evt.getDescription().startsWith("dead")) {
+                            navigateToChild("Deadlocks");
+                        } else if (evt.getDescription().startsWith("threaddump")) {
+                            addMXBeanDump();
+                        } else if (evt.getDescription().startsWith("openlogfile") && !evt.getDescription().endsWith("//")) {
+                            File[] files = {new File(evt.getDescription().substring(14))};
+                            openFiles(files, false);
+                        } else if (evt.getDescription().startsWith("openlogfile")) {
+                            chooseFile();
+                        } else if (evt.getDescription().startsWith("opensession") && !evt.getDescription().endsWith("//")) {
+                            File file = new File(evt.getDescription().substring(14));
+                            openSession(file, true);
+                        } else if (evt.getDescription().startsWith("opensession")) {
+                            openSession();
+                        } else if (evt.getDescription().startsWith("preferences")) {
+                            showPreferencesDialog();
+                        } else if (evt.getDescription().startsWith("filters")) {
+                            showFilterDialog();
+                        } else if (evt.getDescription().startsWith("categories")) {
+                            showCategoriesDialog();
+                        } else if (evt.getDescription().startsWith("overview")) {
+                            showHelp();
+                        } else if (evt.getURL() != null) {
+                            try {
+                                // launch a browser with the appropriate URL
+                                Browser.open(evt.getURL().toString());
+                            } catch (InterruptedException e) {
+                                System.out.println("Error launching external browser.");
+                            } catch (IOException e) {
+                                System.out.println("I/O error launching external browser." + e.getMessage());
+                                e.printStackTrace();
                             }
                         }
                     }
-
                 });
 
 
@@ -487,8 +485,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         String locks = mBeanDumper.findDeadlock();
 
         // if deadlocks were found, append them to dump output.
-        if (locks != null && !"".equals(locks)) {
-            dump += "\n" + locks;
+        if (!Strings.isNullOrEmpty(locks)) {
+            dump += '\n' + locks;
         }
         //System.out.println(dump);
         if (topNodes == null) {
@@ -775,14 +773,14 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             // query list of L&Fs
             UIManager.LookAndFeelInfo[] plafs = UIManager.getInstalledLookAndFeels();
 
-            if ((plaf != null) && (!"".equals(plaf))) {
+            if (!Strings.isNullOrEmpty(plaf)) {
 
                 String[] instPlafs = plaf.split(",");
                 search:
-                for (int i = 0; i < instPlafs.length; i++) {
-                    for (int j = 0; j < plafs.length; j++) {
-                        currentLAFI = plafs[j];
-                        if (currentLAFI.getName().startsWith(instPlafs[i])) {
+                for (final String instPlaf : instPlafs) {
+                    for (final UIManager.LookAndFeelInfo plaf1 : plafs) {
+                        currentLAFI = plaf1;
+                        if (currentLAFI.getName().startsWith(instPlaf)) {
                             UIManager.setLookAndFeel(currentLAFI.getClassName());
                             // setup font
                             setUIFont(new FontUIResource("SansSerif", Font.PLAIN, 11));
@@ -1934,8 +1932,6 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * choose a log file.
-     *
-     * @param addFile check if a log file should be added or if tree should be cleared.
      */
     private void chooseFile() {
         if (firstFile && (PrefManager.get().getPreferredSizeFileChooser().height > 0)) {
@@ -2404,11 +2400,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         }
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+        javax.swing.SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
 
     /**

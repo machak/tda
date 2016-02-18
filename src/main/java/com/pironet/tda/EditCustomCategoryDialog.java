@@ -88,33 +88,29 @@ public class EditCustomCategoryDialog extends JDialog {
         buttonPanel.add(cancelButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (frame != null) {
-                    frame.setEnabled(true);
-                }
-                if (!isAdd) {
-                    CustomCategory cat = (CustomCategory)catList.getModel().getElementAt(catList.getSelectedIndex());
-                    applyCat(cat);
-                    // reset to fire change event.
-                    ((DefaultListModel)catList.getModel()).setElementAt(cat, catList.getSelectedIndex());
-
-                } else {
-                    CustomCategory cat = new CustomCategory(settingsPanel.name.getText());
-                    applyCat(cat);
-                    addToList(cat);
-                }
-                dispose();
+        okButton.addActionListener(e -> {
+            if (frame != null) {
+                frame.setEnabled(true);
             }
+            if (!isAdd) {
+                CustomCategory cat = (CustomCategory)catList.getModel().getElementAt(catList.getSelectedIndex());
+                applyCat(cat);
+                // reset to fire change event.
+                ((DefaultListModel)catList.getModel()).setElementAt(cat, catList.getSelectedIndex());
+
+            } else {
+                CustomCategory cat = new CustomCategory(settingsPanel.name.getText());
+                applyCat(cat);
+                addToList(cat);
+            }
+            dispose();
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (frame != null) {
-                    frame.setEnabled(true);
-                }
-                dispose();
+        cancelButton.addActionListener(e -> {
+            if (frame != null) {
+                frame.setEnabled(true);
             }
+            dispose();
         });
         reset();
     }

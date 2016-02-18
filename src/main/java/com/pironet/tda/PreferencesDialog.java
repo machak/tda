@@ -91,20 +91,14 @@ public class PreferencesDialog extends JDialog {
             buttonPanel.add(cancelButton);
             getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-            okButton.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    frame.setEnabled(true);
-                    saveSettings();
-                }
+            okButton.addActionListener(e -> {
+                frame.setEnabled(true);
+                saveSettings();
             });
 
-            cancelButton.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    frame.setEnabled(true);
-                    dispose();
-                }
+            cancelButton.addActionListener(e -> {
+                frame.setEnabled(true);
+                dispose();
             });
         }
         reset();

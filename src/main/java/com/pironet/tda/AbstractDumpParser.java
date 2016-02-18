@@ -24,11 +24,13 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+import java.util.regex.Pattern;
 
 import javax.swing.ListModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import com.google.common.base.Strings;
 import com.pironet.tda.filter.Filter;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
@@ -44,6 +46,7 @@ import com.pironet.tda.utils.PrefManager;
  * @author irockel
  */
 public abstract class AbstractDumpParser implements DumpParser {
+    private static final Pattern MONITOR_PATTERN = Pattern.compile("monitor://");
     private BufferedReader bis = null;
 
     private int markSize = 16384;
@@ -124,9 +127,9 @@ public abstract class AbstractDumpParser implements DumpParser {
 
             while (dumpIter.hasNext()) {
                 String threadKey = ((String)dumpIter.next()).trim();
-                int occurence = 0;
 
-                if (regex == null || regex.equals("") || threadKey.matches(regex)) {
+                if (Strings.isNullOrEmpty(regex) || threadKey.matches(regex)) {
+                    int occurence = 0;
                     for (int i = 1; i < dumps.length; i++) {
                         Map threads = (Map)dumpStore.get(keys.get(i));
                         if (threads.containsKey(threadKey)) {
@@ -234,7 +237,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      */
     private String fixMonitorLinks(String fixString, String dumpName) {
         if (fixString.indexOf("monitor://") > 0) {
-            fixString = fixString.replaceAll("monitor://", "monitor:/" + dumpName + "/");
+            fixString = MONITOR_PATTERN.matcher(fixString).replaceAll("monitor:/" + dumpName + "/");
         }
         return (fixString);
     }
@@ -410,7 +413,7 @@ public abstract class AbstractDumpParser implements DumpParser {
             for (int j = 0; j < threads.getNodeCount(); j++) {
                 Iterator filterIter = ((CustomCategory)cats.getElementAt(i)).iterOfFilters();
                 boolean matches = true;
-                ThreadInfo ti = (ThreadInfo)((DefaultMutableTreeNode)threads.getNodeAt(j)).getUserObject();
+                ThreadInfo ti = (ThreadInfo)threads.getNodeAt(j).getUserObject();
                 while (matches && filterIter.hasNext()) {
                     Filter filter = (Filter)filterIter.next();
                     matches = filter.matches(ti, true);

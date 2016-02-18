@@ -81,35 +81,31 @@ public class LongThreadDialog extends JDialog {
         buttonPanel.add(cancelButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int divider = 0;
-                if (backRef.isThreadDisplay()) {
-                    divider = backRef.topSplitPane.getDividerLocation();
-                }
-
-                if (TDA.frame != null) {
-                    TDA.frame.setEnabled(true);
-                }
-                ((Logfile)top.getUserObject()).getUsedParser().findLongRunningThreads(top, threadDumps, dumps, Integer.parseInt(settingsPanel.minOccurenceField.getText()), settingsPanel.threadRegExField.getText());
-                backRef.createTree();
-                backRef.tree.expandRow(1);
-
-                backRef.getRootPane().revalidate();
-                if (divider > 0) {
-                    backRef.topSplitPane.setDividerLocation(divider);
-                }
-                dispose();
+        okButton.addActionListener(e -> {
+            int divider = 0;
+            if (backRef.isThreadDisplay()) {
+                divider = backRef.topSplitPane.getDividerLocation();
             }
+
+            if (TDA.frame != null) {
+                TDA.frame.setEnabled(true);
+            }
+            ((Logfile)top.getUserObject()).getUsedParser().findLongRunningThreads(top, threadDumps, dumps, Integer.parseInt(settingsPanel.minOccurenceField.getText()), settingsPanel.threadRegExField.getText());
+            backRef.createTree();
+            backRef.tree.expandRow(1);
+
+            backRef.getRootPane().revalidate();
+            if (divider > 0) {
+                backRef.topSplitPane.setDividerLocation(divider);
+            }
+            dispose();
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (TDA.frame != null) {
-                    TDA.frame.setEnabled(true);
-                }
-                dispose();
+        cancelButton.addActionListener(e -> {
+            if (TDA.frame != null) {
+                TDA.frame.setEnabled(true);
             }
+            dispose();
         });
         reset();
     }

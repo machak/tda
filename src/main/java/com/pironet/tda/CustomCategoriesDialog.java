@@ -76,12 +76,10 @@ public class CustomCategoriesDialog extends JDialog {
         buttonPanel.add(closeButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.setEnabled(true);
-                categoriesPanel.saveSettings();
-                dispose();
-            }
+        closeButton.addActionListener(e -> {
+            frame.setEnabled(true);
+            categoriesPanel.saveSettings();
+            dispose();
         });
         reset();
     }

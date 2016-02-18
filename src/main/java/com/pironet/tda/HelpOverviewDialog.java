@@ -82,24 +82,22 @@ public class HelpOverviewDialog extends JDialog {
         }
 
         htmlView.addHyperlinkListener(
-                new HyperlinkListener() {
-                    public void hyperlinkUpdate(HyperlinkEvent evt) {
-                        // if a link was clicked
-                        if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                            try {
-                                if (evt.getURL().toString().indexOf("#") >= 0) {
-                                    // show internal anchors in editor pane.
-                                    htmlView.setPage(evt.getURL());
-                                } else {
-                                    // launch a browser with the appropriate URL
-                                    Browser.open(evt.getURL().toString());
-                                }
-                            } catch (InterruptedException e) {
-                                System.out.println("Error launching external browser.");
-                            } catch (IOException e) {
-                                System.out.println("I/O error launching external browser." + e.getMessage());
-                                e.printStackTrace();
+                evt -> {
+                    // if a link was clicked
+                    if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                        try {
+                            if (evt.getURL().toString().indexOf("#") >= 0) {
+                                // show internal anchors in editor pane.
+                                htmlView.setPage(evt.getURL());
+                            } else {
+                                // launch a browser with the appropriate URL
+                                Browser.open(evt.getURL().toString());
                             }
+                        } catch (InterruptedException e) {
+                            System.out.println("Error launching external browser.");
+                        } catch (IOException e) {
+                            System.out.println("I/O error launching external browser." + e.getMessage());
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -114,11 +112,7 @@ public class HelpOverviewDialog extends JDialog {
         buttonPanel.add(closeButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        closeButton.addActionListener(e -> dispose());
         getRootPane().setDefaultButton(closeButton);
     }
 

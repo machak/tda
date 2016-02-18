@@ -94,11 +94,7 @@ public class HelpViewer extends BasicContentViewerUI {
         buttonPanel.add(closeButton);
         helpFrame.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        closeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                helpFrame.dispose();
-            }
-        });
+        closeButton.addActionListener(e -> helpFrame.dispose());
         helpFrame.getRootPane().setDefaultButton(closeButton);
         helpFrame.setSize(new Dimension(900, 700));
         helpFrame.setLocationRelativeTo(owner);

@@ -61,8 +61,8 @@ public abstract class AbstractCategory extends AbstractInfo implements Category 
         setRootNode(new DefaultMutableTreeNode("root"));
 
         Arrays.sort(arrayCat, nodeComp);
-        for (int i = 0; i < arrayCat.length; i++) {
-            getRootNode().add((DefaultMutableTreeNode)arrayCat[i]);
+        for (final Object anArrayCat : arrayCat) {
+            getRootNode().add((DefaultMutableTreeNode)anArrayCat);
         }
 
         // reset filter.

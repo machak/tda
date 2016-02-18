@@ -50,11 +50,11 @@ public class MonitorMap implements Serializable {
      */
     public static final int SLEEP_THREAD_POS = 2;
 
-    private Map monitorMap = null;
+    private Map<String, Object> monitorMap = null;
 
     public void addToMonitorMap(String key, Map[] objectSet) {
         if (monitorMap == null) {
-            monitorMap = new HashMap();
+            monitorMap = new HashMap<>();
         }
 
         monitorMap.put(key, objectSet);
