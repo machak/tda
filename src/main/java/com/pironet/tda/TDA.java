@@ -91,7 +91,6 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MenuEvent;
@@ -231,7 +230,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
         //Create the HTML viewing pane.
         if (!this.runningAsVisualVMPlugin && !this.runningAsJConsolePlugin) {
-            InputStream is = TDA.class.getResourceAsStream("doc/welcome.html");
+            InputStream is = TDA.class.getResourceAsStream("/doc/welcome.html");
 
             htmlPane = new JEditorPane();
             String welcomeText = parseWelcomeURL(is);
@@ -392,7 +391,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         BufferedReader br = null;
         String resultString = null;
 
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         try {
             br = new BufferedReader(new InputStreamReader(is));
@@ -401,11 +400,11 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 result.append('\n');
             }
             resultString = result.toString();
-            resultString = resultString.replaceFirst("./important.png", TDA.class.getResource("doc/important.png").toString());
-            resultString = resultString.replaceFirst("./logo.png", TDA.class.getResource("doc/logo.png").toString());
-            resultString = resultString.replaceFirst("./fileopen.png", TDA.class.getResource("doc/fileopen.png").toString());
-            resultString = resultString.replaceFirst("./settings.png", TDA.class.getResource("doc/settings.png").toString());
-            resultString = resultString.replaceFirst("./help.png", TDA.class.getResource("doc/help.png").toString());
+            resultString = resultString.replaceFirst("./important.png", TDA.class.getResource("/doc/important.png").toString());
+            resultString = resultString.replaceFirst("./logo.png", TDA.class.getResource("/doc/logo.png").toString());
+            resultString = resultString.replaceFirst("./fileopen.png", TDA.class.getResource("/doc/fileopen.png").toString());
+            resultString = resultString.replaceFirst("./settings.png", TDA.class.getResource("/doc/settings.png").toString());
+            resultString = resultString.replaceFirst("./help.png", TDA.class.getResource("/doc/help.png").toString());
             resultString = resultString.replaceFirst("<!-- ##tipofday## -->", TipOfDay.getTipOfDay());
             resultString = resultString.replaceFirst("<!-- ##recentlogfiles## -->", getAsTable("openlogfile://", PrefManager.get().getRecentFiles()));
             resultString = resultString.replaceFirst("<!-- ##recentsessions## -->", getAsTable("opensession://", PrefManager.get().getRecentSessions()));
@@ -1978,7 +1977,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * Returns an ImageIcon, or null if the path was invalid.
      */
     public static ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = TDA.class.getResource("icons/" + path);
+        java.net.URL imgURL = TDA.class.getResource("/icons/" + path);
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         } else {
@@ -2391,7 +2390,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         }
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(() -> createAndShowGUI());
+        javax.swing.SwingUtilities.invokeLater(TDA::createAndShowGUI);
     }
 
     /**

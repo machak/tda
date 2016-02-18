@@ -91,7 +91,10 @@ public class LongThreadDialog extends JDialog {
             if (TDA.frame != null) {
                 TDA.frame.setEnabled(true);
             }
-            ((Logfile)top.getUserObject()).getUsedParser().findLongRunningThreads(top, threadDumps, dumps, Integer.parseInt(settingsPanel.minOccurenceField.getText()), settingsPanel.threadRegExField.getText());
+            final Object userObject = top.getUserObject();
+            if (userObject instanceof Logfile) {
+                ((Logfile)userObject).getUsedParser().findLongRunningThreads(top, threadDumps, dumps, Integer.parseInt(settingsPanel.minOccurenceField.getText()), settingsPanel.threadRegExField.getText());
+            }
             backRef.createTree();
             backRef.tree.expandRow(1);
 

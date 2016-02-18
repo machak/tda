@@ -47,7 +47,7 @@ public class TipOfDay {
     private static void loadTips() {
         tips = new Properties();
         try {
-            tips.load(TDA.class.getResourceAsStream("doc/tips.properties"));
+            tips.load(TDA.class.getResourceAsStream("/doc/tips.properties"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
