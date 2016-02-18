@@ -33,6 +33,7 @@ import java.util.Map;
  */
 public class DumpStore implements Serializable {
 
+    private static final long serialVersionUID = 4953625540097603774L;
     private Map dumpFiles;
 
     /**

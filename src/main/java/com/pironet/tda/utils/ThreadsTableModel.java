@@ -35,6 +35,7 @@ import com.pironet.tda.ThreadInfo;
  */
 public class ThreadsTableModel extends AbstractTableModel {
 
+    private static final long serialVersionUID = -2199750860382621693L;
     private Vector elements;
 
     private String[] columnNames = null;

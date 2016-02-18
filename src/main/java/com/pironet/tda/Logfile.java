@@ -28,6 +28,7 @@ package com.pironet.tda;
  * @author irockel
  */
 public class Logfile extends AbstractInfo {
+    private static final long serialVersionUID = -5280565325291319310L;
     private String content;
     private DumpParser usedParser;
 

@@ -83,7 +83,7 @@ public class MBeanDumper {
             RuntimeMXBean rmbean = (RuntimeMXBean)ManagementFactory.newPlatformMXBeanProxy(server,
                     ManagementFactory.RUNTIME_MXBEAN_NAME,
                     RuntimeMXBean.class);
-            dumpPrefix += rmbean.getVmName() + " " + rmbean.getVmVersion() + "\n";
+            dumpPrefix += rmbean.getVmName() + ' ' + rmbean.getVmVersion() + '\n';
             javaVersion = rmbean.getVmVersion();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -152,7 +152,7 @@ public class MBeanDumper {
     private void dumpThreadInfo(StringBuilder dump) {
         dump.append(getDumpDate());
         dump.append(dumpPrefix);
-        dump.append("\n");
+        dump.append('\n');
         long[] tids = tmbean.getAllThreadIds();
         ThreadInfo[] tinfos = tmbean.getThreadInfo(tids, Integer.MAX_VALUE);
         for (ThreadInfo ti : tinfos) {
@@ -166,7 +166,7 @@ public class MBeanDumper {
     private void dumpThreadInfoWithLocks(StringBuilder dump) {
         dump.append(getDumpDate());
         dump.append(dumpPrefix);
-        dump.append("\n");
+        dump.append('\n');
 
         ThreadInfo[] tinfos = tmbean.dumpAllThreads(true, true);
         int i = 0;
@@ -177,7 +177,7 @@ public class MBeanDumper {
             printLockInfo(syncs, dump);
             i++;
         }
-        dump.append("\n");
+        dump.append('\n');
     }
 
     private static String INDENT = "    ";
@@ -191,30 +191,30 @@ public class MBeanDumper {
         MonitorInfo[] monitors = ti.getLockedMonitors();
         for (int i = 0; i < stacktrace.length; i++) {
             StackTraceElement ste = stacktrace[i];
-            dump.append(INDENT + "at " + ste.toString());
-            dump.append("\n");
+            dump.append(INDENT).append("at ").append(ste.toString());
+            dump.append('\n');
             for (int j = 1; j < monitors.length; j++) {
                 MonitorInfo mi = monitors[j];
                 if (mi.getLockedStackDepth() == i) {
-                    dump.append(INDENT + "  - locked " + mi);
-                    dump.append("\n");
+                    dump.append(INDENT).append("  - locked ").append(mi);
+                    dump.append('\n');
                 }
             }
         }
-        dump.append("\n");
+        dump.append('\n');
     }
 
     private void printThread(ThreadInfo ti, StringBuilder dump) {
-        StringBuilder sb = new StringBuilder("\"" + ti.getThreadName() + "\"" +
+        StringBuilder sb = new StringBuilder('"' + ti.getThreadName() + '"' +
                 " nid=" + ti.getThreadId() + " state=" +
                 ti.getThreadState());
         if (ti.getLockName() != null && ti.getThreadState() != Thread.State.BLOCKED) {
             String[] lockInfo = ti.getLockName().split("@");
-            sb.append("\n" + INDENT + "- waiting on <0x" + lockInfo[1] + "> (a " + lockInfo[0] + ")");
-            sb.append("\n" + INDENT + "- locked <0x" + lockInfo[1] + "> (a " + lockInfo[0] + ")");
+            sb.append('\n').append(INDENT).append("- waiting on <0x").append(lockInfo[1]).append("> (a ").append(lockInfo[0]).append(')');
+            sb.append('\n').append(INDENT).append("- locked <0x").append(lockInfo[1]).append("> (a ").append(lockInfo[0]).append(')');
         } else if (ti.getLockName() != null && ti.getThreadState() == Thread.State.BLOCKED) {
             String[] lockInfo = ti.getLockName().split("@");
-            sb.append("\n" + INDENT + "- waiting to lock <0x" + lockInfo[1] + "> (a " + lockInfo[0] + ")");
+            sb.append('\n').append(INDENT).append("- waiting to lock <0x").append(lockInfo[1]).append("> (a ").append(lockInfo[0]).append(')');
         }
         if (ti.isSuspended()) {
             sb.append(" (suspended)");
@@ -223,33 +223,31 @@ public class MBeanDumper {
             sb.append(" (running in native)");
         }
         dump.append(sb.toString());
-        dump.append("\n");
+        dump.append('\n');
         if (ti.getLockOwnerName() != null) {
-            dump.append(INDENT + " owned by " + ti.getLockOwnerName() +
-                    " id=" + ti.getLockOwnerId());
-            dump.append("\n");
+            dump.append(INDENT).append(" owned by ").append(ti.getLockOwnerName()).append(" id=").append(ti.getLockOwnerId());
+            dump.append('\n');
         }
     }
 
     private void printMonitorInfo(ThreadInfo ti, MonitorInfo[] monitors, StringBuilder dump) {
-        dump.append(INDENT + "Locked monitors: count = " + monitors.length);
+        dump.append(INDENT).append("Locked monitors: count = ").append(monitors.length);
         for (MonitorInfo mi : monitors) {
-            dump.append(INDENT + "  - " + mi + " locked at \n");
+            dump.append(INDENT).append("  - ").append(mi).append(" locked at \n");
 
-            dump.append(INDENT + "      " + mi.getLockedStackDepth() +
-                    " " + mi.getLockedStackFrame());
-            dump.append("\n");
+            dump.append(INDENT).append("      ").append(mi.getLockedStackDepth()).append(' ').append(mi.getLockedStackFrame());
+            dump.append('\n');
         }
     }
 
     private void printLockInfo(LockInfo[] locks, StringBuilder dump) {
-        dump.append(INDENT + "Locked synchronizers: count = " + locks.length);
-        dump.append("\n");
+        dump.append(INDENT).append("Locked synchronizers: count = ").append(locks.length);
+        dump.append('\n');
         for (LockInfo li : locks) {
-            dump.append(INDENT + "  - " + li);
-            dump.append("\n");
+            dump.append(INDENT).append("  - ").append(li);
+            dump.append('\n');
         }
-        dump.append("\n");
+        dump.append('\n');
     }
 
     /**
@@ -273,7 +271,7 @@ public class MBeanDumper {
                 ThreadInfo ti = infos[i];
                 printThreadInfo(ti, dump);
                 printLockInfo(ti.getLockedSynchronizers(), dump);
-                dump.append("\n");
+                dump.append('\n');
             }
         } else {
             tids = tmbean.findMonitorDeadlockedThreads();

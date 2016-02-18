@@ -51,6 +51,8 @@ import com.pironet.tda.utils.ResourceManager;
  */
 public class HelpViewer extends BasicContentViewerUI {
 
+    private static final long serialVersionUID = -1291006265976646016L;
+
     public HelpViewer(JHelpContentViewer x) {
         super(x);
     }

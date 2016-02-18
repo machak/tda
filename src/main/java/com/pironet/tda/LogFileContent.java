@@ -35,6 +35,7 @@ import java.lang.ref.SoftReference;
  */
 public class LogFileContent extends AbstractInfo implements Serializable {
 
+    private static final long serialVersionUID = 7867559254324229332L;
     private String logFile;
 
     /**
@@ -89,7 +90,7 @@ public class LogFileContent extends AbstractInfo implements Serializable {
         if (contentBuffer == null) {
             contentBuffer = new StringBuffer(append);
         } else {
-            contentBuffer.append("\n");
+            contentBuffer.append('\n');
             contentBuffer.append(append);
         }
     }
@@ -108,11 +109,11 @@ public class LogFileContent extends AbstractInfo implements Serializable {
             br = new BufferedReader(new FileReader(getLogfile()));
             while (br.ready()) {
                 contentReader.append(br.readLine());
-                contentReader.append("\n");
+                contentReader.append('\n');
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            contentReader.append("The Logfile unavailable! " + ex.getMessage());
+            contentReader.append("The Logfile unavailable! ").append(ex.getMessage());
         } finally {
             try {
                 br.close();

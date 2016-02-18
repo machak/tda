@@ -88,6 +88,7 @@ import javax.swing.undo.UndoableEdit;
  * @version $Id: JEditTextArea.java,v 1.4 2008-04-27 20:31:13 irockel Exp $
  */
 public class JEditTextArea extends JComponent {
+    private static final long serialVersionUID = 3466089958347812938L;
     /**
      * Adding components with this name to the text area will place
      * them left of the horizontal scroll bar. In jEdit, the status
@@ -150,13 +151,6 @@ public class JEditTextArea extends JComponent {
         focusedComponent = this;
     }
 
-    /**
-     * Returns if this component can be traversed by pressing
-     * the Tab key. This returns false.
-     */
-    public final boolean isManagingFocus() {
-        return true;
-    }
 
     /**
      * Returns the object responsible for painting this text area.
@@ -1016,7 +1010,7 @@ public class JEditTextArea extends JComponent {
         }
 
         if (newStart < 0 || newEnd > getDocumentLength()) {
-            throw new IllegalArgumentException("Bounds out of" + " range: " + newStart + "," +
+            throw new IllegalArgumentException("Bounds out of" + " range: " + newStart + ',' +
                     newEnd);
         }
 
@@ -1653,6 +1647,9 @@ public class JEditTextArea extends JComponent {
 
     class MutableCaretEvent extends CaretEvent {
 
+        private static final long serialVersionUID = 6804963055233135557L;
+
+
         MutableCaretEvent() {
             super(JEditTextArea.this);
         }
@@ -1916,6 +1913,7 @@ public class JEditTextArea extends JComponent {
 
     class CaretUndo extends AbstractUndoableEdit {
 
+        private static final long serialVersionUID = 7419703811120730406L;
         private int start;
         private int end;
 

@@ -34,6 +34,8 @@ import javax.swing.JScrollPane;
  */
 public class ViewScrollPane extends JScrollPane {
 
+    private static final long serialVersionUID = -5518505697675098000L;
+
     /**
      * constructor for the view scroll pane
      *

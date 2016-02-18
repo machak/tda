@@ -28,6 +28,7 @@ package com.pironet.tda;
  * @author irockel
  */
 public class ThreadInfo extends AbstractInfo {
+    private static final long serialVersionUID = 2155712648208688195L;
     private String content;
     private String info;
     private int stackLines;

@@ -141,6 +141,6 @@ public class Token {
      * Returns a string representation of this token.
      */
     public String toString() {
-        return "[id=" + id + ",length=" + length + "]";
+        return "[id=" + id + ",length=" + length + ']';
     }
 }

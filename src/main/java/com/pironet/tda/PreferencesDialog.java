@@ -45,6 +45,7 @@ import com.pironet.tda.utils.PrefManager;
  * @author irockel
  */
 public class PreferencesDialog extends JDialog {
+    private static final long serialVersionUID = 280203592355018447L;
     private JTabbedPane prefsPane;
     private GeneralPanel generalPanel;
     private RegExPanel regExPanel;
@@ -144,6 +145,7 @@ public class PreferencesDialog extends JDialog {
     }
 
     class GeneralPanel extends JPanel {
+        private static final long serialVersionUID = -3956832531051247027L;
         JTextField maxLinesField;
         JTextField bufferField;
         JTextField maxLogfileSizeField;
@@ -199,6 +201,7 @@ public class PreferencesDialog extends JDialog {
     }
 
     public class RegExPanel extends JPanel implements ActionListener {
+        private static final long serialVersionUID = 6280588161904432563L;
         JComboBox dateParsingRegexs;
         JCheckBox isMillisTimeStamp;
         JCheckBox isJDK16DefaultParsing;

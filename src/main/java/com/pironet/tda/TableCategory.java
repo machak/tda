@@ -42,6 +42,7 @@ import com.pironet.tda.utils.ThreadsTableSelectionModel;
  * @author irockel
  */
 public class TableCategory extends AbstractCategory {
+    private static final long serialVersionUID = 4337743855722789741L;
     private transient JTable filteredTable;
 
     /**

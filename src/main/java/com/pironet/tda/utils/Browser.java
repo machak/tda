@@ -30,9 +30,9 @@ public class Browser {
             Runtime.getRuntime().exec(cmd);
         } else {
             if (System.getenv("BROWSER") != null) {
-                cmd = System.getenv("BROWSER") + " " + url;
+                cmd = System.getenv("BROWSER") + ' ' + url;
             } else {
-                cmd = "firefox -remote openURL(" + url + ")";
+                cmd = "firefox -remote openURL(" + url + ')';
             }
             Process p = Runtime.getRuntime().exec(cmd);
             int exitcode = p.waitFor();
@@ -76,7 +76,7 @@ public class Browser {
 
     private static String fixupURLForWindows(String url) {
         if (url.indexOf('?') == -1) {
-            return url + "?";
+            return url + '?';
         } else {
             return url + "&workaroundStupidWindowsBug";
         }

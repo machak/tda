@@ -33,6 +33,8 @@ import javax.swing.text.Utilities;
  * @version $Id: TextAreaPainter.java,v 1.1 2007-10-03 12:50:26 irockel Exp $
  */
 public class TextAreaPainter extends JComponent implements TabExpander {
+    private static final long serialVersionUID = 8179631075937538799L;
+
     /**
      * Creates a new repaint manager. This should be not be called
      * directly.
@@ -392,7 +394,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
             }
         } catch (Exception e) {
             System.err.println("Error repainting line"
-                    + " range {" + firstInvalid + ","
+                    + " range {" + firstInvalid + ','
                     + lastInvalid + "}:");
             e.printStackTrace();
         }

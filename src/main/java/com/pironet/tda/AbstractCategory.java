@@ -34,6 +34,7 @@ import com.pironet.tda.utils.PrefManager;
  * @author irockel
  */
 public abstract class AbstractCategory extends AbstractInfo implements Category {
+    private static final long serialVersionUID = 1876757304287772407L;
     private String info;
 
     private DefaultMutableTreeNode rootNode = null;

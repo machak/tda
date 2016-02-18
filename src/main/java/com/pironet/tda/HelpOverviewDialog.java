@@ -47,6 +47,7 @@ import com.pironet.tda.utils.Browser;
  * @author irockel
  */
 public class HelpOverviewDialog extends JDialog {
+    private static final long serialVersionUID = -2009111702946223543L;
     private JEditorPane htmlView;
     private JPanel buttonPanel;
     private JButton closeButton;

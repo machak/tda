@@ -44,6 +44,7 @@ import javax.swing.tree.TreePath;
  * @author irockel
  */
 public class LongThreadDialog extends JDialog {
+    private static final long serialVersionUID = -193805671504973008L;
     private JTabbedPane prefsPane;
     private SettingsPanel settingsPanel;
     private JPanel buttonPanel;
@@ -115,6 +116,7 @@ public class LongThreadDialog extends JDialog {
     }
 
     class SettingsPanel extends JPanel {
+        private static final long serialVersionUID = -7595125431909602782L;
         JTextField minOccurenceField;
         JTextField threadRegExField;
 

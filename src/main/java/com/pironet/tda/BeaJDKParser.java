@@ -170,12 +170,12 @@ public class BeaJDKParser extends AbstractDumpParser {
                             }
 
                             title = line;
-                            content = new StringBuffer("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + ">");
+                            content = new StringBuffer("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
                             content.append(line);
-                            content.append("\n");
+                            content.append('\n');
                         } else if (line.indexOf("at ") >= 0) { // enganado por [fat lock] 
                             content.append(line);
-                            content.append("\n");
+                            content.append('\n');
                         } else if (line.indexOf("-- Waiting for notification") >= 0) {
                             String newLine = linkifyMonitor(line);
                             content.append(newLine);
@@ -184,8 +184,8 @@ public class BeaJDKParser extends AbstractDumpParser {
                             }
                             sContent.append(newLine);
                             monitorStack.push(line);
-                            sContent.append("\n");
-                            content.append("\n");
+                            sContent.append('\n');
+                            content.append('\n');
                         }
                     }
                 }

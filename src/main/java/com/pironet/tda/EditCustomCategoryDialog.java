@@ -52,6 +52,7 @@ import com.pironet.tda.utils.ResourceManager;
  * @author irockel
  */
 public class EditCustomCategoryDialog extends JDialog {
+    private static final long serialVersionUID = 3634852144772181579L;
     private SettingsPanel settingsPanel;
     private JPanel buttonPanel;
     private JButton okButton;
@@ -284,7 +285,7 @@ public class EditCustomCategoryDialog extends JDialog {
         }
 
         private void moveFilter(JList fromList, JList toList, int selectedItem) {
-            Filter filter = (Filter)((DefaultListModel)fromList.getModel()).getElementAt(selectedItem);
+            Filter filter = (Filter)fromList.getModel().getElementAt(selectedItem);
             ((DefaultListModel)fromList.getModel()).removeElementAt(selectedItem);
 
             DefaultListModel dlm = ((DefaultListModel)toList.getModel());

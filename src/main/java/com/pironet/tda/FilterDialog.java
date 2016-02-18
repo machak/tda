@@ -51,6 +51,7 @@ import com.pironet.tda.utils.PrefManager;
  */
 public class FilterDialog extends JDialog {
 
+    private static final long serialVersionUID = -3634911505477870170L;
     private FilterPanel filterPanel;
     private JPanel buttonPanel;
     private JButton closeButton;
@@ -95,6 +96,7 @@ public class FilterDialog extends JDialog {
 
     public static class FilterPanel extends JPanel implements ActionListener, ListSelectionListener {
 
+        private static final long serialVersionUID = -8312551005499949573L;
         JButton addButton = null;
         JButton removeButton = null;
         JButton editButton = null;

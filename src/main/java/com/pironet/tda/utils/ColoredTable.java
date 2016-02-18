@@ -40,6 +40,7 @@ import javax.swing.table.TableModel;
  */
 public class ColoredTable extends JTable {
 
+    private static final long serialVersionUID = -2098850356424824258L;
     private DefaultTableCellRenderer whiteRenderer;
     private DefaultTableCellRenderer grayRenderer;
 

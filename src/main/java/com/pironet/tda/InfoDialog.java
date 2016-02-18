@@ -40,6 +40,8 @@ import javax.swing.JPanel;
  */
 public class InfoDialog extends JDialog {
 
+    private static final long serialVersionUID = -859417500674672433L;
+
     /**
      * Creates a new instance of PreferencesDialog
      */

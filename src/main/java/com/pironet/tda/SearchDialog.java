@@ -51,6 +51,7 @@ import com.pironet.tda.utils.ThreadsTableModel;
 public class SearchDialog extends JDialog
         implements ActionListener {
 
+    private static final long serialVersionUID = 6814998498725088722L;
     private static String SEARCH = "search";
     private static String CANCEL = "cancel";
 

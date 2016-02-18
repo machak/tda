@@ -41,6 +41,7 @@ import com.pironet.tda.utils.TreeRenderer;
  * @author irockel
  */
 public class TreeCategory extends AbstractCategory implements Serializable {
+    private static final long serialVersionUID = -5925988441369530517L;
     private transient JTree filteredCatTree;
 
     /**

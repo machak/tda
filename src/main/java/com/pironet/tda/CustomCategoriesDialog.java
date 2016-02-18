@@ -47,6 +47,7 @@ import com.pironet.tda.utils.PrefManager;
  * @author irockel
  */
 public class CustomCategoriesDialog extends JDialog {
+    private static final long serialVersionUID = 513430726616829480L;
     private CategoriesPanel categoriesPanel;
     private JPanel buttonPanel;
     private JButton closeButton;
@@ -89,6 +90,7 @@ public class CustomCategoriesDialog extends JDialog {
     }
 
     public static class CategoriesPanel extends JPanel implements ActionListener, ListSelectionListener {
+        private static final long serialVersionUID = -8505528776292393170L;
         JButton addButton = null;
         JButton removeButton = null;
         JButton editButton = null;

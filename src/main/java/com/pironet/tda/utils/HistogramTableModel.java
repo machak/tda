@@ -39,6 +39,7 @@ public class HistogramTableModel extends AbstractTableModel {
     private static final Pattern LT_PATTERN = Pattern.compile("<");
     private static final Pattern GT_PATTERN = Pattern.compile(">");
     private static final Pattern BR_PATTERN = Pattern.compile("\\[\\]");
+    private static final long serialVersionUID = -3592017205042118981L;
     private static int DEFINED_ROWS = 3;
 
     private Vector elements = new Vector();

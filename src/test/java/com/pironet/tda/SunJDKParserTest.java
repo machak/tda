@@ -92,7 +92,7 @@ public class SunJDKParserTest extends TestCase {
     /**
      * Test of isFoundClassHistograms method, of class com.pironet.tda.SunJDKParser.
      */
-    public void testIsFoundClassHistograms() throws FileNotFoundException, IOException {
+    public void testIsFoundClassHistograms() throws IOException {
         System.out.println("isFoundClassHistograms");
         DumpParser instance = null;
         FileInputStream fis = null;
@@ -156,7 +156,7 @@ public class SunJDKParserTest extends TestCase {
         try {
             fis = new FileInputStream("test/none/sapdump.log");
             Map dumpMap = new HashMap();
-            Vector topNodes = new Vector();
+            Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
@@ -214,7 +214,7 @@ public class SunJDKParserTest extends TestCase {
         try {
             fis = new FileInputStream("test/none/visualvmremote.log");
             Map dumpMap = new HashMap();
-            Vector topNodes = new Vector();
+            Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
@@ -235,7 +235,7 @@ public class SunJDKParserTest extends TestCase {
         }
     }
 
-    public void testURLThreadNameDumps() throws FileNotFoundException, IOException {
+    public void testURLThreadNameDumps() throws IOException {
         System.out.println("URLThreadNameDumpLoad");
         FileInputStream fis = null;
         DumpParser instance = null;
@@ -243,7 +243,7 @@ public class SunJDKParserTest extends TestCase {
         try {
             fis = new FileInputStream("test/none/urlthread.log");
             Map dumpMap = new HashMap();
-            Vector topNodes = new Vector();
+            Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);

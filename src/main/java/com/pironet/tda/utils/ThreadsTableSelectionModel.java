@@ -12,6 +12,7 @@ import javax.swing.JTable;
  * @author irockel
  */
 public class ThreadsTableSelectionModel extends DefaultListSelectionModel {
+    private static final long serialVersionUID = -7146401444109552942L;
     private JTable table = null;
 
     public ThreadsTableSelectionModel(JTable table) {

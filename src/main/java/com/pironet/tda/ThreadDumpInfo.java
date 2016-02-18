@@ -29,6 +29,7 @@ package com.pironet.tda;
  * @author irockel
  */
 public class ThreadDumpInfo extends AbstractInfo {
+    private static final long serialVersionUID = -8836579500765872609L;
     private int logLine;
     private int overallThreadsWaitingWithoutLocksCount;
 
@@ -329,10 +330,10 @@ public class ThreadDumpInfo extends AbstractInfo {
     public String toString() {
         StringBuffer postFix = new StringBuffer();
         if (logLine > 0) {
-            postFix.append(" at line " + getLogLine());
+            postFix.append(" at line ").append(getLogLine());
         }
         if (startTime != null) {
-            postFix.append(" around " + startTime);
+            postFix.append(" around ").append(startTime);
         }
         return (getName() + postFix);
     }

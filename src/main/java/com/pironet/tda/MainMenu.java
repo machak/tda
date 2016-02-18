@@ -43,6 +43,7 @@ import com.pironet.tda.utils.ResourceManager;
  */
 public class MainMenu extends JMenuBar {
 
+    private static final long serialVersionUID = 8259494817974805809L;
     private JMenuItem closeMenuItem;
     private JMenuItem longMenuItem;
     private JMenuItem recentFilesMenu;

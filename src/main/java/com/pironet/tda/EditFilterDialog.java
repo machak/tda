@@ -46,6 +46,7 @@ import com.pironet.tda.filter.Filter;
  * @author irockel
  */
 public class EditFilterDialog extends JDialog {
+    private static final long serialVersionUID = 4343529849233738390L;
     private SettingsPanel settingsPanel;
     private JPanel buttonPanel;
     private JButton okButton;
@@ -131,6 +132,7 @@ public class EditFilterDialog extends JDialog {
     }
 
     class SettingsPanel extends JPanel {
+        private static final long serialVersionUID = -2764167051238621316L;
         JTextField filterName = null;
         JTextField regEx = null;
         JCheckBox isExclusionFilter = null;

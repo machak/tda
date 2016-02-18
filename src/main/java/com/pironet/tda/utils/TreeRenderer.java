@@ -44,6 +44,8 @@ import com.pironet.tda.ThreadInfo;
  */
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
+    private static final long serialVersionUID = -2215501675736731645L;
+
     public TreeRenderer() {
         // empty constructor
     }

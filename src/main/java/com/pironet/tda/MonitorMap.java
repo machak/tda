@@ -49,6 +49,7 @@ public class MonitorMap implements Serializable {
      * asleep in Object.wait(), waiting to be notified.
      */
     public static final int SLEEP_THREAD_POS = 2;
+    private static final long serialVersionUID = -5663079904458231829L;
 
     private Map<String, Object> monitorMap = null;
 
@@ -110,8 +111,8 @@ public class MonitorMap implements Serializable {
                 addLockToMonitor(monitor, threadTitle, currentThread);
             }
         } else if (line.indexOf('@') > 0) {
-            String monitor = "<" + line.substring(line.indexOf('@') + 1) + "> (a " +
-                    line.substring(line.lastIndexOf(' '), line.indexOf('@')) + ")";
+            String monitor = '<' + line.substring(line.indexOf('@') + 1) + "> (a " +
+                    line.substring(line.lastIndexOf(' '), line.indexOf('@')) + ')';
             if (line.trim().startsWith("- waiting to lock") || line.trim().startsWith("- parking to wait")) {
                 addWaitToMonitor(monitor, threadTitle, currentThread);
             } else if (line.trim().startsWith("- waiting on")) {

@@ -37,7 +37,7 @@ public class AppInfo {
      * get info text for status bar if no real info is displayed.
      */
     public static String getStatusBarInfo() {
-        return (APP_SHORT_NAME + " - " + APP_FULL_NAME + " " + VERSION);
+        return (APP_SHORT_NAME + " - " + APP_FULL_NAME + ' ' + VERSION);
     }
 
     public static String getAppInfo() {

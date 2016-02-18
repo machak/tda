@@ -140,8 +140,8 @@ public abstract class AbstractDumpParser implements DumpParser {
                     if (occurence >= (minOccurence - 1)) {
                         threadCount++;
                         StringBuffer content = new StringBuffer("<body bgcolor=\"ffffff\"><b><font size=").append(TDA.getFontSizeModifier(-1)).
-                                append(">").append((String)keys.get(0)).append("</b></font><hr><pre><font size=").
-                                append(TDA.getFontSizeModifier(-1)).append(">").
+                                append('>').append((String)keys.get(0)).append("</b></font><hr><pre><font size=").
+                                append(TDA.getFontSizeModifier(-1)).append('>').
                                 append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(0))).get(threadKey), (String)keys.get(0)));
 
                         int maxLines = 0;
@@ -149,11 +149,11 @@ public abstract class AbstractDumpParser implements DumpParser {
                             if (((Map)dumpStore.get(keys.get(i))).containsKey(threadKey)) {
                                 content.append("\n\n</pre><b><font size=");
                                 content.append(TDA.getFontSizeModifier(-1));
-                                content.append(">");
+                                content.append('>');
                                 content.append(keys.get(i));
                                 content.append("</font></b><hr><pre><font size=");
                                 content.append(TDA.getFontSizeModifier(-1));
-                                content.append(">");
+                                content.append('>');
                                 content.append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(i))).get(threadKey), (String)keys.get(i)));
                                 int countLines = countLines(((String)((Map)dumpStore.get(keys.get(i))).get(threadKey)));
                                 maxLines = maxLines > countLines ? maxLines : countLines;
@@ -198,7 +198,7 @@ public abstract class AbstractDumpParser implements DumpParser {
     private String getStatInfo(Vector keys, String prefix, int minOccurence, int threadCount) {
         StringBuffer statData = new StringBuffer("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
 
-        statData.append("<b>" + prefix + "</b><hr><p><i>");
+        statData.append("<b>").append(prefix).append("</b><hr><p><i>");
         for (int i = 0; i < keys.size(); i++) {
             statData.append(keys.get(i));
             if (i < keys.size() - 1) {
@@ -217,10 +217,7 @@ public abstract class AbstractDumpParser implements DumpParser {
 
         if (threadCount == 0) {
             statData.append("<tr bgcolor=\"#ffffff\"<td></td></tr>");
-            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System " +
-                    "><p>No threads were found which occured at least " + minOccurence + " times.<br>" +
-                    "You should check your dumps for long running threads " +
-                    "or adjust the minimum occurence.</p>");
+            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System " + "><p>No threads were found which occured at least ").append(minOccurence).append(" times.<br>").append("You should check your dumps for long running threads ").append("or adjust the minimum occurence.</p>");
         }
 
         statData.append("</table>");
@@ -237,7 +234,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      */
     private String fixMonitorLinks(String fixString, String dumpName) {
         if (fixString.indexOf("monitor://") > 0) {
-            fixString = MONITOR_PATTERN.matcher(fixString).replaceAll("monitor:/" + dumpName + "/");
+            fixString = MONITOR_PATTERN.matcher(fixString).replaceAll("monitor:/" + dumpName + '/');
         }
         return (fixString);
     }

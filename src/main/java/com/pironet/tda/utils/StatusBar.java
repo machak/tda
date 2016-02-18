@@ -40,6 +40,7 @@ import javax.swing.JProgressBar;
  * @author irockel
  */
 public class StatusBar extends JPanel {
+    private static final long serialVersionUID = -3568980017536420199L;
     private JLabel infoLabel = null;
     private JProgressBar memStatus = null;
 

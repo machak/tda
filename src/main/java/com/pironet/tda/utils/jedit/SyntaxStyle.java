@@ -123,7 +123,7 @@ public class SyntaxStyle {
     public String toString() {
         return getClass().getName() + "[color=" + color +
                 (italic ? ",italic" : "") +
-                (bold ? ",bold" : "") + "]";
+                (bold ? ",bold" : "") + ']';
     }
 
     // private members

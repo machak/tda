@@ -23,6 +23,8 @@ import javax.swing.undo.UndoableEdit;
  * @version $Id: SyntaxDocument.java,v 1.1 2007-10-03 12:50:26 irockel Exp $
  */
 public class SyntaxDocument extends PlainDocument {
+    private static final long serialVersionUID = 2981519884316665080L;
+
     /**
      * Returns the token marker that is to be used to split lines
      * of this document up into tokens. May return null if this

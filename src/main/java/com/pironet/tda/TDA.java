@@ -132,6 +132,7 @@ import com.pironet.tda.utils.jedit.PopupMenu;
  * @author irockel
  */
 public class TDA extends JPanel implements ListSelectionListener, TreeSelectionListener, ActionListener, MenuListener {
+    private static final long serialVersionUID = -5752755762424187064L;
     private static JFileChooser fc;
     private static JFileChooser sessionFc;
     private static int DIVIDER_SIZE = 4;
@@ -397,7 +398,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             br = new BufferedReader(new InputStreamReader(is));
             while (br.ready()) {
                 result.append(br.readLine());
-                result.append("\n");
+                result.append('\n');
             }
             resultString = result.toString();
             resultString = resultString.replaceFirst("./important.png", TDA.class.getResource("doc/important.png").toString());
@@ -688,7 +689,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             loadSession(file, isRecent);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this.getRootPane(),
-                    "Error opening " + ex.getMessage() + ".",
+                    "Error opening " + ex.getMessage() + '.',
                     "Error opening session", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -791,7 +792,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     private String getInfoText() {
         StringBuffer info = new StringBuffer("<html><body bgcolor=\"ffffff\"><font face=\"System\" size=+2><b>");
-        info.append("<img border=0 src=\"" + TDA.class.getResource("icons/TDA.gif") + "\">" + AppInfo.getAppInfo());
+        info.append("<img border=0 src=\"").append(TDA.class.getResource("icons/TDA.gif")).append("\">").append(AppInfo.getAppInfo());
         info.append("</b></font><hr fgcolor=\"#cccccc\"><font face=\"System\"><p>");
         info.append("(C)opyright ");
         info.append(AppInfo.getCopyright());
@@ -894,7 +895,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 addDumpStream(new FileInputStream(file), file, true);
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(this.getRootPane(),
-                        "Error opening " + ex.getMessage() + ".",
+                        "Error opening " + ex.getMessage() + '.',
                         "Error opening file", JOptionPane.ERROR_MESSAGE);
             }
         }

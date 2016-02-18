@@ -30,6 +30,7 @@ import java.io.Serializable;
  * @author irockel
  */
 public abstract class AbstractInfo implements Serializable {
+    private static final long serialVersionUID = -5806988370387932415L;
     private String name;
 
     /**

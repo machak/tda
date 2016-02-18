@@ -40,6 +40,7 @@ import com.pironet.tda.TDA;
  * @author irockel
  */
 public class PopupMenu extends JPopupMenu implements ActionListener {
+    private static final long serialVersionUID = 8845186276528190221L;
     private JEditTextArea ref;
     private TDA parent;
     private JMenuItem againMenuItem;
@@ -126,7 +127,7 @@ public class PopupMenu extends JPopupMenu implements ActionListener {
     }
 
     private void gotoLine() {
-        String result = JOptionPane.showInputDialog(parent, "Type in line number (between 1-" + ref.getLineCount() + ")");
+        String result = JOptionPane.showInputDialog(parent, "Type in line number (between 1-" + ref.getLineCount() + ')');
 
         if (result != null) {
             int lineNumber = 0;
