@@ -23,6 +23,7 @@ package com.pironet.tda;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -59,11 +60,11 @@ public class BeaJDKParserTest extends TestCase {
      */
     public void testDumpLoad() throws FileNotFoundException, IOException {
         System.out.println("dumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/jrockit_15_dump.txt");
+            fis = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
             Map dumpMap = new HashMap();
             Vector topNodes = new Vector();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);

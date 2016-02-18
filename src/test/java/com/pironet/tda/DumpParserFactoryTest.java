@@ -67,7 +67,7 @@ public class DumpParserFactoryTest extends TestCase {
     public void testGetDumpParserForSunLogfile() throws FileNotFoundException {
         System.out.println("getDumpParserForVersion");
 
-        InputStream dumpFileStream = new FileInputStream("test/none/test.log");
+        InputStream dumpFileStream = getClass().getResourceAsStream("/data/test.log");
         Map threadStore = null;
         DumpParserFactory instance = DumpParserFactory.get();
 
@@ -83,7 +83,7 @@ public class DumpParserFactoryTest extends TestCase {
     public void testGetDumpParserForBeaLogfile() throws FileNotFoundException {
         System.out.println("getDumpParserForVersion");
 
-        InputStream dumpFileStream = new FileInputStream("test/none/jrockit_15_dump.txt");
+        InputStream dumpFileStream = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
         Map threadStore = null;
         DumpParserFactory instance = DumpParserFactory.get();
 

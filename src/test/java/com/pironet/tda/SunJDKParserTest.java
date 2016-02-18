@@ -24,6 +24,7 @@ package com.pironet.tda;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -62,11 +63,11 @@ public class SunJDKParserTest extends TestCase {
      */
     public void testDumpLoad() throws FileNotFoundException, IOException {
         System.out.println("dumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/test.log");
+            fis = getClass().getResourceAsStream("/data/test.log");
             Map dumpMap = new HashMap();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
@@ -95,9 +96,9 @@ public class SunJDKParserTest extends TestCase {
     public void testIsFoundClassHistograms() throws IOException {
         System.out.println("isFoundClassHistograms");
         DumpParser instance = null;
-        FileInputStream fis = null;
+        InputStream fis = null;
         try {
-            fis = new FileInputStream("test/none/testwithhistogram.log");
+            fis = getClass().getResourceAsStream("/data/testwithhistogram.log");
             Map dumpMap = new HashMap();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -121,11 +122,11 @@ public class SunJDKParserTest extends TestCase {
 
     public void test64BitDumpLoad() throws FileNotFoundException, IOException {
         System.out.println("64BitDumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/test64bit.log");
+            fis = getClass().getResourceAsStream("/data/test64bit.log");
             Map dumpMap = new HashMap();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
@@ -150,11 +151,11 @@ public class SunJDKParserTest extends TestCase {
 
     public void testSAPDumps() throws FileNotFoundException, IOException {
         System.out.println("SAPDumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/sapdump.log");
+            fis = getClass().getResourceAsStream("/data/sapdump.log");
             Map dumpMap = new HashMap();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
@@ -179,11 +180,11 @@ public class SunJDKParserTest extends TestCase {
 
     public void testHPDumps() throws FileNotFoundException, IOException {
         System.out.println("HPDumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/hpdump.log");
+            fis = getClass().getResourceAsStream("/data/hpdump.log");
             Map dumpMap = new HashMap();
             Vector topNodes = new Vector();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
@@ -208,11 +209,11 @@ public class SunJDKParserTest extends TestCase {
 
     public void testRemoteVisualVMDumps() throws FileNotFoundException, IOException {
         System.out.println("VisualVMDumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/visualvmremote.log");
+            fis = getClass().getResourceAsStream("/data/visualvmremote.log");
             Map dumpMap = new HashMap();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
@@ -237,11 +238,11 @@ public class SunJDKParserTest extends TestCase {
 
     public void testURLThreadNameDumps() throws IOException {
         System.out.println("URLThreadNameDumpLoad");
-        FileInputStream fis = null;
+        InputStream fis = null;
         DumpParser instance = null;
 
         try {
-            fis = new FileInputStream("test/none/urlthread.log");
+            fis = getClass().getResourceAsStream("/data/urlthread.log");
             Map dumpMap = new HashMap();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
