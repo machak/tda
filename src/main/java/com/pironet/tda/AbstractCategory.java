@@ -19,16 +19,16 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.filter.FilterChecker;
-import com.pironet.tda.utils.IconFactory;
-import com.pironet.tda.utils.PrefManager;
-
 import java.util.Arrays;
 import java.util.Comparator;
 
 import javax.swing.Icon;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.pironet.tda.filter.FilterChecker;
+import com.pironet.tda.utils.IconFactory;
+import com.pironet.tda.utils.PrefManager;
 
 /**
  * @author irockel

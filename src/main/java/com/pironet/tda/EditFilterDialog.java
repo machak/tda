@@ -22,8 +22,6 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.filter.Filter;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -39,6 +37,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.pironet.tda.filter.Filter;
 
 /**
  * dialog for editing filters.

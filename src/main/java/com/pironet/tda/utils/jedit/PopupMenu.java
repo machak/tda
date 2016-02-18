@@ -22,8 +22,6 @@
 
 package com.pironet.tda.utils.jedit;
 
-import com.pironet.tda.TDA;
-
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,12 +29,14 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import com.pironet.tda.TDA;
+
 /**
  * popup for the jedit text area
+ *
  * @author irockel
  */
 public class PopupMenu extends JPopupMenu implements ActionListener {

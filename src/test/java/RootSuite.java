@@ -20,7 +20,9 @@
  * $Id: RootSuite.java,v 1.2 2007-11-06 09:36:37 irockel Exp $
  */
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * @author irockel

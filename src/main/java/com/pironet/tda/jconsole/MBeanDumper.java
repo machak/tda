@@ -141,6 +141,7 @@ public class MBeanDumper {
 
     /**
      * create dump date similar to format used by 1.6 VMs
+     *
      * @return dump date (e.g. 2007-10-25 08:00:00)
      */
     private String getDumpDate() {
@@ -341,6 +342,7 @@ public class MBeanDumper {
 
     /**
      * reset mbean server connection
+     *
      * @param mbs
      */
     void setMBeanServerConnection(MBeanServerConnection mbs) {

@@ -19,11 +19,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.filter.Filter;
-import com.pironet.tda.utils.DateMatcher;
-import com.pironet.tda.utils.IconFactory;
-import com.pironet.tda.utils.PrefManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Iterator;
@@ -33,6 +28,11 @@ import java.util.Vector;
 import javax.swing.ListModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+
+import com.pironet.tda.filter.Filter;
+import com.pironet.tda.utils.DateMatcher;
+import com.pironet.tda.utils.IconFactory;
+import com.pironet.tda.utils.PrefManager;
 
 /**
  * abstract dump parser class, contains all generic dump parser

@@ -20,9 +20,6 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.utils.DateMatcher;
-import com.pironet.tda.utils.IconFactory;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -33,6 +30,9 @@ import java.util.regex.Pattern;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import com.pironet.tda.utils.DateMatcher;
+import com.pironet.tda.utils.IconFactory;
 
 /**
  * Parses Bea/JRockit Thread Dumps

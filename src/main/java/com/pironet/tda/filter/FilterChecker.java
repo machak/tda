@@ -21,14 +21,14 @@
  */
 package com.pironet.tda.filter;
 
-import com.pironet.tda.ThreadInfo;
-import com.pironet.tda.utils.PrefManager;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.ListModel;
+
+import com.pironet.tda.ThreadInfo;
+import com.pironet.tda.utils.PrefManager;
 
 /**
  * has a list of filters and checks for a given thread if it matches any of the filters.

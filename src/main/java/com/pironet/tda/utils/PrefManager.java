@@ -23,10 +23,6 @@
  */
 package com.pironet.tda.utils;
 
-import com.pironet.tda.CustomCategory;
-import com.pironet.tda.filter.Filter;
-import com.pironet.tda.filter.FilterChecker;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
@@ -37,6 +33,10 @@ import java.util.prefs.Preferences;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
+
+import com.pironet.tda.CustomCategory;
+import com.pironet.tda.filter.Filter;
+import com.pironet.tda.filter.FilterChecker;
 
 /**
  * Singleton class for accessing system preferences.

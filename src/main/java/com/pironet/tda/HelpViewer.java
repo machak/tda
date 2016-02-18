@@ -19,9 +19,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.utils.Browser;
-import com.pironet.tda.utils.ResourceManager;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -36,7 +33,6 @@ import javax.help.JHelp;
 import javax.help.JHelpContentViewer;
 import javax.help.JHelpIndexNavigator;
 import javax.help.JHelpNavigator;
-import javax.help.SwingHelpUtilities;
 import javax.help.plaf.basic.BasicContentViewerUI;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -44,6 +40,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.HyperlinkEvent;
+
+import com.pironet.tda.utils.Browser;
+import com.pironet.tda.utils.ResourceManager;
 
 /**
  * displays the java help.

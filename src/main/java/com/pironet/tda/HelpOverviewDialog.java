@@ -22,8 +22,6 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.utils.Browser;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -42,6 +40,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+
+import com.pironet.tda.utils.Browser;
 
 /**
  * @author irockel

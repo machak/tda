@@ -22,14 +22,14 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.utils.DateMatcher;
-import com.pironet.tda.utils.PrefManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+
+import com.pironet.tda.utils.DateMatcher;
+import com.pironet.tda.utils.PrefManager;
 
 /**
  * Factory for the dump parsers.

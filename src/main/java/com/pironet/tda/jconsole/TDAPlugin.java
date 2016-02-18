@@ -28,6 +28,8 @@ package com.pironet.tda.jconsole;
  * SwingWorker responsible for updating the GUI
  * <p>
  * SwingWorker responsible for updating the GUI
+ * <p>
+ * SwingWorker responsible for updating the GUI
  */
 /*public class TDAPlugin extends JConsolePlugin implements PropertyChangeListener {
     private MBeanDumper mBeanDumper;

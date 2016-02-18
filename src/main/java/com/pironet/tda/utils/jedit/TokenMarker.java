@@ -10,8 +10,6 @@ package com.pironet.tda.utils.jedit;
 
 import javax.swing.text.Segment;
 
-import java.util.*;
-
 /**
  * A token marker that splits lines of text into tokens. Each token carries
  * a length field and an indentification tag that can be mapped to a color

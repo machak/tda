@@ -21,10 +21,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.utils.DateMatcher;
-import com.pironet.tda.utils.HistogramTableModel;
-import com.pironet.tda.utils.IconFactory;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -42,7 +38,10 @@ import java.util.regex.Matcher;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
+
+import com.pironet.tda.utils.DateMatcher;
+import com.pironet.tda.utils.HistogramTableModel;
+import com.pironet.tda.utils.IconFactory;
 
 /**
  * Parses SunJDK Thread Dumps. Also parses SAP and HP Dumps.

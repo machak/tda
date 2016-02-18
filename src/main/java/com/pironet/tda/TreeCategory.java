@@ -22,10 +22,6 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.filter.FilterChecker;
-import com.pironet.tda.utils.PrefManager;
-import com.pironet.tda.utils.TreeRenderer;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.EventListener;
@@ -34,6 +30,10 @@ import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.pironet.tda.filter.FilterChecker;
+import com.pironet.tda.utils.PrefManager;
+import com.pironet.tda.utils.TreeRenderer;
 
 /**
  * This class represent a category node.

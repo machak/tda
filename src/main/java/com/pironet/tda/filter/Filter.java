@@ -21,9 +21,9 @@
  */
 package com.pironet.tda.filter;
 
-import com.pironet.tda.ThreadInfo;
-
 import java.util.regex.Pattern;
+
+import com.pironet.tda.ThreadInfo;
 
 /**
  * represents a filter for filtering threads or monitors to display

@@ -19,13 +19,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.filter.FilterChecker;
-import com.pironet.tda.utils.ColoredTable;
-import com.pironet.tda.utils.PrefManager;
-import com.pironet.tda.utils.TableSorter;
-import com.pironet.tda.utils.ThreadsTableModel;
-import com.pironet.tda.utils.ThreadsTableSelectionModel;
-
 import java.util.EventListener;
 
 import javax.swing.JComponent;
@@ -35,6 +28,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.pironet.tda.filter.FilterChecker;
+import com.pironet.tda.utils.ColoredTable;
+import com.pironet.tda.utils.PrefManager;
+import com.pironet.tda.utils.TableSorter;
+import com.pironet.tda.utils.ThreadsTableModel;
+import com.pironet.tda.utils.ThreadsTableSelectionModel;
 
 /**
  * table category type, displays its content in a table.

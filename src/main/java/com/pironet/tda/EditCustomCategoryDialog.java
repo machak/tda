@@ -21,10 +21,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.filter.Filter;
-import com.pironet.tda.utils.PrefManager;
-import com.pironet.tda.utils.ResourceManager;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -45,6 +41,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import com.pironet.tda.filter.Filter;
+import com.pironet.tda.utils.PrefManager;
+import com.pironet.tda.utils.ResourceManager;
 
 /**
  * dialog for editing filters.

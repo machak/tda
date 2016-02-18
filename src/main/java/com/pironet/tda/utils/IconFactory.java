@@ -21,9 +21,9 @@
  */
 package com.pironet.tda.utils;
 
-import com.pironet.tda.TDA;
-
 import javax.swing.Icon;
+
+import com.pironet.tda.TDA;
 
 /**
  * icon factory for the tree icons.

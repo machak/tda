@@ -21,8 +21,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.utils.PrefManager;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -42,6 +40,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import com.pironet.tda.utils.PrefManager;
 
 /**
  * @author irockel

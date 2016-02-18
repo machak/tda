@@ -21,12 +21,12 @@
  */
 package com.pironet.tda.utils;
 
-import com.pironet.tda.ThreadInfo;
-
 import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.pironet.tda.ThreadInfo;
 
 /**
  * table model for displaying thread overview.

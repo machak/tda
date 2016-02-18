@@ -21,11 +21,11 @@
  */
 package com.pironet.tda.utils;
 
-import com.pironet.tda.TDA;
-
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
+
+import com.pironet.tda.TDA;
 
 /**
  * read random tip of day from tips.properties.

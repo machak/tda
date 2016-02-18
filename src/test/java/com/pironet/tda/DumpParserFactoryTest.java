@@ -23,11 +23,12 @@ package com.pironet.tda;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
-import junit.framework.*;
-
 import java.io.InputStream;
 import java.util.Map;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * @author irockel

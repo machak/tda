@@ -22,8 +22,6 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.utils.PrefManager;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -36,11 +34,12 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+
+import com.pironet.tda.utils.PrefManager;
 
 /**
  * @author irockel

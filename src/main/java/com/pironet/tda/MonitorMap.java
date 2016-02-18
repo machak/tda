@@ -23,9 +23,9 @@
 package com.pironet.tda;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * map for saving monitor-thread relation in a thread dump.

@@ -21,6 +21,92 @@
  */
 package com.pironet.tda;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.NumberFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.KeyStroke;
+import javax.swing.ProgressMonitorInputStream;
+import javax.swing.UIManager;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.Position;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+
 import com.pironet.tda.jconsole.MBeanDumper;
 import com.pironet.tda.utils.AppInfo;
 import com.pironet.tda.utils.Browser;
@@ -38,95 +124,6 @@ import com.pironet.tda.utils.TreeRenderer;
 import com.pironet.tda.utils.ViewScrollPane;
 import com.pironet.tda.utils.jedit.JEditTextArea;
 import com.pironet.tda.utils.jedit.PopupMenu;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DropTargetDropEvent;
-import java.io.FileNotFoundException;
-import java.util.Enumeration;
-
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-
-import javax.swing.JTree;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.Position;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-
-import java.io.IOException;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetAdapter;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.NumberFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ProgressMonitorInputStream;
-import javax.swing.UIManager;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
 /**
  * main class of the Thread Dump Analyzer. Start using static main method.
@@ -220,6 +217,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * initializes tda panel
+     *
      * @param asPlugin specifies if tda is running as plugin
      */
     public void init(boolean asJConsolePlugin, boolean asVisualVMPlugin) {
@@ -439,7 +437,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     /**
      * convert the given elements into a href-table to be included into the
      * welcome page. Only last four elements are taken.
-     * @param prefix link prefix to use
+     *
+     * @param prefix   link prefix to use
      * @param elements list of elements.
      * @return given elements as table.
      */
@@ -465,6 +464,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * cut the given link string to the specified length + three dots.
+     *
      * @param link
      * @param len
      * @return cut link or original link if link.length() <= len
@@ -519,6 +519,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * create file filter for session files.
+     *
      * @return file filter instance.
      */
     private static FileFilter getSessionFilter() {
@@ -554,6 +555,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * expand all dump nodes in the root tree
+     *
      * @param expand true=expand, false=collapse.
      */
     public void expandAllDumpNodes(boolean expand) {
@@ -596,7 +598,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * expand or collapse all nodes of the specified tree
-     * @param tree the tree to expand all/collapse all
+     *
+     * @param tree   the tree to expand all/collapse all
      * @param parent the parent to start with
      * @param expand expand=true, collapse=false
      */
@@ -683,6 +686,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * open the specified session
+     *
      * @param file
      */
     private void openSession(File file, boolean isRecent) {
@@ -819,7 +823,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * init the basic display for showing dumps
      *
      * @param content initial logfile content may also be parsed, can also be null.
-     *        only used for clipboard operations.
+     *                only used for clipboard operations.
      */
     public void initDumpDisplay(String content) {
         // clear tree
@@ -996,6 +1000,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * add a tree listener for enabling/disabling menu and toolbar icons.
+     *
      * @param tree
      */
     private void addTreeListener(JTree tree) {
@@ -1084,6 +1089,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * process table selection events (thread display)
+     *
      * @param e the event to process.
      */
     public void valueChanged(ListSelectionEvent e) {
@@ -1119,6 +1125,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * display thread dump information for the give node object.
+     *
      * @param nodeInfo
      */
     private void displayThreadDumpInfo(Object nodeInfo) {
@@ -1394,6 +1401,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * navigate to monitor
+     *
      * @param monitorLink the monitor link to navigate to
      */
     private void navigateToMonitor(String monitorLink) {
@@ -1455,6 +1463,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * navigate to child of currently selected node with the given prefix in name
+     *
      * @param startsWith node name prefix (e.g. "Threads waiting")
      */
     private void navigateToChild(String startsWith) {
@@ -1778,6 +1787,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * set the ui font for all tda stuff (needs to be done for create of objects)
+     *
      * @param f the font to user
      */
     private void setUIFont(javax.swing.plaf.FontUIResource f) {
@@ -1799,8 +1809,9 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * display the specified file in a info window.
+     *
      * @param title title of the info window.
-     * @param file the file to display.
+     * @param file  the file to display.
      */
     private void showInfoFile(String title, String file, String icon) {
         HelpOverviewDialog infoDialog = new HelpOverviewDialog(getFrame(), title, file, TDA.createImageIcon(icon).getImage());
@@ -1923,6 +1934,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * choose a log file.
+     *
      * @param addFile check if a log file should be added or if tree should be cleared.
      */
     private void chooseFile() {
@@ -1942,7 +1954,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     /**
      * open the provided files. If isRecent is set to true, passed files
      * are not added to the recent file list.
-     * @param files the files array to open
+     *
+     * @param files    the files array to open
      * @param isRecent true, if passed files are from recent file list.
      */
     private void openFiles(File[] files, boolean isRecent) {
@@ -1989,6 +2002,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * search for dump root node of for given node
+     *
      * @param node starting to search for
      * @return root node returns null, if no root was found.
      */
@@ -2003,6 +2017,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * get the dump with the given name, starting from the provided node.
+     *
      * @param dumpName
      * @return
      */
@@ -2145,7 +2160,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * check if name of node starts with passed string
-     * @param node the node name to check
+     *
+     * @param node       the node name to check
      * @param startsWith the string to compare.
      * @return true if startsWith and beginning of node name matches.
      */
@@ -2155,7 +2171,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
     /**
      * check if name of node starts with passed string
-     * @param node the node name to check
+     *
+     * @param node       the node name to check
      * @param startIndex the index to start with comparing, 0 if comparing should happen
      *                   from the beginning.
      * @param startsWith the string to compare.

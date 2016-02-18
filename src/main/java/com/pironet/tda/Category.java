@@ -19,8 +19,6 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.filter.FilterChecker;
-
 import java.util.Comparator;
 import java.util.EventListener;
 
@@ -28,6 +26,8 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.pironet.tda.filter.FilterChecker;
 
 /**
  * @author irockel

@@ -22,13 +22,6 @@
 
 package com.pironet.tda.utils;
 
-import com.pironet.tda.Category;
-import com.pironet.tda.HistogramInfo;
-import com.pironet.tda.LogFileContent;
-import com.pironet.tda.Logfile;
-import com.pironet.tda.TDA;
-import com.pironet.tda.ThreadInfo;
-
 import java.awt.Color;
 import java.awt.Component;
 
@@ -36,6 +29,13 @@ import javax.swing.Icon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
+import com.pironet.tda.Category;
+import com.pironet.tda.HistogramInfo;
+import com.pironet.tda.LogFileContent;
+import com.pironet.tda.Logfile;
+import com.pironet.tda.TDA;
+import com.pironet.tda.ThreadInfo;
 
 /**
  * adds icons to tda root tree

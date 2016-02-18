@@ -22,9 +22,6 @@
 
 package com.pironet.tda;
 
-import com.pironet.tda.utils.PrefManager;
-import com.pironet.tda.utils.ResourceManager;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -35,6 +32,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+
+import com.pironet.tda.utils.PrefManager;
+import com.pironet.tda.utils.ResourceManager;
 
 /**
  * provides instances of the main menu (though there is typically only one).

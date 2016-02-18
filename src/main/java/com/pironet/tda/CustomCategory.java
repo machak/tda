@@ -21,11 +21,11 @@
  */
 package com.pironet.tda;
 
-import com.pironet.tda.filter.Filter;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import com.pironet.tda.filter.Filter;
 
 /**
  * stores information for a custom category.
