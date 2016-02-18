@@ -98,7 +98,7 @@ public class CustomCategoriesDialog extends JDialog {
 
         JPanel buttonFlow = null;
 
-        JList categoriesList = null;
+        JList<CustomCategory> categoriesList = null;
 
         JScrollPane scrollPane = null;
 
@@ -129,7 +129,7 @@ public class CustomCategoriesDialog extends JDialog {
             setPreferredSize(new Dimension(380, 290));
 
             //createList();
-            categoriesList = new JList(PrefManager.get().getCategories());
+            categoriesList = new JList<>(PrefManager.get().getCategories());
             scrollPane = new JScrollPane(categoriesList);
             categoriesList.addListSelectionListener(this);
 
@@ -193,7 +193,7 @@ public class CustomCategoriesDialog extends JDialog {
         }
 
         public void saveSettings() {
-            PrefManager.get().setCategories((DefaultListModel)categoriesList.getModel());
+            PrefManager.get().setCategories((DefaultListModel<CustomCategory>)categoriesList.getModel());
         }
     }
 

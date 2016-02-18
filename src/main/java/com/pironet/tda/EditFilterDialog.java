@@ -49,17 +49,15 @@ import com.pironet.tda.utils.Const;
 public class EditFilterDialog extends JDialog {
     private static final long serialVersionUID = 4343529849233738390L;
     private SettingsPanel settingsPanel;
-    private JPanel buttonPanel;
     private JButton okButton;
-    private JButton cancelButton;
     private Frame frame;
-    private JList filterList;
+    private JList<Filter> filterList;
     private boolean isAdd = false;
 
     /**
      * Creates a new instance of PreferencesDialog
      */
-    public EditFilterDialog(Frame owner, String frameTitle, JList filterList, boolean isAdd) {
+    public EditFilterDialog(Frame owner, String frameTitle, JList<Filter> filterList, boolean isAdd) {
         super(owner, frameTitle);
         try {
             setIconImage(TDA.createImageIcon(Const.ICON_FILTERS).getImage());
@@ -75,11 +73,11 @@ public class EditFilterDialog extends JDialog {
     }
 
     private void initPanel() {
-        settingsPanel = new SettingsPanel(!isAdd ? (Filter)filterList.getSelectedValue() : null);
+        settingsPanel = new SettingsPanel(!isAdd ? filterList.getSelectedValue() : null);
         getContentPane().add(settingsPanel, BorderLayout.CENTER);
         okButton = new JButton("Ok");
-        cancelButton = new JButton("Cancel");
-        buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JButton cancelButton = new JButton("Cancel");
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(okButton);
         buttonPanel.add(cancelButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -89,10 +87,10 @@ public class EditFilterDialog extends JDialog {
                 frame.setEnabled(true);
             }
             if (!isAdd) {
-                Filter filter = (Filter)filterList.getModel().getElementAt(filterList.getSelectedIndex());
+                Filter filter = filterList.getModel().getElementAt(filterList.getSelectedIndex());
                 applyFilter(filter);
                 // reset to fire change event.
-                ((DefaultListModel)filterList.getModel()).setElementAt(filter, filterList.getSelectedIndex());
+                ((DefaultListModel<Filter>)filterList.getModel()).setElementAt(filter, filterList.getSelectedIndex());
 
             } else {
                 Filter filter = new Filter();
@@ -120,8 +118,9 @@ public class EditFilterDialog extends JDialog {
         filter.setEnabled(settingsPanel.isEnabled.isSelected());
     }
 
+    @SuppressWarnings("unchecked")
     private void addToList(Filter filter) {
-        DefaultListModel<Filter> dlm = ((DefaultListModel)filterList.getModel());
+        DefaultListModel<Filter> dlm = ((DefaultListModel<Filter>)filterList.getModel());
 
         dlm.ensureCapacity(dlm.getSize() + 1);
         dlm.addElement(filter);
@@ -159,7 +158,7 @@ public class EditFilterDialog extends JDialog {
             innerSettingsPanel = new JPanel(new BorderLayout());
             JPanel innerInnerSettingsPanel = new JPanel(fl);
             innerInnerSettingsPanel.add(new JLabel("Filter rule"));
-            innerInnerSettingsPanel.add(filterRule = new JComboBox(new String[]{"has in title", "matches title", "has in stack",
+            innerInnerSettingsPanel.add(filterRule = new JComboBox<>(new String[]{"has in title", "matches title", "has in stack",
                     "matches stack", "waiting on", "waiting for", "locking", "sleeping", "stack line count >"}));
             innerSettingsPanel.add(innerInnerSettingsPanel, BorderLayout.NORTH);
 
@@ -198,10 +197,9 @@ public class EditFilterDialog extends JDialog {
          * @return filte with filled in data.
          */
         public Filter getAsFilter() {
-            Filter newFilter = new Filter(filterName.getText(),
+            return new Filter(filterName.getText(),
                     regEx.getText(), filterRule.getSelectedIndex(), true,
                     isExclusionFilter.isSelected(), isEnabled.isSelected());
-            return newFilter;
         }
     }
 }

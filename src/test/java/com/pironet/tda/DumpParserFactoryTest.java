@@ -84,10 +84,10 @@ public class DumpParserFactoryTest extends TestCase {
         System.out.println("getDumpParserForVersion");
 
         InputStream dumpFileStream = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
-        Map threadStore = null;
+
         DumpParserFactory instance = DumpParserFactory.get();
 
-        DumpParser result = instance.getDumpParserForLogfile(dumpFileStream, threadStore, false, 0);
+        DumpParser result = instance.getDumpParserForLogfile(dumpFileStream, null, false, 0);
         assertNotNull(result);
 
         assertTrue(result instanceof com.pironet.tda.BeaJDKParser);

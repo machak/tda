@@ -50,9 +50,7 @@ public class PreferencesDialog extends JDialog {
     private JTabbedPane prefsPane;
     private GeneralPanel generalPanel;
     private RegExPanel regExPanel;
-    private JPanel buttonPanel;
     private JButton okButton;
-    private JButton cancelButton;
     private Frame frame;
 
     /**
@@ -87,8 +85,8 @@ public class PreferencesDialog extends JDialog {
         // otherwise we are running in visualvm
         if (frame != null) {
             okButton = new JButton("Ok");
-            cancelButton = new JButton("Cancel");
-            buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            final JButton cancelButton = new JButton("Cancel");
+            final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.add(okButton);
             buttonPanel.add(cancelButton);
             getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -119,7 +117,7 @@ public class PreferencesDialog extends JDialog {
         generalPanel.useGTKLF.setSelected(PrefManager.get().isUseGTKLF());
         generalPanel.maxLogfileSizeField.setText(String.valueOf(PrefManager.get().getMaxLogfileSize()));
 
-        DefaultComboBoxModel boxModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel<String> boxModel = new DefaultComboBoxModel<>();
         String[] regexs = PrefManager.get().getDateParsingRegexs();
         for (final String regex : regexs) {
             boxModel.addElement(regex);
@@ -203,7 +201,7 @@ public class PreferencesDialog extends JDialog {
 
     public class RegExPanel extends JPanel implements ActionListener {
         private static final long serialVersionUID = 6280588161904432563L;
-        JComboBox dateParsingRegexs;
+        JComboBox<String> dateParsingRegexs;
         JCheckBox isMillisTimeStamp;
         JCheckBox isJDK16DefaultParsing;
         JButton clearButton;
@@ -216,7 +214,7 @@ public class PreferencesDialog extends JDialog {
             JPanel layoutPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
             layoutPanel.add(new JLabel("Regular Expression for parsing timestamps in logs files"));
-            dateParsingRegexs = new JComboBox();
+            dateParsingRegexs = new JComboBox<>();
             dateParsingRegexs.setEditable(true);
             dateParsingRegexs.addActionListener(this);
             layoutPanel.add(dateParsingRegexs);
@@ -243,12 +241,12 @@ public class PreferencesDialog extends JDialog {
 
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == dateParsingRegexs) {
-                if ((lastSelectedItem == null) || !((String)dateParsingRegexs.getSelectedItem()).equals(lastSelectedItem)) {
-                    dateParsingRegexs.addItem(dateParsingRegexs.getSelectedItem());
+                if ((lastSelectedItem == null) || !dateParsingRegexs.getSelectedItem().equals(lastSelectedItem)) {
+                    dateParsingRegexs.addItem((String)dateParsingRegexs.getSelectedItem());
                     lastSelectedItem = (String)dateParsingRegexs.getSelectedItem();
                 }
             } else if (e.getSource() == clearButton) {
-                dateParsingRegexs.setModel(new DefaultComboBoxModel());
+                dateParsingRegexs.setModel(new DefaultComboBoxModel<String>());
             }
         }
     }

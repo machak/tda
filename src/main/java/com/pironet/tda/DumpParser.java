@@ -22,6 +22,7 @@
 
 package com.pironet.tda;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -35,20 +36,18 @@ import javax.swing.tree.TreePath;
  *
  * @author irockel
  */
-public interface DumpParser {
-    public boolean hasMoreDumps();
+public interface DumpParser extends Closeable {
+    boolean hasMoreDumps();
 
-    public MutableTreeNode parseNext();
+    MutableTreeNode parseNext();
 
-    public void close() throws IOException;
+    void findLongRunningThreads(DefaultMutableTreeNode root, Map dumpStore, TreePath[] paths, int minOccurence, String regex);
 
-    public void findLongRunningThreads(DefaultMutableTreeNode root, Map dumpStore, TreePath[] paths, int minOccurence, String regex);
+    void mergeDumps(DefaultMutableTreeNode root, Map dumpStore, TreePath[] dumps, int minOccurence, String regex);
 
-    public void mergeDumps(DefaultMutableTreeNode root, Map dumpStore, TreePath[] dumps, int minOccurence, String regex);
+    boolean isFoundClassHistograms();
 
-    public boolean isFoundClassHistograms();
+    void parseLoggcFile(InputStream loggcFileStream, DefaultMutableTreeNode root);
 
-    public void parseLoggcFile(InputStream loggcFileStream, DefaultMutableTreeNode root);
-
-    public void setDumpHistogramCounter(int value);
+    void setDumpHistogramCounter(int value);
 }

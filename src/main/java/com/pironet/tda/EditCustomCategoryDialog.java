@@ -55,17 +55,15 @@ import com.pironet.tda.utils.ResourceManager;
 public class EditCustomCategoryDialog extends JDialog {
     private static final long serialVersionUID = 3634852144772181579L;
     private SettingsPanel settingsPanel;
-    private JPanel buttonPanel;
     private JButton okButton;
-    private JButton cancelButton;
     private Frame frame;
-    private JList catList;
+    private JList<CustomCategory> catList;
     private boolean isAdd = false;
 
     /**
      * Creates a new instance of PreferencesDialog
      */
-    public EditCustomCategoryDialog(Frame owner, String frameTitle, JList catList, boolean isAdd) {
+    public EditCustomCategoryDialog(Frame owner, String frameTitle, JList<CustomCategory> catList, boolean isAdd) {
         super(owner, frameTitle);
         try {
             setIconImage(TDA.createImageIcon(Const.ICON_FILTERS).getImage());
@@ -81,11 +79,11 @@ public class EditCustomCategoryDialog extends JDialog {
     }
 
     private void initPanel() {
-        settingsPanel = new SettingsPanel(!isAdd ? (CustomCategory)catList.getSelectedValue() : null);
+        settingsPanel = new SettingsPanel(!isAdd ? catList.getSelectedValue() : null);
         getContentPane().add(settingsPanel, BorderLayout.CENTER);
         okButton = new JButton(ResourceManager.translate("ok.button"));
-        cancelButton = new JButton(ResourceManager.translate("cancel.button"));
-        buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JButton cancelButton = new JButton(ResourceManager.translate("cancel.button"));
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(okButton);
         buttonPanel.add(cancelButton);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -95,10 +93,10 @@ public class EditCustomCategoryDialog extends JDialog {
                 frame.setEnabled(true);
             }
             if (!isAdd) {
-                CustomCategory cat = (CustomCategory)catList.getModel().getElementAt(catList.getSelectedIndex());
+                CustomCategory cat = catList.getModel().getElementAt(catList.getSelectedIndex());
                 applyCat(cat);
                 // reset to fire change event.
-                ((DefaultListModel)catList.getModel()).setElementAt(cat, catList.getSelectedIndex());
+                ((DefaultListModel<CustomCategory>)catList.getModel()).setElementAt(cat, catList.getSelectedIndex());
 
             } else {
                 CustomCategory cat = new CustomCategory(settingsPanel.name.getText());
@@ -132,7 +130,7 @@ public class EditCustomCategoryDialog extends JDialog {
     }
 
     private void addToList(CustomCategory cat) {
-        final DefaultListModel<CustomCategory> dlm = ((DefaultListModel)catList.getModel());
+        final DefaultListModel<CustomCategory> dlm = ((DefaultListModel<CustomCategory>)catList.getModel());
 
         dlm.ensureCapacity(dlm.getSize() + 1);
         dlm.addElement(cat);
@@ -145,8 +143,8 @@ public class EditCustomCategoryDialog extends JDialog {
 
     class SettingsPanel extends JPanel implements ListSelectionListener, ActionListener {
         private static final long serialVersionUID = -8178578773476105054L;
-        JList catFilters = null;
-        JList filterList = null;
+        JList<Filter> catFilters = null;
+        JList<Filter> filterList = null;
 
         JTextField name = null;
 
@@ -187,9 +185,10 @@ public class EditCustomCategoryDialog extends JDialog {
             GridBagConstraints c = new GridBagConstraints();
 
             JPanel innerPanel = new JPanel(gridbag);
-            catFilters = new JList();
-            catFilters.setModel(new DefaultListModel());
-            filterList = new JList(PrefManager.get().getFilters());
+            catFilters = new JList<>();
+            final DefaultListModel<Filter> model = new DefaultListModel<>();
+            catFilters.setModel(model);
+            filterList = new JList<>(PrefManager.get().getFilters());
 
             catFilters.addListSelectionListener(this);
             filterList.addListSelectionListener(this);
@@ -285,12 +284,10 @@ public class EditCustomCategoryDialog extends JDialog {
             }
         }
 
-        private void moveFilter(JList fromList, JList toList, int selectedItem) {
-            Filter filter = (Filter)fromList.getModel().getElementAt(selectedItem);
+        private void moveFilter(JList fromList, JList<Filter> toList, int selectedItem) {
+            final Filter filter = (Filter)fromList.getModel().getElementAt(selectedItem);
             ((DefaultListModel)fromList.getModel()).removeElementAt(selectedItem);
-
-            DefaultListModel dlm = ((DefaultListModel)toList.getModel());
-
+            final DefaultListModel<Filter> dlm = ((DefaultListModel<Filter>)toList.getModel());
             dlm.ensureCapacity(dlm.getSize() + 1);
             dlm.addElement(filter);
             toList.ensureIndexIsVisible(dlm.getSize());

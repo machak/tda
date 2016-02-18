@@ -102,7 +102,7 @@ public class FilterDialog extends JDialog {
         JButton removeButton = null;
         JButton editButton = null;
         JPanel buttonFlow = null;
-        JList filterList = null;
+        JList<Filter> filterList = null;
         JScrollPane scrollPane = null;
         Frame owner = null;
 
@@ -131,7 +131,7 @@ public class FilterDialog extends JDialog {
             setPreferredSize(new Dimension(380, 290));
 
             //createList();
-            filterList = new JList(PrefManager.get().getFilters());
+            filterList = new JList<>(PrefManager.get().getFilters());
             scrollPane = new JScrollPane(filterList);
             filterList.addListSelectionListener(this);
 

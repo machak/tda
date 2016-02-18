@@ -26,10 +26,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.tree.MutableTreeNode;
+
+import org.apache.commons.io.IOUtils;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -53,22 +56,21 @@ public class SunJDKParserTest extends TestCase {
     }
 
     public static Test suite() {
-        TestSuite suite = new TestSuite(SunJDKParserTest.class);
 
-        return suite;
+        return new TestSuite(SunJDKParserTest.class);
     }
 
     /**
      * Test of hasMoreDumps method, of class com.pironet.tda.SunJDKParser.
      */
-    public void testDumpLoad() throws FileNotFoundException, IOException {
+    public void testDumpLoad() throws IOException {
         System.out.println("dumpLoad");
         InputStream fis = null;
         DumpParser instance = null;
 
         try {
             fis = getClass().getResourceAsStream("/data/test.log");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -81,12 +83,8 @@ public class SunJDKParserTest extends TestCase {
             // check if three dumps are in it.
             assertEquals(3, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 
@@ -99,7 +97,7 @@ public class SunJDKParserTest extends TestCase {
         InputStream fis = null;
         try {
             fis = getClass().getResourceAsStream("/data/testwithhistogram.log");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
             Vector<MutableTreeNode> topNodes = new Vector<>();
@@ -111,23 +109,19 @@ public class SunJDKParserTest extends TestCase {
             boolean result = instance.isFoundClassHistograms();
             assertEquals(expResult, result);
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 
-    public void test64BitDumpLoad() throws FileNotFoundException, IOException {
+    public void test64BitDumpLoad() throws IOException {
         System.out.println("64BitDumpLoad");
         InputStream fis = null;
         DumpParser instance = null;
 
         try {
             fis = getClass().getResourceAsStream("/data/test64bit.log");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -140,23 +134,19 @@ public class SunJDKParserTest extends TestCase {
             // check if one dump was found.
             assertEquals(1, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 
-    public void testSAPDumps() throws FileNotFoundException, IOException {
+    public void testSAPDumps() throws IOException {
         System.out.println("SAPDumpLoad");
         InputStream fis = null;
         DumpParser instance = null;
 
         try {
             fis = getClass().getResourceAsStream("/data/sapdump.log");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -169,24 +159,20 @@ public class SunJDKParserTest extends TestCase {
             // check if two dump were found.
             assertEquals(2, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 
-    public void testHPDumps() throws FileNotFoundException, IOException {
+    public void testHPDumps() throws IOException {
         System.out.println("HPDumpLoad");
         InputStream fis = null;
         DumpParser instance = null;
 
         try {
             fis = getClass().getResourceAsStream("/data/hpdump.log");
-            Map dumpMap = new HashMap();
-            Vector topNodes = new Vector();
+            final Map<String, Map<String, String>> dumpMap = new HashMap<>();
+            List<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
@@ -198,23 +184,19 @@ public class SunJDKParserTest extends TestCase {
             // check if two dump were found.
             assertEquals(2, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 
-    public void testRemoteVisualVMDumps() throws FileNotFoundException, IOException {
+    public void testRemoteVisualVMDumps() throws IOException {
         System.out.println("VisualVMDumpLoad");
         InputStream fis = null;
         DumpParser instance = null;
 
         try {
             fis = getClass().getResourceAsStream("/data/visualvmremote.log");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -227,12 +209,8 @@ public class SunJDKParserTest extends TestCase {
             // check if two dump were found.
             assertEquals(1, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 
@@ -243,7 +221,7 @@ public class SunJDKParserTest extends TestCase {
 
         try {
             fis = getClass().getResourceAsStream("/data/urlthread.log");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -256,12 +234,8 @@ public class SunJDKParserTest extends TestCase {
             // check if two dump were found.
             assertEquals(1, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 }

@@ -53,6 +53,7 @@ public abstract class AbstractCategory extends AbstractInfo implements Category 
      *
      * @param nodeComp
      */
+    @SuppressWarnings("unchecked")
     public void sort(Comparator nodeComp) {
         Object[] arrayCat = new Object[getRootNode().getChildCount()];
         for (int i = 0; i < getRootNode().getChildCount(); i++) {

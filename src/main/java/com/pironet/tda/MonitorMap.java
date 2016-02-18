@@ -65,8 +65,9 @@ public class MonitorMap implements Serializable {
         return (monitorMap != null && monitorMap.containsKey(key));
     }
 
+    @SuppressWarnings("unchecked")
     public Map<String, String>[] getFromMonitorMap(String key) {
-        return (monitorMap != null && hasInMonitorMap(key) ? (Map[])monitorMap.get(key) : null);
+        return (monitorMap != null && hasInMonitorMap(key) ? (Map<String, String>[])monitorMap.get(key) : null);
     }
 
     public void addWaitToMonitor(String key, String waitThread, String threadContent) {
@@ -81,12 +82,14 @@ public class MonitorMap implements Serializable {
         addToMonitorValue(key, SLEEP_THREAD_POS, sleepThread, threadContent);
     }
 
+    @SuppressWarnings("unchecked")
     private void addToMonitorValue(String key, int pos, String threadTitle, String thread) {
-        Map<String, String>[] objectSet = null;
+        Map<String, String>[] objectSet;
 
         if (hasInMonitorMap(key)) {
             objectSet = getFromMonitorMap(key);
         } else {
+
             objectSet = new HashMap[3];
             objectSet[0] = new HashMap<>();
             objectSet[1] = new HashMap<>();
@@ -103,23 +106,21 @@ public class MonitorMap implements Serializable {
         }
         if ((line.indexOf('<') > 0)) {
             String monitor = line.substring(line.indexOf('<'));
-            if (line.trim().startsWith("- waiting to lock") || line.trim().startsWith("- parking to wait")) {
-                addWaitToMonitor(monitor, threadTitle, currentThread);
-            } else if (line.trim().startsWith("- waiting on")) {
-                addSleepToMonitor(monitor, threadTitle, currentThread);
-            } else {
-                addLockToMonitor(monitor, threadTitle, currentThread);
-            }
+            processLine(line, threadTitle, currentThread, monitor);
         } else if (line.indexOf('@') > 0) {
             String monitor = '<' + line.substring(line.indexOf('@') + 1) + "> (a " +
                     line.substring(line.lastIndexOf(' '), line.indexOf('@')) + ')';
-            if (line.trim().startsWith("- waiting to lock") || line.trim().startsWith("- parking to wait")) {
-                addWaitToMonitor(monitor, threadTitle, currentThread);
-            } else if (line.trim().startsWith("- waiting on")) {
-                addSleepToMonitor(monitor, threadTitle, currentThread);
-            } else {
-                addLockToMonitor(monitor, threadTitle, currentThread);
-            }
+            processLine(line, threadTitle, currentThread, monitor);
+        }
+    }
+
+    private void processLine(final String line, final String threadTitle, final String currentThread, final String monitor) {
+        if (line.trim().startsWith("- waiting to lock") || line.trim().startsWith("- parking to wait")) {
+            addWaitToMonitor(monitor, threadTitle, currentThread);
+        } else if (line.trim().startsWith("- waiting on")) {
+            addSleepToMonitor(monitor, threadTitle, currentThread);
+        } else {
+            addLockToMonitor(monitor, threadTitle, currentThread);
         }
     }
 

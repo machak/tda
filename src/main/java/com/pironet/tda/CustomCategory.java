@@ -35,7 +35,7 @@ import com.pironet.tda.filter.Filter;
 public class CustomCategory {
     private String name = null;
 
-    private Map filters = null;
+    private Map<String, Filter> filters = null;
 
     public CustomCategory(String name) {
         setName(name);
@@ -65,7 +65,7 @@ public class CustomCategory {
      */
     public void addToFilters(Filter filter) {
         if (filters == null) {
-            filters = new HashMap();
+            filters = new HashMap<>();
         }
 
         filters.put(filter.getName(), filter);

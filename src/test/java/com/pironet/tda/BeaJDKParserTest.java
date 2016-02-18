@@ -30,6 +30,8 @@ import java.util.Vector;
 
 import javax.swing.tree.MutableTreeNode;
 
+import org.apache.commons.io.IOUtils;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -52,22 +54,21 @@ public class BeaJDKParserTest extends TestCase {
     }
 
     public static Test suite() {
-        TestSuite suite = new TestSuite(BeaJDKParserTest.class);
 
-        return suite;
+        return new TestSuite(BeaJDKParserTest.class);
     }
 
     /**
      * Test of hasMoreDumps method, of class com.pironet.tda.SunJDKParser.
      */
-    public void testDumpLoad() throws FileNotFoundException, IOException {
+    public void testDumpLoad() throws IOException {
         System.out.println("dumpLoad");
         InputStream fis = null;
         DumpParser instance = null;
 
         try {
             fis = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
-            Map dumpMap = new HashMap();
+            Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
@@ -80,12 +81,8 @@ public class BeaJDKParserTest extends TestCase {
             // check if three dumps are in it.
             //assertEquals(3, topNodes.size());
         } finally {
-            if (instance != null) {
-                instance.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
+            IOUtils.closeQuietly(instance);
+            IOUtils.closeQuietly(fis);
         }
     }
 

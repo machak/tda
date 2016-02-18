@@ -56,6 +56,9 @@ public final class PrefManager {
 
     private final static PrefManager prefManager = new PrefManager();
     private static final Pattern PARAM_PATTERN = Pattern.compile(PARAM_DELIM);
+    private static final Pattern PATTERN_FILTER_SEP = Pattern.compile(FILTER_SEP);
+    private static final Pattern PATTERN_PARAM_DELIM = Pattern.compile(PARAM_DELIM);
+
 
     private final Preferences toolPrefs;
 
@@ -197,7 +200,7 @@ public final class PrefManager {
         if (Strings.isNullOrEmpty(elems)) {
             elems = getDateParsingRegex();
         }
-        return (elems.split(PARAM_DELIM));
+        return (PATTERN_PARAM_DELIM.split(elems));
     }
 
     public void setDateParsingRegexs(ListModel regexs) {
@@ -235,7 +238,7 @@ public final class PrefManager {
     }
 
     public String[] getRecentFiles() {
-        return (toolPrefs.get("recentFiles", "").split(PARAM_DELIM));
+        return (PATTERN_PARAM_DELIM.split(toolPrefs.get("recentFiles", "")));
     }
 
     public void addToRecentSessions(String file) {
@@ -258,7 +261,7 @@ public final class PrefManager {
     }
 
     public String[] getRecentSessions() {
-        return (toolPrefs.get("recentSessions", "").split(PARAM_DELIM));
+        return (PATTERN_PARAM_DELIM.split(toolPrefs.get("recentSessions", "")));
     }
 
     public void setUseGTKLF(boolean value) {
@@ -267,7 +270,7 @@ public final class PrefManager {
 
     public boolean isUseGTKLF() {
         return (toolPrefs.getBoolean("useGTKLF", System.getProperty("java.version").startsWith("1.6") &&
-                System.getProperty("os.name").startsWith("Linux") ? true : false));
+                System.getProperty("os.name").startsWith("Linux")));
     }
 
     public void setMillisTimeStamp(boolean value) {
@@ -291,17 +294,17 @@ public final class PrefManager {
      */
     private final List<Filter> cachedFilters = new ArrayList<>();
 
-    public ListModel getFilters() {
+    public ListModel<Filter> getFilters() {
         DefaultListModel<Filter> filters;
         if (this.cachedFilters.isEmpty()) {
             String filterString = toolPrefs.get("filters", "");
             if (filterString.length() > 0) {
                 filters = new DefaultListModel<>();
-                String[] sFilters = filterString.split(PARAM_DELIM);
+                String[] sFilters = PATTERN_PARAM_DELIM.split(filterString);
                 filters.ensureCapacity(sFilters.length);
                 try {
                     for (int i = 0; i < sFilters.length; i++) {
-                        String[] filterData = sFilters[i].split(FILTER_SEP);
+                        String[] filterData = PATTERN_FILTER_SEP.split(sFilters[i]);
                         Filter newFilter = new Filter(filterData[0],
                                 filterData[1], Integer.parseInt(filterData[2]),
                                 filterData[3].equals("true"), filterData[4].equals("true"), filterData[5].equals("true"));
@@ -350,14 +353,14 @@ public final class PrefManager {
     /**
      * temporary storage for categories to not to have them be parsed again
      */
-    private final List cachedCategories = new ArrayList();
+    private final List<CustomCategory> cachedCategories = new ArrayList<>();
 
     /**
      * get custom categories.
      *
      * @return list model with custom categories.
      */
-    public ListModel getCategories() {
+    public ListModel<CustomCategory> getCategories() {
         DefaultListModel<CustomCategory> categories;
         if (this.cachedCategories.isEmpty()) {
             String categoryString = toolPrefs.get("categories", "");
@@ -366,9 +369,9 @@ public final class PrefManager {
                 String[] sCategories = PARAM_PATTERN.split(categoryString);
                 categories.ensureCapacity(sCategories.length);
                 try {
-                    FilterChecker fc = FilterChecker.getFilterChecker();
+                    FilterChecker.getFilterChecker();
                     for (int i = 0; i < sCategories.length; i++) {
-                        String[] catData = sCategories[i].split(FILTER_SEP);
+                        String[] catData = PATTERN_FILTER_SEP.split(sCategories[i]);
                         CustomCategory newCat = new CustomCategory(catData[0]);
 
                         for (int j = 1; j < catData.length; j++) {
@@ -383,12 +386,12 @@ public final class PrefManager {
                     System.out.println("couldn't parse categories, " + aioob.getMessage());
                     aioob.printStackTrace();
                     // fall back to default categories
-                    categories = new DefaultListModel();
+                    categories = new DefaultListModel<>();
                 }
                 // initialize cache
                 setCategoryCache(categories);
             } else {
-                categories = new DefaultListModel();
+                categories = new DefaultListModel<>();
             }
         } else {
             // populate categories from cache
@@ -403,11 +406,10 @@ public final class PrefManager {
      *
      * @return populated DefaultModelList object
      */
-    private DefaultListModel getCachedCategories() {
-        DefaultListModel modelFilters = new DefaultListModel();
-        Iterator it = this.cachedCategories.iterator();
-        while (it.hasNext()) {
-            modelFilters.addElement(it.next());
+    private DefaultListModel<CustomCategory> getCachedCategories() {
+        DefaultListModel<CustomCategory> modelFilters = new DefaultListModel<>();
+        for (final CustomCategory cachedCategory : this.cachedCategories) {
+            modelFilters.addElement(cachedCategory);
         }
         return modelFilters;
     }
@@ -417,7 +419,7 @@ public final class PrefManager {
      *
      * @param categories populated object of {@link CustomCategory} objects
      */
-    private void setCategoryCache(DefaultListModel categories) {
+    private void setCategoryCache(final DefaultListModel<CustomCategory> categories) {
         // remove existing categories
         this.cachedCategories.clear();
         for (int f = 0; f < categories.size(); f++) {
@@ -458,22 +460,22 @@ public final class PrefManager {
 
     public void setFilters(DefaultListModel<Filter> filters) {
         // store into cache
-        StringBuilder filterString = new StringBuilder();
+        final StringBuilder filterString = new StringBuilder();
         for (int i = 0; i < filters.getSize(); i++) {
             if (i > 0) {
                 filterString.append(PARAM_DELIM);
             }
-            filterString.append(((Filter)filters.getElementAt(i)).getName());
+            filterString.append(filters.getElementAt(i).getName());
             filterString.append(FILTER_SEP);
-            filterString.append(((Filter)filters.getElementAt(i)).getFilterExpression());
+            filterString.append(filters.getElementAt(i).getFilterExpression());
             filterString.append(FILTER_SEP);
-            filterString.append(((Filter)filters.getElementAt(i)).getFilterRule());
+            filterString.append(filters.getElementAt(i).getFilterRule());
             filterString.append(FILTER_SEP);
-            filterString.append(((Filter)filters.getElementAt(i)).isGeneralFilter());
+            filterString.append(filters.getElementAt(i).isGeneralFilter());
             filterString.append(FILTER_SEP);
-            filterString.append(((Filter)filters.getElementAt(i)).isExclusionFilter());
+            filterString.append(filters.getElementAt(i).isExclusionFilter());
             filterString.append(FILTER_SEP);
-            filterString.append(((Filter)filters.getElementAt(i)).isEnabled());
+            filterString.append(filters.getElementAt(i).isEnabled());
         }
         toolPrefs.put("filters", filterString.toString());
         setFilterCache(filters);
@@ -483,16 +485,16 @@ public final class PrefManager {
     /**
      * store categories
      *
-     * @param categories
+     * @param categories  DefaultListModel
      */
-    public void setCategories(DefaultListModel categories) {
+    public void setCategories(DefaultListModel<CustomCategory> categories) {
         // store into cache
         StringBuilder catString = new StringBuilder();
         for (int i = 0; i < categories.getSize(); i++) {
             if (i > 0) {
                 catString.append(PARAM_DELIM);
             }
-            CustomCategory cat = (CustomCategory)categories.getElementAt(i);
+            CustomCategory cat = categories.getElementAt(i);
             catString.append(cat.getName());
             catString.append(FILTER_SEP);
             Iterator catIter = cat.iterOfFilters();

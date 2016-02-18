@@ -2,6 +2,8 @@
 
 package com.pironet.tda.utils;
 
+import java.awt.Dimension;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -53,6 +55,11 @@ public final class Const {
             TDA.createImageIcon(ICON_CUSTOM_CATEGORY)
     };
     public static final String AA_TEXT_INFO_PROPERTY_KEY = "AATextInfoPropertyKey";
+    public static final int FONT_SIZE = 12;
+    public static final Dimension EMPTY_DIMENSION = new Dimension(400, 400);
+    public static final int MIN_RIGHT_PANE_SIZE = 600;
+    public static int DIVIDER_SIZE = 4;
+    static int DEFINED_ROWS = 3;
 
     private Const() {
 

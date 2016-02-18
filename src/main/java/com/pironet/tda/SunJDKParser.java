@@ -57,6 +57,7 @@ public class SunJDKParser extends AbstractDumpParser {
     private static final Pattern AT_PATTERN = Pattern.compile("@");
     private static final Pattern PATTERN_NONAME = Pattern.compile("<no name>");
     private static final Pattern PATTERN_SPACE = Pattern.compile("(\\s)+");
+
     private MutableTreeNode nextDump = null;
     private Map<String, Map<String, String>> threadStore = null;
     private int counter = 1;
@@ -144,7 +145,7 @@ public class SunJDKParser extends AbstractDumpParser {
                 int sleeping = 0;
                 boolean locked = true;
                 boolean finished = false;
-                MonitorMap mmap = new MonitorMap();
+                final MonitorMap mmap = new MonitorMap();
                 final Stack<String> monitorStack = new Stack<>();
                 long startTime = 0;
                 int singleLineCounter = 0;
@@ -313,12 +314,10 @@ public class SunJDKParser extends AbstractDumpParser {
                 }
                 if (inWaiting) {
                     addToCategory(catWaiting, title, null, stringContent, singleLineCounter, true);
-                    inWaiting = false;
                     waiting++;
                 }
                 if (inSleeping) {
                     addToCategory(catSleeping, title, null, stringContent, singleLineCounter, true);
-                    inSleeping = false;
                     sleeping++;
                 }
                 if (inLocking) {
@@ -510,7 +509,7 @@ public class SunJDKParser extends AbstractDumpParser {
             } else if (found) {
                 if (line.startsWith("Total ")) {
                     // split string.
-                    String newLine = line.replaceAll("(\\s)+", ";");
+                    String newLine = PATTERN_SPACE.matcher(line).replaceAll(";");
                     String[] elems = newLine.split(";");
                     classHistogram.setBytes(Long.parseLong(elems[2]));
                     classHistogram.setInstances(Long.parseLong(elems[1]));
@@ -678,7 +677,6 @@ public class SunJDKParser extends AbstractDumpParser {
 
     /**
      * dump the monitor information
-
      */
     private int[] dumpMonitors(DefaultMutableTreeNode catMonitors, DefaultMutableTreeNode catMonitorsLocks, MonitorMap mmap) {
         Iterator iter = mmap.iterOfKeys();
@@ -686,17 +684,17 @@ public class SunJDKParser extends AbstractDumpParser {
         int overallThreadsWaiting = 0;
         while (iter.hasNext()) {
             String monitor = (String)iter.next();
-            Map[] threads = mmap.getFromMonitorMap(monitor);
+            Map<String, String>[] threads = mmap.getFromMonitorMap(monitor);
             ThreadInfo mi = new ThreadInfo(monitor, null, "", 0, null);
             DefaultMutableTreeNode monitorNode = new DefaultMutableTreeNode(mi);
 
             // first the locks
-            Iterator iterLocks = threads[MonitorMap.LOCK_THREAD_POS].keySet().iterator();
+            Iterator<String> iterLocks = threads[MonitorMap.LOCK_THREAD_POS].keySet().iterator();
             int locks = 0;
             int sleeps = 0;
             while (iterLocks.hasNext()) {
-                String thread = (String)iterLocks.next();
-                String stackTrace = (String)threads[MonitorMap.LOCK_THREAD_POS].get(thread);
+                String thread = iterLocks.next();
+                String stackTrace = threads[MonitorMap.LOCK_THREAD_POS].get(thread);
                 if (threads[MonitorMap.SLEEP_THREAD_POS].containsKey(thread)) {
                     createNode(monitorNode, "locks and sleeps on monitor: " + thread, null, stackTrace, 0);
                     sleeps++;
@@ -714,7 +712,7 @@ public class SunJDKParser extends AbstractDumpParser {
             while (iterWaits.hasNext()) {
                 String thread = (String)iterWaits.next();
                 if (!threads[MonitorMap.LOCK_THREAD_POS].containsKey(thread)) {
-                    createNode(monitorNode, "waits on monitor: " + thread, null, (String)threads[MonitorMap.WAIT_THREAD_POS].get(thread), 0);
+                    createNode(monitorNode, "waits on monitor: " + thread, null, threads[MonitorMap.WAIT_THREAD_POS].get(thread), 0);
                     waits++;
                 }
             }
@@ -737,7 +735,7 @@ public class SunJDKParser extends AbstractDumpParser {
     }
 
     private int[] dumpBlockingMonitors(DefaultMutableTreeNode catLockingTree, MonitorMap mmap) {
-        Map directChildMap = new HashMap(); // Top level of our display model
+        final Map<String, DefaultMutableTreeNode> directChildMap = new HashMap<>(); // Top level of our display model
 
         //******************************************************************
         // Figure out what threads are blocking and what threads are blocked
@@ -748,7 +746,7 @@ public class SunJDKParser extends AbstractDumpParser {
         //********************************************************************
         // Renormalize this from a flat tree (depth==1) into a structured tree
         //********************************************************************
-        renormalizeBlockingThreadTree(mmap, directChildMap);
+        reNormalizeBlockingThreadTree(mmap, directChildMap);
 
         //********************************************************************
         // Recalculate the number of blocked threads and add remaining top-level threads to our display model
@@ -763,16 +761,16 @@ public class SunJDKParser extends AbstractDumpParser {
         return new int[]{contendedLocks, blockedThreads};
     }
 
-    private void renormalizeBlockingThreadTree(MonitorMap mmap, Map directChildMap) {
-        Map allBlockingThreadsMap = new HashMap(directChildMap); // All threads that are blocking at least one other thread
+    private void reNormalizeBlockingThreadTree(final MonitorMap mmap, final Map<String, DefaultMutableTreeNode> directChildMap) {
+        Map<String, DefaultMutableTreeNode> allBlockingThreadsMap = new HashMap<>(directChildMap); // All threads that are blocking at least one other thread
 
         // First, re-normalize based on monitors to get our unique tree
         // Tree will be unique as long as there are no deadlocks aka monitor loops
         for (Iterator iter = mmap.iterOfKeys(); iter.hasNext(); ) {
             String monitor1 = (String)iter.next();
-            Map[] threads1 = mmap.getFromMonitorMap(monitor1);
+            Map<String, String>[] threads1 = mmap.getFromMonitorMap(monitor1);
 
-            DefaultMutableTreeNode thread1Node = (DefaultMutableTreeNode)allBlockingThreadsMap.get(monitor1);
+            final DefaultMutableTreeNode thread1Node = allBlockingThreadsMap.get(monitor1);
             if (thread1Node == null) {
                 continue;
             }
@@ -790,7 +788,7 @@ public class SunJDKParser extends AbstractDumpParser {
                     continue;
                 }
 
-                Map[] threads2 = mmap.getFromMonitorMap(monitor2);
+                Map<String, String>[] threads2 = mmap.getFromMonitorMap(monitor2);
                 if (threads2[MonitorMap.WAIT_THREAD_POS].containsKey(threadLine1)) {
                     // Get the node of the thread that is holding this lock
                     DefaultMutableTreeNode thread2Node = (DefaultMutableTreeNode)allBlockingThreadsMap.get(monitor2);
@@ -817,7 +815,7 @@ public class SunJDKParser extends AbstractDumpParser {
 
         allBlockingThreadsMap.clear();
 
-        // Second, renormalize top level based on threads for cases where one thread holds multiple monitors
+        // Second, re-normalize top level based on threads for cases where one thread holds multiple monitors
         boolean changed;
         do {
             changed = false;
@@ -888,11 +886,11 @@ public class SunJDKParser extends AbstractDumpParser {
         return false;
     }
 
-    private int fillBlockingThreadMaps(MonitorMap mmap, Map<String, DefaultMutableTreeNode> directChildMap) {
+    private int fillBlockingThreadMaps(final MonitorMap mmap, final Map<String, DefaultMutableTreeNode> directChildMap) {
         int blockedThread = 0;
         for (Iterator iter = mmap.iterOfKeys(); iter.hasNext(); ) {
             String monitor = (String)iter.next();
-            Map[] threads = mmap.getFromMonitorMap(monitor);
+            Map<String, String>[] threads = mmap.getFromMonitorMap(monitor);
 
             // Only one thread can really be holding this monitor, so find the thread
             String threadLine = getLockingThread(threads);
@@ -909,11 +907,11 @@ public class SunJDKParser extends AbstractDumpParser {
                 // Skip the thread that has this monitor locked
                 if (!threads[MonitorMap.LOCK_THREAD_POS].containsKey(thread)) {
                     blockedThread++;
-                    createNode(monitorNode, "Thread - " + thread, null, (String)threads[MonitorMap.WAIT_THREAD_POS].get(thread), 0);
+                    createNode(monitorNode, "Thread - " + thread, null, threads[MonitorMap.WAIT_THREAD_POS].get(thread), 0);
                 }
             }
 
-            String blockingStackFrame = (String)threads[MonitorMap.LOCK_THREAD_POS].get(threadLine);
+            String blockingStackFrame = threads[MonitorMap.LOCK_THREAD_POS].get(threadLine);
             tmi.setContent(blockingStackFrame);
             mmi.setContent("This monitor (" + linkifyMonitor(monitor)
                     + ") is held in the following stack frame:\n\n" + blockingStackFrame);
@@ -997,7 +995,7 @@ public class SunJDKParser extends AbstractDumpParser {
             for (int i = histograms.size() - 1; i >= 0; i--) {
                 DefaultMutableTreeNode dump = getNextDumpForHistogram(root);
                 if (dump != null) {
-                    addHistogramToDump(dump, (HistogramTableModel)histograms.get(i));
+                    addHistogramToDump(dump, histograms.get(i));
                 }
             }
         } catch (IOException ex) {

@@ -23,6 +23,7 @@
  */
 package com.pironet.tda.utils;
 
+import java.util.List;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -40,11 +41,10 @@ public class HistogramTableModel extends AbstractTableModel {
     private static final Pattern GT_PATTERN = Pattern.compile(">");
     private static final Pattern BR_PATTERN = Pattern.compile("\\[\\]");
     private static final long serialVersionUID = -3592017205042118981L;
-    private static int DEFINED_ROWS = 3;
 
-    private Vector elements = new Vector();
+    private List<Entry> elements = new Vector<>();
 
-    private Vector filteredElements = null;
+    private List<Entry> filteredElements = null;
 
     private String[] columnNames = {"class name",
             "instance count",
@@ -67,11 +67,10 @@ public class HistogramTableModel extends AbstractTableModel {
     /**
      * Creates a new instance of HistogramTableModel
      */
-    public HistogramTableModel() {
-    }
+
 
     public void addEntry(String className, int instanceCount, int bytes) {
-        elements.addElement(new Entry(className, instanceCount, bytes));
+        elements.add(new Entry(className, instanceCount, bytes));
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -82,16 +81,16 @@ public class HistogramTableModel extends AbstractTableModel {
         }
     }
 
-    private Object getValueAt(Vector elements, int rowIndex, int columnIndex) {
+    private Object getValueAt(List<Entry> elements, int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0: {
-                return ((Entry)elements.elementAt(rowIndex)).className;
+                return elements.get(rowIndex).className;
             }
             case 1: {
-                return new Integer(((Entry)elements.elementAt(rowIndex)).bytes);
+                return elements.get(rowIndex).bytes;
             }
             case 2: {
-                return new Integer(((Entry)elements.elementAt(rowIndex)).instanceCount);
+                return elements.get(rowIndex).instanceCount;
             }
         }
         return null;
@@ -110,7 +109,7 @@ public class HistogramTableModel extends AbstractTableModel {
     }
 
     public int getColumnCount() {
-        return DEFINED_ROWS;
+        return Const.DEFINED_ROWS;
     }
 
     public Class getColumnClass(int c) {
@@ -164,14 +163,14 @@ public class HistogramTableModel extends AbstractTableModel {
         if (Strings.isNullOrEmpty(value) && isShowHotspotClasses()) {
             filteredElements = null;
         } else {
-            filteredElements = new Vector();
-            for (Object element : elements) {
+            filteredElements = new Vector<>();
+            for (Entry element : elements) {
                 if (isIgnoreCase()) {
-                    if (((Entry)element).className.toLowerCase().indexOf(value) >= 0) {
+                    if (element.className.toLowerCase().contains(value)) {
                         filteredElements.add(element);
                     }
                 } else {
-                    if (isNotHotspotClass(((Entry)element).className) && (Strings.isNullOrEmpty(value) || (((Entry)element).className.indexOf(value) >= 0))) {
+                    if (isNotHotspotClass(element.className) && (Strings.isNullOrEmpty(value) || (element.className.contains(value)))) {
                         filteredElements.add(element);
                     }
                 }
@@ -186,7 +185,7 @@ public class HistogramTableModel extends AbstractTableModel {
      */
     private boolean isNotHotspotClass(String className) {
         //System.out.println("className" + className + " eval=" + (!isShowHotspotClasses() && className.startsWith("<")));
-        return (isShowHotspotClasses() || !(className.indexOf("[internal HotSpot]") >= 0));
+        return (isShowHotspotClasses() || !(className.contains("[internal HotSpot]")));
     }
 
     public void setShowHotspotClasses(boolean value) {

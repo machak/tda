@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * logfile content info object of log file thread dump information.
  *
@@ -75,7 +77,7 @@ public class LogFileContent extends AbstractInfo implements Serializable {
                 readContent();
             }
 
-            return (((StringBuffer)content.get()).toString());
+            return (content.get().toString());
         } else {
             return (contentBuffer.toString());
         }
@@ -102,8 +104,7 @@ public class LogFileContent extends AbstractInfo implements Serializable {
      * synchronization is not needed here.
      */
     private void readContent() {
-        StringBuffer contentReader = new StringBuffer();
-
+        final StringBuffer contentReader = new StringBuffer();
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(getLogfile()));
@@ -115,13 +116,9 @@ public class LogFileContent extends AbstractInfo implements Serializable {
             ex.printStackTrace();
             contentReader.append("The Logfile unavailable! ").append(ex.getMessage());
         } finally {
-            try {
-                br.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            IOUtils.closeQuietly(br);
         }
-        content = new SoftReference(contentReader);
+        content = new SoftReference<>(contentReader);
     }
 
 }

@@ -36,6 +36,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -1305,9 +1307,7 @@ public class JEditTextArea extends JComponent {
 
     /**
      * Sets if the selection should be rectangular.
-     *
-     * @param overwrite True if the selection should be rectangular,
-     *                  false otherwise.
+
      */
     public final void setSelectionRectangular(boolean rectSelect) {
         this.rectSelect = rectSelect;
@@ -1536,7 +1536,7 @@ public class JEditTextArea extends JComponent {
             } else if (name.equals(BOTTOM)) {
                 bottom = comp;
             } else if (name.equals(LEFT_OF_SCROLLBAR)) {
-                leftOfScrollBar.addElement(comp);
+                leftOfScrollBar.add(comp);
             }
         }
 
@@ -1550,7 +1550,7 @@ public class JEditTextArea extends JComponent {
             if (bottom == comp) {
                 bottom = null;
             } else {
-                leftOfScrollBar.removeElement(comp);
+                leftOfScrollBar.remove(comp);
             }
         }
 
@@ -1612,9 +1612,7 @@ public class JEditTextArea extends JComponent {
                     centerHeight);
 
             // Lay out all status components, in order
-            Enumeration status = leftOfScrollBar.elements();
-            while (status.hasMoreElements()) {
-                Component comp = (Component)status.nextElement();
+            for (final Component comp : leftOfScrollBar) {
                 Dimension dim = comp.getPreferredSize();
                 comp.setBounds(ileft,
                         itop + centerHeight,
@@ -1634,7 +1632,7 @@ public class JEditTextArea extends JComponent {
         private Component center;
         private Component right;
         private Component bottom;
-        private Vector leftOfScrollBar = new Vector();
+        private List<Component> leftOfScrollBar = new Vector<>();
     }
 
     class CaretBlinker implements ActionListener {

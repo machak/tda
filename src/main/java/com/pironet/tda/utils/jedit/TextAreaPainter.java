@@ -72,19 +72,11 @@ public class TextAreaPainter extends JComponent implements TabExpander {
         eolMarkers = defaults.eolMarkers;
     }
 
-    /**
-     * Returns if this component can be traversed by pressing the
-     * Tab key. This returns false.
-     */
-    public final boolean isManagingFocus() {
-        return false;
-    }
 
     /**
      * Returns the syntax styles used to paint colorized text. Entry <i>n</i>
      * will be used to paint tokens with id = <i>n</i>.
      *
-     * @see org.gjt.sp.jedit.syntax.Token
      */
     public final SyntaxStyle[] getStyles() {
         return styles;

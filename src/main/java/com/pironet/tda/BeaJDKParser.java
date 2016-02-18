@@ -34,6 +34,8 @@ import javax.swing.tree.MutableTreeNode;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
 
+import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte0.waiting;
+
 /**
  * Parses Bea/JRockit Thread Dumps
  *
@@ -50,9 +52,6 @@ public class BeaJDKParser extends AbstractDumpParser {
 
     /**
      * constructs a new instance of a bea jdk parser
-     *
-     * @param dumpFileStream the dump file stream to read.
-     * @param threadStore    the thread store to store the thread informations in.
      */
     public BeaJDKParser(BufferedReader bis, Map threadStore, int lineCounter, DateMatcher dm) {
         super(bis, dm);
@@ -84,58 +83,43 @@ public class BeaJDKParser extends AbstractDumpParser {
         boolean retry = false;
 
         do {
-            DefaultMutableTreeNode threadDump = null;
-            ThreadDumpInfo overallTDI = null;
-            DefaultMutableTreeNode catMonitors = null;
-            DefaultMutableTreeNode catMonitorsLocks = null;
-            DefaultMutableTreeNode catThreads = null;
-            DefaultMutableTreeNode catLocking = null;
-            DefaultMutableTreeNode catSleeping = null;
-            DefaultMutableTreeNode catWaiting = null;
 
             try {
-                Map threads = new HashMap();
-                overallTDI = new ThreadDumpInfo("Dump No. " + counter++, 0);
-                threadDump = new DefaultMutableTreeNode(overallTDI);
-                catThreads = new DefaultMutableTreeNode(new TableCategory("Threads", IconFactory.THREADS));
+                Map<String, String> threads = new HashMap<>();
+                ThreadDumpInfo overallTDI = new ThreadDumpInfo("Dump No. " + counter++, 0);
+                DefaultMutableTreeNode threadDump = new DefaultMutableTreeNode(overallTDI);
+                DefaultMutableTreeNode catThreads = new DefaultMutableTreeNode(new TableCategory("Threads", IconFactory.THREADS));
                 threadDump.add(catThreads);
-                catWaiting = new DefaultMutableTreeNode(new TableCategory("Threads waiting for Monitors", IconFactory.THREADS_WAITING));
+                DefaultMutableTreeNode catWaiting = new DefaultMutableTreeNode(new TableCategory("Threads waiting for Monitors", IconFactory.THREADS_WAITING));
 
-                catSleeping = new DefaultMutableTreeNode(new TableCategory("Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
+                DefaultMutableTreeNode catSleeping = new DefaultMutableTreeNode(new TableCategory("Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
 
-                catLocking = new DefaultMutableTreeNode(new TableCategory("Threads locking Monitors", IconFactory.THREADS_LOCKING));
+                DefaultMutableTreeNode catLocking = new DefaultMutableTreeNode(new TableCategory("Threads locking Monitors", IconFactory.THREADS_LOCKING));
 
                 // create category for monitors with disabled filtering.
-                catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
-                catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
+                DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
+                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
 
                 String title = null;
                 StringBuffer content = null;
                 StringBuffer lContent = null;
                 StringBuffer sContent = null;
                 StringBuffer wContent = null;
-                int threadCount = 0;
-                int waiting = 0;
-                int locking = 0;
-                int sleeping = 0;
                 boolean locked = true; // true means we haven't hit the beggining of a thread dump yet
-                boolean finished = false;
-                MonitorMap mmap = new MonitorMap();
-                Stack monitorStack = new Stack();
-                long startTime = 0;
+                final MonitorMap mmap = new MonitorMap();
+                final Stack<String> monitorStack = new Stack<>();
                 int singleLineCounter = 0;
-                Matcher matched = getDm().getLastMatch();
 
-                while (getBis().ready() && !finished) {
+                while (getBis().ready()) {
                     String line = getBis().readLine();
                     lineCounter++;
                     singleLineCounter++;
                     if (locked) {  // Are we outside of a thread dump ?
-                        if (line.indexOf("===== FULL THREAD DUMP ===============") >= 0) {
+                        if (line.contains("===== FULL THREAD DUMP ===============")) {
                             locked = false;
                         }
                     } else {  // Alright we're already inside a dump
-                        if (line.indexOf("-- end of trace") >= 0) {
+                        if (line.contains("-- end of trace")) {
                             System.out.print("x");
                         }
                         if (line.startsWith("\"")) { // Did we hit a new thread ?
@@ -144,25 +128,21 @@ public class BeaJDKParser extends AbstractDumpParser {
                                 threads.put(title, content.toString());
                                 content.append("</pre></pre>");
                                 addToCategory(catThreads, title, null, stringContent, singleLineCounter, true);
-                                threadCount++;
                             }
                             if (wContent != null) {
                                 wContent.append("</b><hr>");
                                 addToCategory(catWaiting, title, null, stringContent, singleLineCounter, true);
                                 wContent = null;
-                                waiting++;
                             }
                             if (sContent != null) {
                                 sContent.append("</b><hr>");
                                 addToCategory(catSleeping, title, null, stringContent, singleLineCounter, true);
                                 sContent = null;
-                                sleeping++;
                             }
                             if (lContent != null) {
                                 lContent.append("</b><hr>");
                                 addToCategory(catLocking, title, null, stringContent, singleLineCounter, true);
                                 lContent = null;
-                                locking++;
                             }
                             singleLineCounter = 0;
                             while (!monitorStack.empty()) {
@@ -173,10 +153,10 @@ public class BeaJDKParser extends AbstractDumpParser {
                             content = new StringBuffer("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
                             content.append(line);
                             content.append('\n');
-                        } else if (line.indexOf("at ") >= 0) { // enganado por [fat lock] 
+                        } else if (line.contains("at ")) { // enganado por [fat lock]
                             content.append(line);
                             content.append('\n');
-                        } else if (line.indexOf("-- Waiting for notification") >= 0) {
+                        } else if (line.contains("-- Waiting for notification")) {
                             String newLine = linkifyMonitor(line);
                             content.append(newLine);
                             if (sContent == null) {
@@ -231,7 +211,7 @@ public class BeaJDKParser extends AbstractDumpParser {
      * @return true, if the start of a bea thread dump is detected.
      */
     public static boolean checkForSupportedThreadDump(String logLine) {
-        return (logLine.trim().indexOf("===== FULL THREAD DUMP ===============") >= 0);
+        return (logLine.trim().contains("===== FULL THREAD DUMP ==============="));
     }
 
     protected String[] getThreadTokens(String name) {

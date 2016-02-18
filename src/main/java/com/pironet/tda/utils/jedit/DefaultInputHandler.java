@@ -30,7 +30,7 @@ public class DefaultInputHandler extends InputHandler {
      * Creates a new input handler with no key bindings defined.
      */
     public DefaultInputHandler() {
-        bindings = currentBindings = new Hashtable();
+        bindings = currentBindings = new Hashtable<>();
     }
 
     /**
@@ -84,10 +84,11 @@ public class DefaultInputHandler extends InputHandler {
      * @param keyStroke key binding to add
      * @param action    action to perform if key is pressed.
      */
+    @SuppressWarnings("unchecked")
     public void addKeyBinding(KeyStroke keyStroke, ActionListener action) {
         Object o = bindings.get(keyStroke);
         if (o instanceof Map) {
-            ((Map)o).put(keyStroke, action);
+            ((Map<KeyStroke, Object>)o).put(keyStroke, action);
         } else {
             bindings.put(keyStroke, action);
         }
@@ -103,6 +104,7 @@ public class DefaultInputHandler extends InputHandler {
      * @param keyBinding The key binding
      * @param action     The action
      */
+    @SuppressWarnings("unchecked")
     public void addKeyBinding(String keyBinding, ActionListener action) {
         Hashtable<KeyStroke, Object> current = bindings;
 
@@ -158,6 +160,7 @@ public class DefaultInputHandler extends InputHandler {
      * Handle a key pressed event. This will look up the binding for
      * the key stroke and execute it.
      */
+    @SuppressWarnings("unchecked")
     public void keyPressed(KeyEvent evt) {
         int keyCode = evt.getKeyCode();
         int modifiers = evt.getModifiers();
@@ -206,11 +209,9 @@ public class DefaultInputHandler extends InputHandler {
                         evt.getSource(), String.valueOf(evt.getKeyChar()), evt.getModifiers());
 
                 evt.consume();
-                return;
             } else if (o instanceof Hashtable) {
-                currentBindings = (Hashtable)o;
+                currentBindings = (Hashtable<KeyStroke, Object>)o;
                 evt.consume();
-                return;
             }
         }
     }
@@ -218,6 +219,7 @@ public class DefaultInputHandler extends InputHandler {
     /**
      * Handle a key typed event. This inserts the key into the text area.
      */
+    @SuppressWarnings("unchecked")
     public void keyTyped(KeyEvent evt) {
         int modifiers = evt.getModifiers();
         char c = evt.getKeyChar();
@@ -229,7 +231,7 @@ public class DefaultInputHandler extends InputHandler {
                 Object o = currentBindings.get(keyStroke);
 
                 if (o instanceof Hashtable) {
-                    currentBindings = (Hashtable)o;
+                    currentBindings = (Hashtable<KeyStroke, Object>)o;
                     return;
                 } else if (o instanceof ActionListener) {
                     currentBindings = bindings;
