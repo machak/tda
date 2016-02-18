@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
@@ -54,6 +55,8 @@ public class SunJDKParser extends AbstractDumpParser {
 
     private static final Pattern LT_PATTERN = Pattern.compile("<");
     private static final Pattern AT_PATTERN = Pattern.compile("@");
+    private static final Pattern PATTERN_NONAME = Pattern.compile("<no name>");
+    private static final Pattern PATTERN_SPACE = Pattern.compile("(\\s)+");
     private MutableTreeNode nextDump = null;
     private Map<String, Map<String, String>> threadStore = null;
     private int counter = 1;
@@ -82,7 +85,7 @@ public class SunJDKParser extends AbstractDumpParser {
     }
 
     /**
-     * @returns true, if a class histogram was found and added during parsing.
+     * @return true, if a class histogram was found and added during parsing.
      */
     public boolean isFoundClassHistograms() {
         return (foundClassHistograms);
@@ -91,7 +94,7 @@ public class SunJDKParser extends AbstractDumpParser {
     /**
      * parse the next thread dump from the stream passed with the constructor.
      *
-     * @returns null if no more thread dumps were found.
+     * @return null if no more thread dumps were found.
      */
     public MutableTreeNode parseNext() {
         if (nextDump != null) {
@@ -180,7 +183,6 @@ public class SunJDKParser extends AbstractDumpParser {
                                     } else {
                                         overallTDI.setStartTime(parsedStartTime);
                                     }
-                                    parsedStartTime = null;
                                     matched = null;
                                     getDm().resetLastMatch();
                                 }
@@ -321,12 +323,10 @@ public class SunJDKParser extends AbstractDumpParser {
                 }
                 if (inLocking) {
                     addToCategory(catLocking, title, null, stringContent, singleLineCounter, true);
-                    inLocking = false;
                     locking++;
                 }
-                singleLineCounter = 0;
                 while (!monitorStack.empty()) {
-                    mmap.parseAndAddThread((String)monitorStack.pop(), title, content.toString());
+                    mmap.parseAndAddThread(monitorStack.pop(), title, content.toString());
                 }
 
                 int monitorCount = mmap.size();
@@ -377,14 +377,14 @@ public class SunJDKParser extends AbstractDumpParser {
                 }
                 overallTDI.setThreads((Category)catThreads.getUserObject());
 
-                ((Category)catThreads.getUserObject()).setName(((Category)catThreads.getUserObject()) + " (" + threadCount + " Threads overall)");
-                ((Category)catWaiting.getUserObject()).setName(((Category)catWaiting.getUserObject()) + " (" + waiting + " Threads waiting)");
-                ((Category)catSleeping.getUserObject()).setName(((Category)catSleeping.getUserObject()) + " (" + sleeping + " Threads sleeping)");
-                ((Category)catLocking.getUserObject()).setName(((Category)catLocking.getUserObject()) + " (" + locking + " Threads locking)");
-                ((Category)catMonitors.getUserObject()).setName(((Category)catMonitors.getUserObject()) + " (" + monitorCount + " Monitors)");
-                ((Category)catBlockingMonitors.getUserObject()).setName(((Category)catBlockingMonitors.getUserObject()) + " (" + blockedThreads
+                ((Category)catThreads.getUserObject()).setName(catThreads.getUserObject() + " (" + threadCount + " Threads overall)");
+                ((Category)catWaiting.getUserObject()).setName(catWaiting.getUserObject() + " (" + waiting + " Threads waiting)");
+                ((Category)catSleeping.getUserObject()).setName(catSleeping.getUserObject() + " (" + sleeping + " Threads sleeping)");
+                ((Category)catLocking.getUserObject()).setName(catLocking.getUserObject() + " (" + locking + " Threads locking)");
+                ((Category)catMonitors.getUserObject()).setName(catMonitors.getUserObject() + " (" + monitorCount + " Monitors)");
+                ((Category)catBlockingMonitors.getUserObject()).setName(catBlockingMonitors.getUserObject() + " (" + blockedThreads
                         + " Threads blocked by " + contendedMonitors + " Monitors)");
-                ((Category)catMonitorsLocks.getUserObject()).setName(((Category)catMonitorsLocks.getUserObject()) + " (" + monitorsWithoutLocksCount
+                ((Category)catMonitorsLocks.getUserObject()).setName(catMonitorsLocks.getUserObject() + " (" + monitorsWithoutLocksCount
                         + " Monitors)");
                 // add thread dump to passed dump store.
                 if ((threadCount > 0) && (dumpKey != null)) {
@@ -517,10 +517,10 @@ public class SunJDKParser extends AbstractDumpParser {
                     finished = true;
                 } else if (!line.startsWith("-------")) {
                     // removed blank, breaks splitting using blank...
-                    String newLine = line.replaceAll("<no name>", "<no-name>");
+                    String newLine = PATTERN_NONAME.matcher(line).replaceAll("<no-name>");
 
                     // split string.
-                    newLine = newLine.replaceAll("(\\s)+", ";");
+                    newLine = PATTERN_SPACE.matcher(newLine).replaceAll(";");
                     String[] elems = newLine.split(";");
 
                     if (elems.length == 4) {
@@ -561,7 +561,7 @@ public class SunJDKParser extends AbstractDumpParser {
 
         while (getBis().ready() && !finished) {
             String line = getNextLine();
-            if (!found && !line.equals("")) {
+            if (!found && !Strings.isNullOrEmpty(line)) {
                 if (line.trim().startsWith("Heap")) {
                     found = true;
                 } else if (lines >= getMaxCheckLines()) {
@@ -678,11 +678,7 @@ public class SunJDKParser extends AbstractDumpParser {
 
     /**
      * dump the monitor information
-     *
-     * @param catMonitors
-     * @param catMonitorsLocks
-     * @param mmap
-     * @return
+
      */
     private int[] dumpMonitors(DefaultMutableTreeNode catMonitors, DefaultMutableTreeNode catMonitorsLocks, MonitorMap mmap) {
         Iterator iter = mmap.iterOfKeys();
@@ -698,7 +694,6 @@ public class SunJDKParser extends AbstractDumpParser {
             Iterator iterLocks = threads[MonitorMap.LOCK_THREAD_POS].keySet().iterator();
             int locks = 0;
             int sleeps = 0;
-            int waits = 0;
             while (iterLocks.hasNext()) {
                 String thread = (String)iterLocks.next();
                 String stackTrace = (String)threads[MonitorMap.LOCK_THREAD_POS].get(thread);
@@ -715,6 +710,7 @@ public class SunJDKParser extends AbstractDumpParser {
             }
 
             Iterator iterWaits = threads[MonitorMap.WAIT_THREAD_POS].keySet().iterator();
+            int waits = 0;
             while (iterWaits.hasNext()) {
                 String thread = (String)iterWaits.next();
                 if (!threads[MonitorMap.LOCK_THREAD_POS].containsKey(thread)) {
@@ -757,10 +753,8 @@ public class SunJDKParser extends AbstractDumpParser {
         //********************************************************************
         // Recalculate the number of blocked threads and add remaining top-level threads to our display model
         //********************************************************************
-        Iterator iter = directChildMap.entrySet().iterator();
-        while (iter.hasNext()) {
-            DefaultMutableTreeNode threadNode = (DefaultMutableTreeNode)((Map.Entry)iter.next()).getValue();
-
+        for (final Object o : directChildMap.entrySet()) {
+            DefaultMutableTreeNode threadNode = (DefaultMutableTreeNode)((Map.Entry)o).getValue();
             updateChildCount(threadNode, true);
             ((Category)catLockingTree.getUserObject()).addToCatNodes(threadNode);
         }
@@ -772,7 +766,7 @@ public class SunJDKParser extends AbstractDumpParser {
     private void renormalizeBlockingThreadTree(MonitorMap mmap, Map directChildMap) {
         Map allBlockingThreadsMap = new HashMap(directChildMap); // All threads that are blocking at least one other thread
 
-        // First, renormalize based on monitors to get our unique tree
+        // First, re-normalize based on monitors to get our unique tree
         // Tree will be unique as long as there are no deadlocks aka monitor loops
         for (Iterator iter = mmap.iterOfKeys(); iter.hasNext(); ) {
             String monitor1 = (String)iter.next();
@@ -824,7 +818,7 @@ public class SunJDKParser extends AbstractDumpParser {
         allBlockingThreadsMap.clear();
 
         // Second, renormalize top level based on threads for cases where one thread holds multiple monitors
-        boolean changed = false;
+        boolean changed;
         do {
             changed = false;
             for (final Object o : directChildMap.entrySet()) {
@@ -987,7 +981,7 @@ public class SunJDKParser extends AbstractDumpParser {
      */
     public void parseLoggcFile(InputStream loggcFileStream, DefaultMutableTreeNode root) {
         BufferedReader bis = new BufferedReader(new InputStreamReader(loggcFileStream));
-        Vector histograms = new Vector();
+        List<HistogramTableModel> histograms = new Vector<>();
 
         try {
             while (bis.ready()) {
@@ -1018,7 +1012,7 @@ public class SunJDKParser extends AbstractDumpParser {
      * @return thread tokens.
      */
     public String[] getThreadTokens(String name) {
-        String[] tokens = null;
+        String[] tokens;
 
         if (name.indexOf("prio") > 0) {
             tokens = new String[7];

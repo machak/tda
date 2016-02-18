@@ -11,7 +11,7 @@ public final class Const {
 
     public static final String ICON_THREAD = "thread.png";
     public static final ImageIcon THREAD = TDA.createImageIcon(ICON_THREAD);
-    public static final String ICON_HISTOGRAM = "Histogram.gif";
+    public static final String ICON_HISTOGRAM = "histogram.png";
     public static final ImageIcon HISTOGRAM = TDA.createImageIcon(ICON_HISTOGRAM);
     public static final String ICON_BLOCKING = "blocking.png";
     public static final ImageIcon BLOCKING = TDA.createImageIcon(ICON_BLOCKING);
@@ -52,6 +52,7 @@ public final class Const {
             TDA.createImageIcon(ICON_MONITORS_GREEN),
             TDA.createImageIcon(ICON_CUSTOM_CATEGORY)
     };
+    public static final String AA_TEXT_INFO_PROPERTY_KEY = "AATextInfoPropertyKey";
 
     private Const() {
 

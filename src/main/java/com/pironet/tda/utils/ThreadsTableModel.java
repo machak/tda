@@ -36,17 +36,14 @@ import com.pironet.tda.ThreadInfo;
 public class ThreadsTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = -2199750860382621693L;
-    private Vector elements;
+    private Vector<Object> elements;
 
     private String[] columnNames = null;
 
-    /**
-     * @param root
-     */
     public ThreadsTableModel(DefaultMutableTreeNode rootNode) {
         // transform child nodes in proper vector.
         if (rootNode != null) {
-            elements = new Vector();
+            elements = new Vector<>();
             for (int i = 0; i < rootNode.getChildCount(); i++) {
                 DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)rootNode.getChildAt(i);
                 elements.add(childNode.getUserObject());
@@ -103,9 +100,7 @@ public class ThreadsTableModel extends AbstractTableModel {
         return (rowIndex >= 0 && rowIndex < getRowCount() ? (ThreadInfo)elements.get(rowIndex) : null);
     }
 
-    /**
-     * @inherited
-     */
+
     public Class getColumnClass(int columnIndex) {
         if (columnIndex > 1 && columnIndex < 5) {
             return Integer.class;
@@ -125,7 +120,7 @@ public class ThreadsTableModel extends AbstractTableModel {
         int i = startRow;
         boolean found = false;
         while (!found && (i < getRowCount())) {
-            found = getInfoObjectAtRow(i++).getTokens()[0].indexOf(name) >= 0;
+            found = getInfoObjectAtRow(i++).getTokens()[0].contains(name);
         }
 
         return (found ? i - 1 : -1);

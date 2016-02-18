@@ -19,6 +19,7 @@
  */
 package com.pironet.tda;
 
+import java.awt.Dimension;
 import java.util.EventListener;
 
 import javax.swing.JComponent;
@@ -61,19 +62,15 @@ public class TableCategory extends AbstractCategory {
         setIconID(iconID);
     }
 
-    /**
-     * @inherited
-     */
+
     public JComponent getCatComponent(EventListener listener) {
         if (isFilterEnabled() && ((filteredTable == null) || (getLastUpdated() < PrefManager.get().getFiltersLastChanged()))) {
             // first refresh filter checker with current filters
             setFilterChecker(FilterChecker.getFilterChecker());
-
             // apply new filter settings.
             DefaultMutableTreeNode filteredRootNode = filterNodes(getRootNode());
             if (filteredRootNode != null && filteredRootNode.getChildCount() > 0) {
-                ThreadsTableModel ttm = new ThreadsTableModel(filterNodes(getRootNode()));
-
+                final ThreadsTableModel ttm = new ThreadsTableModel(filterNodes(getRootNode()));
                 // create table instance (filtered)
                 setupTable(ttm, listener);
             } else {
@@ -85,8 +82,7 @@ public class TableCategory extends AbstractCategory {
         } else if (!isFilterEnabled() && ((filteredTable == null) || (getLastUpdated() < PrefManager.get().getFiltersLastChanged()))) {
             // create unfiltered table view.
             if (getRootNode().getChildCount() > 0) {
-                ThreadsTableModel ttm = new ThreadsTableModel(getRootNode());
-
+                final ThreadsTableModel ttm = new ThreadsTableModel(getRootNode());
                 // create table instance (unfiltered)
                 setupTable(ttm, listener);
             }
@@ -98,17 +94,16 @@ public class TableCategory extends AbstractCategory {
      * setup the table instance with the specified table model
      * (either filtered or none-filtered).
      *
-     * @param ts       the table sorter/model to use.
+     * @param tm       the table sorter/model to use.
      * @param listener the event listener to add to the table
      */
     private void setupTable(TableModel tm, EventListener listener) {
-        TableSorter ts = new TableSorter(tm);
+        final TableSorter ts = new TableSorter(tm);
         filteredTable = new ColoredTable(ts);
         ts.setTableHeader(filteredTable.getTableHeader());
         filteredTable.setSelectionModel(new ThreadsTableSelectionModel(filteredTable));
         filteredTable.getSelectionModel().addListSelectionListener((ListSelectionListener)listener);
-
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        final DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.RIGHT);
 
         // currently only two different views have to be dealt with,
@@ -125,7 +120,6 @@ public class TableCategory extends AbstractCategory {
             filteredTable.getColumnModel().getColumn(0).setPreferredWidth(300);
             filteredTable.getColumnModel().getColumn(1).setPreferredWidth(30);
             filteredTable.getColumnModel().getColumn(2).setPreferredWidth(50);
-
             filteredTable.getColumnModel().getColumn(1).setCellRenderer(renderer);
         }
     }

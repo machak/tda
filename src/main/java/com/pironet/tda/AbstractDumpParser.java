@@ -22,6 +22,7 @@ package com.pironet.tda;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -105,7 +106,7 @@ public abstract class AbstractDumpParser implements DumpParser {
     }
 
     protected void diffDumps(String prefix, DefaultMutableTreeNode root, Map dumpStore, TreePath[] dumps, int minOccurence, String regex) {
-        Vector keys = new Vector(dumps.length);
+        List<String> keys = new Vector<>(dumps.length);
 
         for (final TreePath dump : dumps) {
             String dumpName = getDumpStringFromTreePath(dump);
@@ -123,10 +124,9 @@ public abstract class AbstractDumpParser implements DumpParser {
         int threadCount = 0;
 
         if (dumpStore.get(keys.get(0)) != null) {
-            Iterator dumpIter = ((Map)dumpStore.get(keys.get(0))).keySet().iterator();
 
-            while (dumpIter.hasNext()) {
-                String threadKey = ((String)dumpIter.next()).trim();
+            for (final Object o : ((Map)dumpStore.get(keys.get(0))).keySet()) {
+                String threadKey = ((String)o).trim();
 
                 if (Strings.isNullOrEmpty(regex) || threadKey.matches(regex)) {
                     int occurence = 0;
@@ -140,9 +140,9 @@ public abstract class AbstractDumpParser implements DumpParser {
                     if (occurence >= (minOccurence - 1)) {
                         threadCount++;
                         StringBuilder content = new StringBuilder("<body bgcolor=\"ffffff\"><b><font size=").append(TDA.getFontSizeModifier(-1)).
-                                append('>').append((String)keys.get(0)).append("</b></font><hr><pre><font size=").
+                                append('>').append(keys.get(0)).append("</b></font><hr><pre><font size=").
                                 append(TDA.getFontSizeModifier(-1)).append('>').
-                                append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(0))).get(threadKey), (String)keys.get(0)));
+                                append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(0))).get(threadKey), keys.get(0)));
 
                         int maxLines = 0;
                         for (int i = 1; i < dumps.length; i++) {
@@ -154,7 +154,7 @@ public abstract class AbstractDumpParser implements DumpParser {
                                 content.append("</font></b><hr><pre><font size=");
                                 content.append(TDA.getFontSizeModifier(-1));
                                 content.append('>');
-                                content.append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(i))).get(threadKey), (String)keys.get(i)));
+                                content.append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(i))).get(threadKey), keys.get(i)));
                                 int countLines = countLines(((String)((Map)dumpStore.get(keys.get(i))).get(threadKey)));
                                 maxLines = maxLines > countLines ? maxLines : countLines;
                             }
@@ -195,7 +195,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      * @param threadCount  the overall thread count of this run.
      * @return
      */
-    private String getStatInfo(Vector keys, String prefix, int minOccurence, int threadCount) {
+    private String getStatInfo(List<String> keys, String prefix, int minOccurence, int threadCount) {
         StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
 
         statData.append("<b>").append(prefix).append("</b><hr><p><i>");
@@ -249,8 +249,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      * @see ThreadInfo
      */
     protected void createNode(DefaultMutableTreeNode top, String title, String info, String content, int lineCount) {
-        DefaultMutableTreeNode threadInfo = null;
-        threadInfo = new DefaultMutableTreeNode(new ThreadInfo(title, info, content, lineCount, getThreadTokens(title)));
+        DefaultMutableTreeNode threadInfo = new DefaultMutableTreeNode(new ThreadInfo(title, info, content, lineCount, getThreadTokens(title)));
         top.add(threadInfo);
     }
 
@@ -267,8 +266,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      */
     protected void addToCategory(DefaultMutableTreeNode category, String title, StringBuffer info, String content, int lineCount,
                                  boolean parseTokens) {
-        DefaultMutableTreeNode threadInfo = null;
-        threadInfo = new DefaultMutableTreeNode(new ThreadInfo(title, info != null ? info.toString() : null, content, lineCount,
+        DefaultMutableTreeNode threadInfo = new DefaultMutableTreeNode(new ThreadInfo(title, info != null ? info.toString() : null, content, lineCount,
                 parseTokens ? getThreadTokens(title) : null));
         ((Category)category.getUserObject()).addToCatNodes(threadInfo);
     }
@@ -284,8 +282,7 @@ public abstract class AbstractDumpParser implements DumpParser {
 
     /**
      * parse the thread tokens for table display.
-     *
-     * @param title
+
      */
     protected abstract String[] getThreadTokens(String title);
 
@@ -399,14 +396,14 @@ public abstract class AbstractDumpParser implements DumpParser {
      * check threads in given thread dump and add appropriate
      * custom categories (if any defined).
      *
-     * @param tdi the thread dump info object.
+     * @param threadDump the thread dump info object.
      */
     public void addCustomCategories(DefaultMutableTreeNode threadDump) {
         ThreadDumpInfo tdi = (ThreadDumpInfo)threadDump.getUserObject();
         Category threads = tdi.getThreads();
         ListModel cats = PrefManager.get().getCategories();
         for (int i = 0; i < cats.getSize(); i++) {
-            Category cat = new TableCategory(((CustomCategory)cats.getElementAt(i)).getName(), IconFactory.CUSTOM_CATEGORY);
+            final Category cat = new TableCategory(((CustomCategory)cats.getElementAt(i)).getName(), IconFactory.CUSTOM_CATEGORY);
             for (int j = 0; j < threads.getNodeCount(); j++) {
                 Iterator filterIter = ((CustomCategory)cats.getElementAt(i)).iterOfFilters();
                 boolean matches = true;

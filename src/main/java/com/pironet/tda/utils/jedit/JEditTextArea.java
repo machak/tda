@@ -126,6 +126,7 @@ public class JEditTextArea extends JComponent {
         setLayout(new ScrollLayout());
         add(CENTER, painter);
         add(RIGHT, vertical = new JScrollBar(JScrollBar.VERTICAL));
+        vertical.setMinimum(400);
         add(BOTTOM, horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
 
         // Add some event listeners

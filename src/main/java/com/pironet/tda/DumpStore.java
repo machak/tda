@@ -34,13 +34,7 @@ import java.util.Map;
 public class DumpStore implements Serializable {
 
     private static final long serialVersionUID = 4953625540097603774L;
-    private Map dumpFiles;
-
-    /**
-     * Creates a new instance of DumpStore
-     */
-    public DumpStore() {
-    }
+    private Map<String, Map<String, Map<String, String>>> dumpFiles;
 
     /**
      * add the found thread dumps of a dump file to dump store
@@ -48,10 +42,10 @@ public class DumpStore implements Serializable {
      * @param key               the key to store the thread dumps in, usually the file name
      * @param threadDumpsInFile new found thread dumps to add.
      */
-    public void addFileToDumpFiles(String key, Map threadDumpsInFile) {
+    public void addFileToDumpFiles(final String key, final Map<String, Map<String, String>> threadDumpsInFile) {
         // first check if map is null, and if so, create new instance
         if (dumpFiles == null) {
-            dumpFiles = new HashMap();
+            dumpFiles = new HashMap<>();
         }
         if (threadDumpsInFile != null) {
             dumpFiles.put(key, threadDumpsInFile);
@@ -61,8 +55,9 @@ public class DumpStore implements Serializable {
     /**
      * get the thread dumps for the specified file key from the store
      */
-    public Map getFromDumpFiles(String key) {
-        return (dumpFiles != null ? (Map)dumpFiles.get(key) : null);
+    @SuppressWarnings("unchecked")
+    public Map<String, Map<String, String>> getFromDumpFiles(String key) {
+        return (dumpFiles != null ? dumpFiles.get(key) : null);
     }
 
     /**

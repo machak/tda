@@ -54,12 +54,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -78,13 +80,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.ProgressMonitorInputStream;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -133,14 +135,16 @@ import com.pironet.tda.utils.jedit.PopupMenu;
  */
 public class TDA extends JPanel implements ListSelectionListener, TreeSelectionListener, ActionListener, MenuListener {
     private static final long serialVersionUID = -5752755762424187064L;
+    private static final Pattern PATTERN_B_SLASHES = Pattern.compile("\\\\");
     private static JFileChooser fc;
     private static JFileChooser sessionFc;
     private static int DIVIDER_SIZE = 4;
     protected static JFrame frame;
-
+    /**
+     * sync object is needed to synchronize opening of multiple files.
+     */
+    private static final Object syncObject = new Object();
     private static String dumpFile;
-
-    private static String loggcFile;
 
     private static int fontSizeModifier = 0;
 
@@ -156,8 +160,6 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     private DumpStore dumpStore;
     private Vector topNodes;
     private ViewScrollPane htmlView;
-    private ViewScrollPane tableView;
-    private ViewScrollPane dumpView;
     private JTextField filter;
     private JCheckBox checkCase;
     private PreferencesDialog prefsDialog;
@@ -234,15 +236,17 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             InputStream is = TDA.class.getResourceAsStream("/doc/welcome.html");
 
             htmlPane = new JEditorPane();
-            htmlPane.putClientProperty("AATextInfoPropertyKey", Boolean.TRUE);
+
             String welcomeText = parseWelcomeURL(is);
             htmlPane.setContentType("text/html");
             htmlPane.setText(welcomeText);
         } else if (asJConsolePlugin) {
             htmlPane = new JEditorPane("text/html", "<html><body bgcolor=\"ffffff\"><i>Press Button above to request a thread dump.</i></body></html>");
+
         } else {
             htmlPane = new JEditorPane("text/html", "<html><body bgcolor=\"ffffff\"></body></html>");
         }
+        htmlPane.putClientProperty(Const.AA_TEXT_INFO_PROPERTY_KEY, Boolean.TRUE);
         htmlPane.setEditable(false);
 
         if (!asJConsolePlugin && !asVisualVMPlugin) {
@@ -445,7 +449,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         for (int i = from; i < elements.length; i++) {
             if (elements[i].trim().length() > 0) {
                 // remove backslashes as they confuse the html display.
-                String elem = elements[i].replaceAll("\\\\", "/");
+                String elem = PATTERN_B_SLASHES.matcher(elements[i]).replaceAll("/");
                 result.append("<tr><td width=\"20px\"></td><td><a href=\"");
                 result.append(prefix);
                 result.append(elem);
@@ -519,7 +523,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * @return file filter instance.
      */
     private static FileFilter getSessionFilter() {
-        FileFilter filter = new FileFilter() {
+        return (new FileFilter() {
 
             public boolean accept(File arg0) {
                 return (arg0 != null && (arg0.isDirectory() || arg0.getName().endsWith("tsf")));
@@ -529,8 +533,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 return ("TDA Session Files");
             }
 
-        };
-        return (filter);
+        });
     }
 
     /**
@@ -595,9 +598,9 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     /**
      * expand or collapse all nodes of the specified tree
      *
-     * @param catTree   the tree to expand all/collapse all
-     * @param parent the parent to start with
-     * @param expand expand=true, collapse=false
+     * @param catTree the tree to expand all/collapse all
+     * @param parent  the parent to start with
+     * @param expand  expand=true, collapse=false
      */
     private void expandAll(JTree catTree, TreePath parent, boolean expand) {
         // Traverse children
@@ -630,7 +633,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = sessionFc.getSelectedFile();
             // check if file has a suffix
-            if (file.getName().indexOf(".") < 0) {
+            if (!file.getName().contains(".")) {
                 file = new File(file.getAbsolutePath() + ".tsf");
             }
             int selectValue = 0;
@@ -673,8 +676,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = sessionFc.getSelectedFile();
-            int selectValue = 0;
-            if ((selectValue == 0) && (file.exists())) {
+            if ((file.exists())) {
                 openSession(file, false);
             }
         }
@@ -750,12 +752,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      */
     private void setupLookAndFeel() {
         try {
-            //--- set the desired preconfigured plaf ---
-            UIManager.LookAndFeelInfo currentLAFI = null;
-
-            // retrieve plaf param.
             String plaf = "Mac,Windows,Metal";
-            if (PrefManager.get().isUseGTKLF()) {
+            if (System.getProperty("os.name").startsWith("Linux")) {
                 plaf = "GTK,Mac,Windows,Metal";
             }
 
@@ -768,6 +766,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             if (!Strings.isNullOrEmpty(plaf)) {
 
                 String[] instPlafs = plaf.split(",");
+                UIManager.LookAndFeelInfo currentLAFI = null;
                 search:
                 for (final String instPlaf : instPlafs) {
                     for (final UIManager.LookAndFeelInfo plaf1 : plafs) {
@@ -790,7 +789,6 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             setUIFont(new FontUIResource("SansSerif", Font.PLAIN, 11));
         }
     }
-
 
 
     /**
@@ -865,10 +863,6 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 (file.length() <= (PrefManager.get().getMaxLogfileSize() * 1024))));
     }
 
-    /**
-     * sync object is needed to synchronize opening of multiple files.
-     */
-    private static Object syncObject = new Object();
 
     /**
      * add the set dumpFileStream to the tree
@@ -1114,6 +1108,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         htmlPane.setContentType("text/html");
         htmlPane.setText("");
         htmlPane.setCaretPosition(0);
+
+
         threadDisplay = false;
         statusBar.setInfoText(AppInfo.getStatusBarInfo());
     }
@@ -1152,11 +1148,10 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * display selected category in upper right frame
      */
     private void displayCategory(Object nodeInfo) {
-        Category cat = ((Category)nodeInfo);
-        Dimension size = null;
-        ((JScrollPane)topSplitPane.getLeftComponent()).setPreferredSize(topSplitPane.getLeftComponent().getSize());
+        final Category cat = ((Category)nodeInfo);
+        topSplitPane.getLeftComponent().setPreferredSize(topSplitPane.getLeftComponent().getSize());
         boolean needDividerPos = false;
-
+        Dimension size = null;
         if (topSplitPane.getRightComponent() != null) {
             size = topSplitPane.getRightComponent().getSize();
         } else {
@@ -1170,7 +1165,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             } else {
                 catComp.addMouseListener(getCatPopupMenu());
             }
-            dumpView = new ViewScrollPane(catComp, runningAsVisualVMPlugin);
+            final ViewScrollPane dumpView = new ViewScrollPane(catComp, runningAsVisualVMPlugin);
             if (size != null) {
                 dumpView.setPreferredSize(size);
             }
@@ -1224,7 +1219,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         histogramTable = new JTable(ts);
         ts.setTableHeader(histogramTable.getTableHeader());
         histogramTable.getColumnModel().getColumn(0).setPreferredWidth(700);
-        tableView = new ViewScrollPane(histogramTable, runningAsVisualVMPlugin);
+        final ViewScrollPane tableView = new ViewScrollPane(histogramTable, runningAsVisualVMPlugin);
 
         JPanel histogramView = new JPanel(new BorderLayout());
         JPanel histoStatView = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
@@ -1306,13 +1301,13 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         DumpParser dp = null;
         try {
             String fileName = top.getUserObject().toString();
-            Map dumpMap = null;
+            Map<String, Map<String, String>> dumpMap = null;
             if (runningAsJConsolePlugin || runningAsVisualVMPlugin) {
                 dumpMap = dumpStore.getFromDumpFiles(fileName);
             }
 
             if (dumpMap == null) {
-                dumpMap = new HashMap();
+                dumpMap = new HashMap<>();
                 dumpStore.addFileToDumpFiles(fileName, dumpMap);
             }
             dp = DumpParserFactory.get().getDumpParserForLogfile(dumpFileStream, dumpMap, runningAsJConsolePlugin,
@@ -1569,12 +1564,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      */
     private PopupListener getMonitorsPopupMenu() {
         if (monitorsPopupListener == null) {
-            JMenuItem menuItem;
-
-            //Create the popup menu.
-            JPopupMenu popup = new JPopupMenu();
-
-            menuItem = new JMenuItem("Search...");
+            final JPopupMenu popup = new JPopupMenu();
+            JMenuItem menuItem = new JMenuItem("Search...");
             menuItem.addActionListener(this);
             popup.add(menuItem);
             popup.addSeparator();
@@ -1689,19 +1680,21 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             } else if ("Close all...".equals(source.getText())) {
                 closeAllDumps();
             } else if ("Diff Selection".equals(source.getText())) {
-                TreePath[] paths = tree.getSelectionPaths();
-                if ((paths != null) && (paths.length < 2)) {
-                    JOptionPane.showMessageDialog(this.getRootPane(),
-                            "You must select at least two dumps for getting a diff!\n",
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                final TreePath[] paths = tree.getSelectionPaths();
+                if (paths != null) {
+                    if ((paths.length < 2)) {
+                        JOptionPane.showMessageDialog(this.getRootPane(),
+                                "You must select at least two dumps for getting a diff!\n",
+                                "Error", JOptionPane.ERROR_MESSAGE);
 
-                } else {
-                    DefaultMutableTreeNode mergeRoot = fetchTop(tree.getSelectionPath());
-                    Map dumpMap = dumpStore.getFromDumpFiles(mergeRoot.getUserObject().toString());
-                    ((Logfile)mergeRoot.getUserObject()).getUsedParser().mergeDumps(mergeRoot,
-                            dumpMap, paths, paths.length, null);
-                    createTree();
-                    this.getRootPane().revalidate();
+                    } else {
+                        DefaultMutableTreeNode mergeRoot = fetchTop(tree.getSelectionPath());
+                        Map dumpMap = dumpStore.getFromDumpFiles(mergeRoot.getUserObject().toString());
+                        ((Logfile)mergeRoot.getUserObject()).getUsedParser().mergeDumps(mergeRoot,
+                                dumpMap, paths, paths.length, null);
+                        createTree();
+                        this.getRootPane().revalidate();
+                    }
                 }
             } else if ("Show selected Dump in logfile".equals(source.getText())) {
                 navigateToDumpInLogfile();
@@ -1764,17 +1757,17 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      *
      * @param f the font to user
      */
-    private void setUIFont(javax.swing.plaf.FontUIResource f) {
+    private void setUIFont(FontUIResource f) {
         //
         // sets the default font for all Swing components.
         // ex.
         //  setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.ITALIC,12));
         //
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        Enumeration keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);
-            if (value instanceof javax.swing.plaf.FontUIResource) {
+            if (value instanceof FontUIResource) {
                 UIManager.put(key, f);
             }
         }
@@ -1933,18 +1926,16 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     private void openFiles(File[] files, boolean isRecent) {
         for (final File file : files) {
             dumpFile = file.getAbsolutePath();
-            if (dumpFile != null) {
-                if (!firstFile) {
-                    // root nodes are moved down.
-                    setRootNodeLevel(1);
+            if (!firstFile) {
+                // root nodes are moved down.
+                setRootNodeLevel(1);
 
-                    // do direct add without re-init.
-                    addDumpFile();
-                } else {
-                    initDumpDisplay(null);
-                    if (isFileOpen()) {
-                        firstFile = false;
-                    }
+                // do direct add without re-init.
+                addDumpFile();
+            } else {
+                initDumpDisplay(null);
+                if (isFileOpen()) {
+                    firstFile = false;
                 }
             }
 
@@ -1963,7 +1954,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * Returns an ImageIcon, or null if the path was invalid.
      */
     public static ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = TDA.class.getResource("/icons/" + path);
+        URL imgURL = TDA.class.getResource("/icons/" + path);
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         } else {
@@ -1995,7 +1986,6 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      */
     private DefaultMutableTreeNode getDumpRootNode(String dumpName, DefaultMutableTreeNode node) {
         DefaultMutableTreeNode lastNode = null;
-        DefaultMutableTreeNode dumpNode = null;
         // search for starting node
         while (node != null && !(node.getUserObject() instanceof Logfile)) {
             lastNode = node;
@@ -2006,6 +1996,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             node = lastNode;
         }
 
+        DefaultMutableTreeNode dumpNode = null;
         for (int i = 0; i < node.getChildCount(); i++) {
             Object userObject = ((DefaultMutableTreeNode)node.getChildAt(i)).getUserObject();
             if ((userObject instanceof ThreadDumpInfo) && ((ThreadDumpInfo)userObject).getName().startsWith(dumpName)) {
@@ -2159,7 +2150,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             result = (String)info;
         }
 
-        if (startIndex > 0) {
+        if (startIndex > 0 && result != null) {
             result = result.substring(startIndex);
         }
 
@@ -2174,41 +2165,37 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            loggcFile = file.getAbsolutePath();
-            if (loggcFile != null) {
-                try {
-                    final InputStream loggcFileStream = new ProgressMonitorInputStream(
-                            this,
-                            "Parsing " + loggcFile,
-                            new FileInputStream(loggcFile));
+            final String loggcFile = file.getAbsolutePath();
+            try {
+                final InputStream loggcFileStream = new ProgressMonitorInputStream(
+                        this,
+                        "Parsing " + loggcFile,
+                        new FileInputStream(loggcFile));
 
-                    final SwingWorker worker = new SwingWorker() {
-                        public Object construct() {
+                final SwingWorker worker = new SwingWorker() {
+                    public Object construct() {
+                        try {
+                            DefaultMutableTreeNode top = fetchTop(tree.getSelectionPath());
+
+                            ((Logfile)top.getUserObject()).getUsedParser().parseLoggcFile(loggcFileStream, top);
+
+                            addThreadDumps(top, loggcFileStream);
+                            createTree();
+                            getRootPane().revalidate();
+                            displayContent(null);
+                        } finally {
                             try {
-                                DefaultMutableTreeNode top = fetchTop(tree.getSelectionPath());
-
-                                ((Logfile)top.getUserObject()).getUsedParser().parseLoggcFile(loggcFileStream, top);
-
-                                addThreadDumps(top, loggcFileStream);
-                                createTree();
-                                getRootPane().revalidate();
-                                displayContent(null);
-                            } finally {
-                                if (loggcFileStream != null) {
-                                    try {
-                                        loggcFileStream.close();
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                }
+                                loggcFileStream.close();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
                             }
-                            return null;
                         }
-                    };
-                    worker.start();
-                } catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
-                }
+                        return null;
+                    }
+                };
+                worker.start();
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -2376,7 +2363,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         }
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(TDA::createAndShowGUI);
+        SwingUtilities.invokeLater(TDA::createAndShowGUI);
     }
 
     /**

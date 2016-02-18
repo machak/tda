@@ -48,7 +48,7 @@ import com.pironet.tda.filter.FilterChecker;
  *
  * @author irockel
  */
-public class PrefManager {
+public final class PrefManager {
     public static final String PARAM_DELIM = "\u00A7\u00A7\u00A7\u00A7";
 
     public static final String FILTER_SEP = "\u00ac\u00ac\u00ac\u00ac";
@@ -115,9 +115,8 @@ public class PrefManager {
     }
 
     public Point getWindowPos() {
-        Point point = new Point(toolPrefs.getInt("windowPosX", 0),
-                toolPrefs.getInt("windowPosY", 0));
-        return (point);
+        return (new Point(toolPrefs.getInt("windowPosX", 0),
+                toolPrefs.getInt("windowPosY", 0)));
     }
 
     public void setWindowPos(int x, int y) {
