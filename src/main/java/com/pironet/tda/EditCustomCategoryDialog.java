@@ -130,7 +130,7 @@ public class EditCustomCategoryDialog extends JDialog {
     }
 
     private void addToList(CustomCategory cat) {
-        DefaultListModel dlm = ((DefaultListModel)catList.getModel());
+        final DefaultListModel<CustomCategory> dlm = ((DefaultListModel)catList.getModel());
 
         dlm.ensureCapacity(dlm.getSize() + 1);
         dlm.addElement(cat);
@@ -142,6 +142,7 @@ public class EditCustomCategoryDialog extends JDialog {
     }
 
     class SettingsPanel extends JPanel implements ListSelectionListener, ActionListener {
+        private static final long serialVersionUID = -8178578773476105054L;
         JList catFilters = null;
         JList filterList = null;
 

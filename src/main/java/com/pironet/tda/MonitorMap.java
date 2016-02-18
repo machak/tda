@@ -64,7 +64,7 @@ public class MonitorMap implements Serializable {
         return (monitorMap != null && monitorMap.containsKey(key));
     }
 
-    public Map[] getFromMonitorMap(String key) {
+    public Map<String, String>[] getFromMonitorMap(String key) {
         return (monitorMap != null && hasInMonitorMap(key) ? (Map[])monitorMap.get(key) : null);
     }
 
@@ -81,15 +81,15 @@ public class MonitorMap implements Serializable {
     }
 
     private void addToMonitorValue(String key, int pos, String threadTitle, String thread) {
-        Map[] objectSet = null;
+        Map<String, String>[] objectSet = null;
 
         if (hasInMonitorMap(key)) {
             objectSet = getFromMonitorMap(key);
         } else {
             objectSet = new HashMap[3];
-            objectSet[0] = new HashMap();
-            objectSet[1] = new HashMap();
-            objectSet[2] = new HashMap();
+            objectSet[0] = new HashMap<>();
+            objectSet[1] = new HashMap<>();
+            objectSet[2] = new HashMap<>();
             addToMonitorMap(key, objectSet);
         }
 

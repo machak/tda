@@ -107,8 +107,8 @@ public abstract class AbstractDumpParser implements DumpParser {
     protected void diffDumps(String prefix, DefaultMutableTreeNode root, Map dumpStore, TreePath[] dumps, int minOccurence, String regex) {
         Vector keys = new Vector(dumps.length);
 
-        for (int i = 0; i < dumps.length; i++) {
-            String dumpName = getDumpStringFromTreePath(dumps[i]);
+        for (final TreePath dump : dumps) {
+            String dumpName = getDumpStringFromTreePath(dump);
             if (dumpName.indexOf(" at") > 0) {
                 dumpName = dumpName.substring(0, dumpName.indexOf(" at"));
             } else if (dumpName.indexOf(" around") > 0) {

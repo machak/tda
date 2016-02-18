@@ -363,9 +363,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 text = (String)t.getTransferData(DataFlavor.stringFlavor);
             }
-        } catch (UnsupportedFlavorException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
+        } catch (UnsupportedFlavorException | IOException ex) {
             ex.printStackTrace();
         }
 
@@ -410,10 +408,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             resultString = resultString.replaceFirst("<!-- ##tipofday## -->", TipOfDay.getTipOfDay());
             resultString = resultString.replaceFirst("<!-- ##recentlogfiles## -->", getAsTable("openlogfile://", PrefManager.get().getRecentFiles()));
             resultString = resultString.replaceFirst("<!-- ##recentsessions## -->", getAsTable("opensession://", PrefManager.get().getRecentSessions()));
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException | IOException ex) {
             // hack to prevent crashing of the app because off unparsed replacer.
-            ex.printStackTrace();
-        } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
             try {
@@ -690,10 +686,6 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     private void openSession(File file, boolean isRecent) {
         try {
             loadSession(file, isRecent);
-        } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(this.getRootPane(),
-                    "Error opening " + ex.getMessage() + ".",
-                    "Error opening session", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this.getRootPane(),
                     "Error opening " + ex.getMessage() + ".",
@@ -719,9 +711,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                         topNodes = (Vector)ois.readObject();
                         dumpStore = (DumpStore)ois.readObject();
                         ois.close();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    } catch (ClassNotFoundException ex) {
+                    } catch (IOException | ClassNotFoundException ex) {
                         ex.printStackTrace();
                     } finally {
                         try {
@@ -898,10 +888,10 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * add the set dumpFileStream to the tree
      */
     private void addDumpFiles(String[] files) {
-        for (int i = 0; i < files.length; i++) {
+        for (final String file : files) {
             try {
                 dumpCounter = 1;
-                addDumpStream(new FileInputStream(files[i]), files[i], true);
+                addDumpStream(new FileInputStream(file), file, true);
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(this.getRootPane(),
                         "Error opening " + ex.getMessage() + ".",
@@ -958,8 +948,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         } else {
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("Thread Dump Nodes");
             treeModel = new DefaultTreeModel(root);
-            for (int i = 0; i < topNodes.size(); i++) {
-                root.add((DefaultMutableTreeNode)topNodes.get(i));
+            for (Object topNode : topNodes) {
+                root.add((DefaultMutableTreeNode)topNode);
             }
             tree = new JTree(root);
             tree.setRootVisible(false);
@@ -1097,9 +1087,9 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
         int[] rows = ttsm.getTable().getSelectedRows();
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < rows.length; i++) {
+        for (final int row : rows) {
             appendThreadInfo(sb, ((ThreadsTableModel)ts.getTableModel()).
-                    getInfoObjectAtRow(ts.modelIndex(rows[i])));
+                    getInfoObjectAtRow(ts.modelIndex(row)));
         }
         displayContent(sb.toString());
         setThreadDisplay(true);
@@ -1955,8 +1945,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * @param isRecent true, if passed files are from recent file list.
      */
     private void openFiles(File[] files, boolean isRecent) {
-        for (int i = 0; i < files.length; i++) {
-            dumpFile = files[i].getAbsolutePath();
+        for (final File file : files) {
+            dumpFile = file.getAbsolutePath();
             if (dumpFile != null) {
                 if (!firstFile) {
                     // root nodes are moved down.
@@ -1973,7 +1963,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             }
 
             if (!isRecent) {
-                PrefManager.get().addToRecentFiles(files[i].getAbsolutePath());
+                PrefManager.get().addToRecentFiles(file.getAbsolutePath());
             }
         }
 
@@ -2443,10 +2433,10 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         public void drop(DropTargetDropEvent dtde) {
             try {
                 DataFlavor[] df = dtde.getTransferable().getTransferDataFlavors();
-                for (int i = 0; i < df.length; i++) {
-                    if (df[i].isMimeTypeEqual("application/x-java-serialized-object")) {
+                for (final DataFlavor aDf : df) {
+                    if (aDf.isMimeTypeEqual("application/x-java-serialized-object")) {
                         dtde.acceptDrop(dtde.getDropAction());
-                        String[] fileStrings = ((String)dtde.getTransferable().getTransferData(df[i])).split("\n");
+                        String[] fileStrings = ((String)dtde.getTransferable().getTransferData(aDf)).split("\n");
                         File[] files = new File[fileStrings.length];
                         for (int j = 0; j < fileStrings.length; j++) {
                             files[j] = new File(fileStrings[j].substring(7));
@@ -2455,10 +2445,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                         dtde.dropComplete(true);
                     }
                 }
-            } catch (UnsupportedFlavorException ex) {
-                ex.printStackTrace();
-                dtde.rejectDrop();
-            } catch (IOException ex) {
+            } catch (UnsupportedFlavorException | IOException ex) {
                 ex.printStackTrace();
                 dtde.rejectDrop();
             }

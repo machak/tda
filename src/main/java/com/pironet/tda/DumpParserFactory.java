@@ -93,7 +93,7 @@ public class DumpParserFactory {
                 lineCounter++;
             }
             //System.out.println("Selected Dump Parser: " + currentDumpParser.getClass().getName());
-            if ((currentDumpParser != null) && (bis != null)) {
+            if ((currentDumpParser != null)) {
                 bis.reset();
             }
         } catch (IOException ex) {

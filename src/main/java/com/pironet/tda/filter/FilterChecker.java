@@ -39,14 +39,14 @@ public class FilterChecker {
     /**
      * filters checked by this checker instance.
      */
-    private Map filters = null;
+    private Map<String, Filter> filters = null;
 
-    private static Map generalFilters = null;
+    private static Map<String, Filter> generalFilters = null;
 
     /**
      * Creates a new instance of FilterChecker
      */
-    public FilterChecker(Map checkFilters) {
+    public FilterChecker(Map<String, Filter> checkFilters) {
         filters = checkFilters;
     }
 
@@ -62,7 +62,7 @@ public class FilterChecker {
     }
 
     private static void setGeneralFilters() {
-        generalFilters = new HashMap();
+        generalFilters = new HashMap<>();
         ListModel filters = PrefManager.get().getFilters();
         for (int i = 0; i < filters.getSize(); i++) {
             Filter currentFilter = (Filter)filters.getElementAt(i);
@@ -77,7 +77,7 @@ public class FilterChecker {
      */
     public void addToFilters(Filter filter) {
         if (filters == null) {
-            filters = new HashMap();
+            filters = new HashMap<>();
         }
 
         filters.put(filter.getName(), filter);
@@ -91,7 +91,7 @@ public class FilterChecker {
      */
     public Filter getFromFilters(String key) {
         System.out.println("getFromFilters= " + key);
-        return (filters != null ? (Filter)filters.get(key) : null);
+        return (filters != null ? filters.get(key) : null);
     }
 
     /**

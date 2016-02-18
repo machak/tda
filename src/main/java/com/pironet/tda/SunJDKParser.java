@@ -22,7 +22,6 @@
 package com.pironet.tda;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,11 +33,13 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
+import com.google.common.base.Strings;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.HistogramTableModel;
 import com.pironet.tda.utils.IconFactory;
@@ -51,8 +52,10 @@ import com.pironet.tda.utils.IconFactory;
  */
 public class SunJDKParser extends AbstractDumpParser {
 
+    private static final Pattern LT_PATTERN = Pattern.compile("<");
+    private static final Pattern AT_PATTERN = Pattern.compile("@");
     private MutableTreeNode nextDump = null;
-    private Map threadStore = null;
+    private Map<String, Map<String, String>> threadStore = null;
     private int counter = 1;
     private int lineCounter = 0;
     private boolean foundClassHistograms = false;
@@ -61,7 +64,7 @@ public class SunJDKParser extends AbstractDumpParser {
     /**
      * Creates a new instance of SunJDKParser
      */
-    public SunJDKParser(BufferedReader bis, Map threadStore, int lineCounter, boolean withCurrentTimeStamp, int startCounter, DateMatcher dm) {
+    public SunJDKParser(BufferedReader bis, Map<String, Map<String, String>> threadStore, int lineCounter, boolean withCurrentTimeStamp, int startCounter, DateMatcher dm) {
         super(bis, dm);
         this.threadStore = threadStore;
         this.withCurrentTimeStamp = withCurrentTimeStamp;
@@ -100,40 +103,31 @@ public class SunJDKParser extends AbstractDumpParser {
         String line = null;
 
         do {
-            DefaultMutableTreeNode threadDump = null;
-            ThreadDumpInfo overallTDI = null;
-            DefaultMutableTreeNode catMonitors = null;
-            DefaultMutableTreeNode catMonitorsLocks = null;
-            DefaultMutableTreeNode catThreads = null;
-            DefaultMutableTreeNode catLocking = null;
-            DefaultMutableTreeNode catBlockingMonitors = null;
-            DefaultMutableTreeNode catSleeping = null;
-            DefaultMutableTreeNode catWaiting = null;
 
             try {
-                Map threads = new HashMap();
-                overallTDI = new ThreadDumpInfo("Dump No. " + counter++, 0);
+                Map<String, String> threads = new HashMap<>();
+                ThreadDumpInfo overallTDI = new ThreadDumpInfo("Dump No. " + counter++, 0);
                 if (withCurrentTimeStamp) {
                     overallTDI.setStartTime((new Date(System.currentTimeMillis())).toString());
                 }
-                threadDump = new DefaultMutableTreeNode(overallTDI);
+                DefaultMutableTreeNode threadDump = new DefaultMutableTreeNode(overallTDI);
 
-                catThreads = new DefaultMutableTreeNode(new TableCategory("Threads", IconFactory.THREADS));
+                DefaultMutableTreeNode catThreads = new DefaultMutableTreeNode(new TableCategory("Threads", IconFactory.THREADS));
                 threadDump.add(catThreads);
 
-                catWaiting = new DefaultMutableTreeNode(new TableCategory("Threads waiting for Monitors", IconFactory.THREADS_WAITING));
+                DefaultMutableTreeNode catWaiting = new DefaultMutableTreeNode(new TableCategory("Threads waiting for Monitors", IconFactory.THREADS_WAITING));
 
-                catSleeping = new DefaultMutableTreeNode(new TableCategory("Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
+                DefaultMutableTreeNode catSleeping = new DefaultMutableTreeNode(new TableCategory("Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
 
-                catLocking = new DefaultMutableTreeNode(new TableCategory("Threads locking Monitors", IconFactory.THREADS_LOCKING));
+                DefaultMutableTreeNode catLocking = new DefaultMutableTreeNode(new TableCategory("Threads locking Monitors", IconFactory.THREADS_LOCKING));
 
                 // create category for monitors with disabled filtering.
                 // NOTE:  These strings are "magic" in that the methods
                 // TDA#displayCategory and TreeCategory#getCatComponent both
                 // checks these literal strings and the behavior differs.
-                catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
-                catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NOLOCKS, false));
-                catBlockingMonitors = new DefaultMutableTreeNode(new TreeCategory("Threads blocked by Monitors", IconFactory.THREADS_LOCKING, false));
+                DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
+                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NOLOCKS, false));
+                DefaultMutableTreeNode catBlockingMonitors = new DefaultMutableTreeNode(new TreeCategory("Threads blocked by Monitors", IconFactory.THREADS_LOCKING, false));
 
                 String title = null;
                 String dumpKey = null;
@@ -148,7 +142,7 @@ public class SunJDKParser extends AbstractDumpParser {
                 boolean locked = true;
                 boolean finished = false;
                 MonitorMap mmap = new MonitorMap();
-                Stack monitorStack = new Stack();
+                final Stack<String> monitorStack = new Stack<>();
                 long startTime = 0;
                 int singleLineCounter = 0;
                 boolean concurrentSyncsFlag = false;
@@ -159,7 +153,7 @@ public class SunJDKParser extends AbstractDumpParser {
                     lineCounter++;
                     singleLineCounter++;
                     if (locked) {
-                        if (line.indexOf("Full thread dump") >= 0) {
+                        if (line.contains("Full thread dump")) {
                             locked = false;
                             if (!withCurrentTimeStamp) {
                                 overallTDI.setLogLine(lineCounter);
@@ -227,20 +221,20 @@ public class SunJDKParser extends AbstractDumpParser {
                             }
                             singleLineCounter = 0;
                             while (!monitorStack.empty()) {
-                                mmap.parseAndAddThread((String)monitorStack.pop(), title, content.toString());
+                                mmap.parseAndAddThread(monitorStack.pop(), title, content.toString());
                             }
 
                             // Second, initialize state for this new thread
                             title = line;
                             content = new StringBuffer("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + ">");
                             content.append(line);
-                            content.append("\n");
-                        } else if (line.indexOf("at ") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("at ")) {
                             content.append(line);
-                            content.append("\n");
-                        } else if (line.indexOf("java.lang.Thread.State") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("java.lang.Thread.State")) {
                             content.append(line);
-                            content.append("\n");
+                            content.append('\n');
                             if (title.indexOf("t@") > 0) {
                                 // in this case the title line is missing state informations
                                 String state = line.substring(line.indexOf(':') + 1).trim();
@@ -250,44 +244,44 @@ public class SunJDKParser extends AbstractDumpParser {
                                     title += " state=" + state;
                                 }
                             }
-                        } else if (line.indexOf("Locked ownable synchronizers:") >= 0) {
+                        } else if (line.contains("Locked ownable synchronizers:")) {
                             concurrentSyncsFlag = true;
                             content.append(line);
-                            content.append("\n");
-                        } else if (line.indexOf("- waiting on") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("- waiting on")) {
                             content.append(linkifyMonitor(line));
                             monitorStack.push(line);
                             inSleeping = true;
-                            content.append("\n");
-                        } else if (line.indexOf("- parking to wait") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("- parking to wait")) {
                             content.append(linkifyMonitor(line));
                             monitorStack.push(line);
                             inSleeping = true;
-                            content.append("\n");
-                        } else if (line.indexOf("- waiting to") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("- waiting to")) {
                             content.append(linkifyMonitor(line));
                             monitorStack.push(line);
                             inWaiting = true;
-                            content.append("\n");
-                        } else if (line.indexOf("- locked") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("- locked")) {
                             content.append(linkifyMonitor(line));
                             inLocking = true;
                             monitorStack.push(line);
-                            content.append("\n");
-                        } else if (line.indexOf("- ") >= 0) {
+                            content.append('\n');
+                        } else if (line.contains("- ")) {
                             if (concurrentSyncsFlag) {
                                 content.append(linkifyMonitor(line));
                                 monitorStack.push(line);
                             } else {
                                 content.append(line);
                             }
-                            content.append("\n");
+                            content.append('\n');
                         }
 
                         // last thread reached?
-                        if ((line.indexOf("\"Suspend Checker Thread\"") >= 0)
-                                || (line.indexOf("\"VM Periodic Task Thread\"") >= 0)
-                                || (line.indexOf("<EndOfDump>") >= 0)) {
+                        if ((line.contains("\"Suspend Checker Thread\""))
+                                || (line.contains("\"VM Periodic Task Thread\""))
+                                || (line.contains("<EndOfDump>"))) {
                             finished = true;
                             getBis().mark(getMarkSize());
                             if ((checkForDeadlocks(threadDump)) == 0) {
@@ -401,8 +395,6 @@ public class SunJDKParser extends AbstractDumpParser {
                 addCustomCategories(threadDump);
 
                 return (threadCount > 0 ? threadDump : null);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (StringIndexOutOfBoundsException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null,
@@ -430,13 +422,13 @@ public class SunJDKParser extends AbstractDumpParser {
             String begin = line.substring(0, line.indexOf('<'));
             String monitor = line.substring(line.indexOf('<'), line.indexOf('>') + 1);
             String end = line.substring(line.indexOf('>') + 1);
-            monitor = monitor.replaceAll("<", "<a href=\"monitor://" + monitor + "\">&lt;");
+            monitor = LT_PATTERN.matcher(monitor).replaceAll("<a href=\"monitor://" + monitor + "\">&lt;");
             monitor = monitor.substring(0, monitor.length() - 1) + "&gt;</a>";
             return (begin + monitor + end);
         } else if (line != null && line.indexOf('@') >= 0) {
             String begin = line.substring(0, line.indexOf('@') + 1);
             String monitor = line.substring(line.indexOf('@'));
-            monitor = monitor.replaceAll("@", "@<a href=\"monitor://<" + monitor.substring(1) + ">\">");
+            monitor = AT_PATTERN.matcher(monitor).replaceAll("@<a href=\"monitor://<" + monitor.substring(1) + ">\">");
             monitor = monitor.substring(0, monitor.length() - 1) + "</a>";
             return (begin + monitor);
         } else {
@@ -450,7 +442,7 @@ public class SunJDKParser extends AbstractDumpParser {
      * @param line containing monitor
      */
     private String linkifyDeadlockInfo(String line) {
-        if (line != null && line.indexOf("Ox") >= 0) {
+        if (line != null && line.contains("Ox")) {
             String begin = line.substring(0, line.indexOf("0x"));
             int objectBegin = line.lastIndexOf("0x");
             int monitorBegin = line.indexOf("0x");
@@ -482,9 +474,8 @@ public class SunJDKParser extends AbstractDumpParser {
     }
 
     private void addHistogramToDump(DefaultMutableTreeNode threadDump, HistogramTableModel classHistogram) {
-        DefaultMutableTreeNode catHistogram;
-        HistogramInfo hi = new HistogramInfo("Class Histogram of Dump", classHistogram);
-        catHistogram = new DefaultMutableTreeNode(hi);
+        final HistogramInfo hi = new HistogramInfo("Class Histogram of Dump", classHistogram);
+        final DefaultMutableTreeNode catHistogram = new DefaultMutableTreeNode(hi);
         threadDump.add(catHistogram);
     }
 
@@ -501,14 +492,14 @@ public class SunJDKParser extends AbstractDumpParser {
     private HistogramTableModel parseNextClassHistogram(BufferedReader bis) throws IOException {
         boolean finished = false;
         boolean found = false;
-        HistogramTableModel classHistogram = new HistogramTableModel();
+        final HistogramTableModel classHistogram = new HistogramTableModel();
         int maxLinesCounter = 0;
 
         boolean isNormalBis = bis == getBis();
 
         while (bis.ready() && !finished) {
             String line = (isNormalBis) ? getNextLine().trim() : bis.readLine().trim();
-            if (!found && !line.equals("")) {
+            if (!found && !Strings.isNullOrEmpty(line)) {
                 if (line.startsWith("num   #instances    #bytes  class name")) {
                     found = true;
                 } else if (maxLinesCounter >= getMaxCheckLines()) {
@@ -558,14 +549,13 @@ public class SunJDKParser extends AbstractDumpParser {
      * PSPermGen       total 16384K, used 13145K [0x90130000, 0x91130000, 0x94130000)
      * object space 16384K, 80% used [0x90130000,0x90e06610,0x91130000)
      *
-     * @param threadDump
      * @return
-     * @throws java.io.IOException
+     * @throws IOException
      */
     private boolean checkThreadDumpStatData(ThreadDumpInfo tdi) throws IOException {
         boolean finished = false;
         boolean found = false;
-        StringBuffer hContent = new StringBuffer();
+        StringBuilder hContent = new StringBuilder();
         int heapLineCounter = 0;
         int lines = 0;
 
@@ -614,7 +604,7 @@ public class SunJDKParser extends AbstractDumpParser {
         while (getBis().ready() && !finished) {
             String line = getNextLine();
 
-            if (!found && !line.equals("")) {
+            if (!found && !Strings.isNullOrEmpty(line)) {
                 if (line.trim().startsWith("Found one Java-level deadlock")) {
                     found = true;
                     dContent.append("<body bgcolor=\"ffffff\"><font size=").append(TDA.getFontSizeModifier(-1)).append("><b>");
@@ -636,25 +626,25 @@ public class SunJDKParser extends AbstractDumpParser {
                     dContent.append("Found one Java-level deadlock");
                     dContent.append("</b><hr></font><pre>\n");
                     first = true;
-                } else if ((line.indexOf("Found") >= 0) && (line.endsWith("deadlocks.") || line.endsWith("deadlock."))) {
+                } else if ((line.contains("Found")) && (line.endsWith("deadlocks.") || line.endsWith("deadlock."))) {
                     finished = true;
                 } else if (line.startsWith("=======")) {
                     // ignore this line
-                } else if (line.indexOf(" monitor 0x") >= 0) {
+                } else if (line.contains(" monitor 0x")) {
                     dContent.append(linkifyDeadlockInfo(line));
-                    dContent.append("\n");
-                } else if (line.indexOf("Java stack information for the threads listed above") >= 0) {
+                    dContent.append('\n');
+                } else if (line.contains("Java stack information for the threads listed above")) {
                     dContent.append("</pre><br><font size=").append(TDA.getFontSizeModifier(-1)).append("><b>");
                     dContent.append("Java stack information for the threads listed above");
                     dContent.append("</b><hr></font><pre>");
                     first = true;
-                } else if ((line.indexOf("- waiting on") >= 0)
-                        || (line.indexOf("- waiting to") >= 0)
-                        || (line.indexOf("- locked") >= 0)
-                        || (line.indexOf("- parking to wait") >= 0)) {
+                } else if ((line.contains("- waiting on"))
+                        || (line.contains("- waiting to"))
+                        || (line.contains("- locked"))
+                        || (line.contains("- parking to wait"))) {
 
                     dContent.append(linkifyMonitor(line));
-                    dContent.append("\n");
+                    dContent.append('\n');
 
                 } else if (line.trim().startsWith("\"")) {
                     dContent.append("</pre>");
@@ -767,7 +757,8 @@ public class SunJDKParser extends AbstractDumpParser {
         //********************************************************************
         // Recalculate the number of blocked threads and add remaining top-level threads to our display model
         //********************************************************************
-        for (Iterator iter = directChildMap.entrySet().iterator(); iter.hasNext(); ) {
+        Iterator iter = directChildMap.entrySet().iterator();
+        while (iter.hasNext()) {
             DefaultMutableTreeNode threadNode = (DefaultMutableTreeNode)((Map.Entry)iter.next()).getValue();
 
             updateChildCount(threadNode, true);
@@ -836,8 +827,8 @@ public class SunJDKParser extends AbstractDumpParser {
         boolean changed = false;
         do {
             changed = false;
-            for (Iterator iter = directChildMap.entrySet().iterator(); iter.hasNext(); ) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode)((Map.Entry)iter.next()).getValue();
+            for (final Object o : directChildMap.entrySet()) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)((Map.Entry)o).getValue();
                 if (checkForDuplicateThreadItem(directChildMap, node)) {
                     changed = true;
                     break;
@@ -846,8 +837,8 @@ public class SunJDKParser extends AbstractDumpParser {
         } while (changed);
 
         // Third, renormalize lower levels of the tree based on threads for cases where one thread holds multiple monitors
-        for (Iterator iter = directChildMap.entrySet().iterator(); iter.hasNext(); ) {
-            renormalizeThreadDepth((DefaultMutableTreeNode)((Map.Entry)iter.next()).getValue());
+        for (final Object o : directChildMap.entrySet()) {
+            renormalizeThreadDepth((DefaultMutableTreeNode)((Map.Entry)o).getValue());
         }
     }
 
@@ -903,7 +894,7 @@ public class SunJDKParser extends AbstractDumpParser {
         return false;
     }
 
-    private int fillBlockingThreadMaps(MonitorMap mmap, Map directChildMap) {
+    private int fillBlockingThreadMaps(MonitorMap mmap, Map<String, DefaultMutableTreeNode> directChildMap) {
         int blockedThread = 0;
         for (Iterator iter = mmap.iterOfKeys(); iter.hasNext(); ) {
             String monitor = (String)iter.next();
@@ -919,8 +910,8 @@ public class SunJDKParser extends AbstractDumpParser {
             threadNode.add(monitorNode);
 
             // Look over all threads blocked on this monitor
-            for (Iterator iterWaits = threads[MonitorMap.WAIT_THREAD_POS].keySet().iterator(); iterWaits.hasNext(); ) {
-                String thread = (String)iterWaits.next();
+            for (final Object o : threads[MonitorMap.WAIT_THREAD_POS].keySet()) {
+                String thread = (String)o;
                 // Skip the thread that has this monitor locked
                 if (!threads[MonitorMap.LOCK_THREAD_POS].containsKey(thread)) {
                     blockedThread++;
@@ -947,8 +938,8 @@ public class SunJDKParser extends AbstractDumpParser {
             return (String)threads[MonitorMap.LOCK_THREAD_POS].keySet().iterator().next();
         }
 
-        for (Iterator iterLocks = threads[MonitorMap.LOCK_THREAD_POS].keySet().iterator(); iterLocks.hasNext(); ) {
-            String thread = (String)iterLocks.next();
+        for (final Object o : threads[MonitorMap.LOCK_THREAD_POS].keySet()) {
+            String thread = (String)o;
             if (!threads[MonitorMap.SLEEP_THREAD_POS].containsKey(thread)) {
                 return thread;
             }
@@ -1037,46 +1028,46 @@ public class SunJDKParser extends AbstractDumpParser {
 
             String strippedToken = name.substring(name.lastIndexOf('"') + 1);
 
-            if (strippedToken.indexOf("tid=") >= 0) {
+            if (strippedToken.contains("tid=")) {
                 tokens[2] = strippedToken.substring(strippedToken.indexOf("prio=") + 5, strippedToken.indexOf("tid=") - 1);
             } else {
                 tokens[2] = strippedToken.substring(strippedToken.indexOf("prio=") + 5);
             }
 
-            if ((strippedToken.indexOf("tid=") >= 0) && (strippedToken.indexOf("nid=") >= 0)) {
+            if ((strippedToken.contains("tid=")) && (strippedToken.contains("nid="))) {
                 tokens[3] = String.valueOf(Long.parseLong(strippedToken.substring(strippedToken.indexOf("tid=") + 6,
                         strippedToken.indexOf("nid=") - 1), 16));
-            } else if (strippedToken.indexOf("tid=") >= 0) {
+            } else if (strippedToken.contains("tid=")) {
                 tokens[3] = String.valueOf(Long.parseLong(strippedToken.substring(strippedToken.indexOf("tid=") + 6), 16));
             }
 
             // default for token 6 is:
             tokens[6] = "<no address range>";
 
-            if ((strippedToken.indexOf("nid=") >= 0) && (strippedToken.indexOf(" ", strippedToken.indexOf("nid="))) >= 0) {
+            if ((strippedToken.contains("nid=")) && (strippedToken.indexOf(' ', strippedToken.indexOf("nid="))) >= 0) {
                 if (strippedToken.indexOf("nid=0x") > 0) { // is hexadecimal
                     String nidToken = strippedToken.substring(strippedToken.indexOf("nid=") + 6,
-                            strippedToken.indexOf(" ", strippedToken.indexOf("nid=")));
+                            strippedToken.indexOf(' ', strippedToken.indexOf("nid=")));
                     tokens[4] = String.valueOf(Long.parseLong(nidToken, 16));
                 } else { // is decimal
                     String nidToken = strippedToken.substring(strippedToken.indexOf("nid=") + 4,
-                            strippedToken.indexOf(" ", strippedToken.indexOf("nid=")));
+                            strippedToken.indexOf(' ', strippedToken.indexOf("nid=")));
                     tokens[4] = nidToken;
                 }
 
                 if (strippedToken.indexOf('[') > 0) {
                     if (strippedToken.indexOf("lwp_id=") > 0) {
-                        tokens[5] = strippedToken.substring(strippedToken.indexOf(" ", strippedToken.indexOf("lwp_id=")) + 1, strippedToken.indexOf('[',
+                        tokens[5] = strippedToken.substring(strippedToken.indexOf(' ', strippedToken.indexOf("lwp_id=")) + 1, strippedToken.indexOf('[',
                                 strippedToken.indexOf("lwp_id=")) - 1);
                     } else {
-                        tokens[5] = strippedToken.substring(strippedToken.indexOf(" ", strippedToken.indexOf("nid=")) + 1, strippedToken.indexOf('[',
+                        tokens[5] = strippedToken.substring(strippedToken.indexOf(' ', strippedToken.indexOf("nid=")) + 1, strippedToken.indexOf('[',
                                 strippedToken.indexOf("nid=")) - 1);
                     }
                     tokens[6] = strippedToken.substring(strippedToken.indexOf('['));
                 } else {
-                    tokens[5] = strippedToken.substring(strippedToken.indexOf(" ", strippedToken.indexOf("nid=")) + 1);
+                    tokens[5] = strippedToken.substring(strippedToken.indexOf(' ', strippedToken.indexOf("nid=")) + 1);
                 }
-            } else if (strippedToken.indexOf("nid=") >= 0) {
+            } else if (strippedToken.contains("nid=")) {
                 String nidToken = strippedToken.substring(strippedToken.indexOf("nid=") + 6);
                 // nid is at the end.
                 if (nidToken.indexOf("0x") > 0) { // is hexadecimal
@@ -1111,7 +1102,7 @@ public class SunJDKParser extends AbstractDumpParser {
      * @return true, if the start of a sun thread dump is detected.
      */
     public static boolean checkForSupportedThreadDump(String logLine) {
-        return (logLine.trim().indexOf("Full thread dump") >= 0);
+        return (logLine.trim().contains("Full thread dump"));
     }
 
     protected String getNextLine() throws IOException {

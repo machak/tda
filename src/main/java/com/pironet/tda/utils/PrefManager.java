@@ -28,8 +28,10 @@ import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
@@ -53,6 +55,7 @@ public class PrefManager {
 
 
     private final static PrefManager prefManager = new PrefManager();
+    private static final Pattern PARAM_PATTERN = Pattern.compile(PARAM_DELIM);
 
     private final Preferences toolPrefs;
 
@@ -287,10 +290,10 @@ public class PrefManager {
     /**
      * temporary storage for filters to not to have them be parsed again
      */
-    private final java.util.List<Filter> cachedFilters = new ArrayList<>();
+    private final List<Filter> cachedFilters = new ArrayList<>();
 
     public ListModel getFilters() {
-        DefaultListModel<Filter> filters = null;
+        DefaultListModel<Filter> filters;
         if (this.cachedFilters.isEmpty()) {
             String filterString = toolPrefs.get("filters", "");
             if (filterString.length() > 0) {
@@ -326,11 +329,9 @@ public class PrefManager {
      *
      * @return populated DefaultModelList object
      */
-    private DefaultListModel getCachedFilters() {
-        DefaultListModel modelFilters = new DefaultListModel();
-        for (final Object cachedFilter : this.cachedFilters) {
-            modelFilters.addElement(cachedFilter);
-        }
+    private DefaultListModel<Filter> getCachedFilters() {
+        final DefaultListModel<Filter> modelFilters = new DefaultListModel<>();
+        this.cachedFilters.forEach(modelFilters::addElement);
         return modelFilters;
     }
 
@@ -339,7 +340,7 @@ public class PrefManager {
      *
      * @param filters updated list of filters
      */
-    private void setFilterCache(DefaultListModel filters) {
+    private void setFilterCache(DefaultListModel<Filter> filters) {
         // remove existing filters
         this.cachedFilters.clear();
         for (int f = 0; f < filters.size(); f++) {
@@ -350,7 +351,7 @@ public class PrefManager {
     /**
      * temporary storage for categories to not to have them be parsed again
      */
-    private final java.util.List cachedCategories = new ArrayList();
+    private final List cachedCategories = new ArrayList();
 
     /**
      * get custom categories.
@@ -358,12 +359,12 @@ public class PrefManager {
      * @return list model with custom categories.
      */
     public ListModel getCategories() {
-        DefaultListModel categories = null;
+        DefaultListModel<CustomCategory> categories;
         if (this.cachedCategories.isEmpty()) {
             String categoryString = toolPrefs.get("categories", "");
             if (categoryString.length() > 0) {
-                categories = new DefaultListModel();
-                String[] sCategories = categoryString.split(PARAM_DELIM);
+                categories = new DefaultListModel<>();
+                String[] sCategories = PARAM_PATTERN.split(categoryString);
                 categories.ensureCapacity(sCategories.length);
                 try {
                     FilterChecker fc = FilterChecker.getFilterChecker();
@@ -456,7 +457,7 @@ public class PrefManager {
         return (filters);
     }
 
-    public void setFilters(DefaultListModel filters) {
+    public void setFilters(DefaultListModel<Filter> filters) {
         // store into cache
         StringBuilder filterString = new StringBuilder();
         for (int i = 0; i < filters.getSize(); i++) {
@@ -535,8 +536,8 @@ public class PrefManager {
     private boolean hasInRecentFiles(String file, String[] currentFiles) {
         boolean found = false;
 
-        for (int i = 0; i < currentFiles.length; i++) {
-            if (file.equals(currentFiles[i])) {
+        for (final String currentFile : currentFiles) {
+            if (file.equals(currentFile)) {
                 found = true;
                 break;
             }

@@ -41,6 +41,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.pironet.tda.filter.Filter;
 import com.pironet.tda.utils.PrefManager;
 
 /**
@@ -190,6 +191,7 @@ public class FilterDialog extends JDialog {
             }
         }
 
+        @SuppressWarnings("unchecked")
         public void saveSettings() {
             PrefManager.get().setFilters((DefaultListModel)filterList.getModel());
         }

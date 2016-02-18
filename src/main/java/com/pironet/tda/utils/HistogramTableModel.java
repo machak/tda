@@ -164,14 +164,14 @@ public class HistogramTableModel extends AbstractTableModel {
             filteredElements = null;
         } else {
             filteredElements = new Vector();
-            for (int i = 0; i < elements.size(); i++) {
+            for (Object element : elements) {
                 if (isIgnoreCase()) {
-                    if (((Entry)elements.get(i)).className.toLowerCase().indexOf(value) >= 0) {
-                        filteredElements.add(elements.get(i));
+                    if (((Entry)element).className.toLowerCase().indexOf(value) >= 0) {
+                        filteredElements.add(element);
                     }
                 } else {
-                    if (isNotHotspotClass(((Entry)elements.get(i)).className) && (Strings.isNullOrEmpty(value) || (((Entry)elements.get(i)).className.indexOf(value) >= 0))) {
-                        filteredElements.add(elements.get(i));
+                    if (isNotHotspotClass(((Entry)element).className) && (Strings.isNullOrEmpty(value) || (((Entry)element).className.indexOf(value) >= 0))) {
+                        filteredElements.add(element);
                     }
                 }
             }

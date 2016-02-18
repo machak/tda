@@ -119,8 +119,8 @@ public class PreferencesDialog extends JDialog {
 
         DefaultComboBoxModel boxModel = new DefaultComboBoxModel();
         String[] regexs = PrefManager.get().getDateParsingRegexs();
-        for (int i = 0; i < regexs.length; i++) {
-            boxModel.addElement(regexs[i]);
+        for (final String regex : regexs) {
+            boxModel.addElement(regex);
         }
         regExPanel.dateParsingRegexs.setModel(boxModel);
         regExPanel.dateParsingRegexs.setSelectedItem(PrefManager.get().getDateParsingRegex());

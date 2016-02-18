@@ -155,8 +155,7 @@ public class MBeanDumper {
         dump.append("\n");
         long[] tids = tmbean.getAllThreadIds();
         ThreadInfo[] tinfos = tmbean.getThreadInfo(tids, Integer.MAX_VALUE);
-        for (int i = 0; i < tinfos.length; i++) {
-            ThreadInfo ti = tinfos[i];
+        for (ThreadInfo ti : tinfos) {
             printThreadInfo(ti, dump);
         }
     }
@@ -170,11 +169,13 @@ public class MBeanDumper {
         dump.append("\n");
 
         ThreadInfo[] tinfos = tmbean.dumpAllThreads(true, true);
-        for (int i = 0; i < tinfos.length; i++) {
+        int i = 0;
+        while (i < tinfos.length) {
             ThreadInfo ti = tinfos[i];
             printThreadInfo(ti, dump);
             LockInfo[] syncs = ti.getLockedSynchronizers();
             printLockInfo(syncs, dump);
+            i++;
         }
         dump.append("\n");
     }
@@ -232,8 +233,7 @@ public class MBeanDumper {
 
     private void printMonitorInfo(ThreadInfo ti, MonitorInfo[] monitors, StringBuilder dump) {
         dump.append(INDENT + "Locked monitors: count = " + monitors.length);
-        for (int j = 0; j < monitors.length; j++) {
-            MonitorInfo mi = monitors[j];
+        for (MonitorInfo mi : monitors) {
             dump.append(INDENT + "  - " + mi + " locked at \n");
 
             dump.append(INDENT + "      " + mi.getLockedStackDepth() +
@@ -245,8 +245,7 @@ public class MBeanDumper {
     private void printLockInfo(LockInfo[] locks, StringBuilder dump) {
         dump.append(INDENT + "Locked synchronizers: count = " + locks.length);
         dump.append("\n");
-        for (int i = 0; i < locks.length; i++) {
-            LockInfo li = locks[i];
+        for (LockInfo li : locks) {
             dump.append(INDENT + "  - " + li);
             dump.append("\n");
         }
