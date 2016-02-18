@@ -53,24 +53,24 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
         if (leaf && isCategory(value)) {
             setIcon(getIconFromCategory(value));
         } else if (leaf && isThreadInfo(value)) {
-            setIcon(TDA.createImageIcon("thread.png"));
+            setIcon(TDA.createImageIcon(Const.ICON_THREAD));
         } else if (leaf && isHistogramInfo(value)) {
-            setIcon(TDA.createImageIcon("Histogram.gif"));
+            setIcon(TDA.createImageIcon(Const.ICON_HISTOGRAM));
         } else if (leaf && isLogfile(value)) {
-            setIcon(TDA.createImageIcon("root.png"));
+            setIcon(TDA.createImageIcon(Const.ICON_ROOT));
         } else if (leaf && isLogFileContent(value)) {
-            setIcon(TDA.createImageIcon("LogfileContent.gif"));
+            setIcon(TDA.createImageIcon(Const.ICON_LOG_FILE));
         } else if (!leaf) {
             if (((DefaultMutableTreeNode)value).isRoot() || isLogfile(value)) {
-                setIcon(TDA.createImageIcon("root.png"));
+                setIcon(TDA.createImageIcon(Const.ICON_ROOT));
             } else if (isThreadInfo(value)) {
                 if (((ThreadInfo)((DefaultMutableTreeNode)value).getUserObject()).areALotOfWaiting()) {
-                    setIcon(TDA.createImageIcon("blocking.png"));
+                    setIcon(TDA.createImageIcon(Const.ICON_BLOCKING));
                 } else {
-                    setIcon(TDA.createImageIcon("thread.png"));
+                    setIcon(TDA.createImageIcon(Const.ICON_THREAD));
                 }
             } else {
-                setIcon(TDA.createImageIcon("ThreadDump.gif"));
+                setIcon(TDA.createImageIcon(Const.ICON_THREAD_DUMP));
             }
         }
         this.setBackgroundNonSelectionColor(new Color(0, 0, 0, 0));

@@ -110,6 +110,7 @@ import com.google.common.base.Strings;
 import com.pironet.tda.jconsole.MBeanDumper;
 import com.pironet.tda.utils.AppInfo;
 import com.pironet.tda.utils.Browser;
+import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.HistogramTableModel;
 import com.pironet.tda.utils.MonitorComparator;
 import com.pironet.tda.utils.PrefManager;
@@ -789,23 +790,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         }
     }
 
-    private String getInfoText() {
-        StringBuilder info = new StringBuilder("<html><body bgcolor=\"ffffff\"><font face=\"System\" size=+2><b>");
-        info.append("<img border=0 src=\"").append(TDA.class.getResource("icons/TDA.gif")).append("\">").append(AppInfo.getAppInfo());
-        info.append("</b></font><hr fgcolor=\"#cccccc\"><font face=\"System\"><p>");
-        info.append("(C)opyright ");
-        info.append(AppInfo.getCopyright());
-        info.append(" - Ingo Rockel<br>");
-        info.append("Version: <b>");
-        info.append(AppInfo.getVersion());
-        info.append("</b><p>");
-        if (runningAsJConsolePlugin || runningAsVisualVMPlugin) {
-            info.append("<a href=\"threaddump://\">Request Thread Dump...</a>");
-        } else {
-            info.append("Select File/Open to open your log file with thread dumps to start analyzing these thread dumps.<p>See Help/Overview for information on how to obtain a thread dump from your VM.</p></font></body></html>");
-        }
-        return (info.toString());
-    }
+
 
     /**
      * init the basic display for showing dumps
@@ -1679,9 +1664,9 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             } else if ("Help".equals(source.getText())) {
                 showHelp();
             } else if ("Release Notes".equals(source.getText())) {
-                showInfoFile("Release Notes", "doc/README", "Document.gif");
+                showInfoFile("Release Notes", "doc/README", Const.ICON_DOCUMENT);
             } else if ("License".equals(source.getText())) {
-                showInfoFile("License Information", "doc/COPYING", "Document.gif");
+                showInfoFile("License Information", "doc/COPYING", Const.ICON_DOCUMENT);
             } else if ("Forum".equals(source.getText())) {
                 try {
                     Browser.open("https://tda.dev.java.net/servlets/ForumMessageList?forumID=1967");
@@ -2310,7 +2295,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Image image = Toolkit.getDefaultToolkit().getImage( "TDA.gif" );
-        Image image = TDA.createImageIcon("TDA.gif").getImage();
+        Image image = TDA.createImageIcon(Const.ICON_TDA).getImage();
         frame.setIconImage(image);
 
 

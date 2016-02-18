@@ -42,6 +42,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.pironet.tda.filter.Filter;
+import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.PrefManager;
 
 /**
@@ -63,7 +64,7 @@ public class FilterDialog extends JDialog {
     public FilterDialog(Frame owner) {
         super(owner, "Filter Settings");
         try {
-            setIconImage(TDA.createImageIcon("Filters.gif").getImage());
+            setIconImage(TDA.createImageIcon(Const.ICON_FILTERS).getImage());
         } catch (NoSuchMethodError nsme) {
             // ignore, for 1.4 backward compatibility
         }

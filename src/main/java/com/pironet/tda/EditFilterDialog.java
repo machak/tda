@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.pironet.tda.filter.Filter;
+import com.pironet.tda.utils.Const;
 
 /**
  * dialog for editing filters.
@@ -61,7 +62,7 @@ public class EditFilterDialog extends JDialog {
     public EditFilterDialog(Frame owner, String frameTitle, JList filterList, boolean isAdd) {
         super(owner, frameTitle);
         try {
-            setIconImage(TDA.createImageIcon("Filters.gif").getImage());
+            setIconImage(TDA.createImageIcon(Const.ICON_FILTERS).getImage());
         } catch (NoSuchMethodError nsme) {
             // ignore, for 1.4 backward compatibility
         }

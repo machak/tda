@@ -43,6 +43,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.pironet.tda.filter.Filter;
+import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.PrefManager;
 import com.pironet.tda.utils.ResourceManager;
 
@@ -67,7 +68,7 @@ public class EditCustomCategoryDialog extends JDialog {
     public EditCustomCategoryDialog(Frame owner, String frameTitle, JList catList, boolean isAdd) {
         super(owner, frameTitle);
         try {
-            setIconImage(TDA.createImageIcon("Filters.gif").getImage());
+            setIconImage(TDA.createImageIcon(Const.ICON_FILTERS).getImage());
         } catch (NoSuchMethodError nsme) {
             // ignore, for 1.4 backward compatibility
         }

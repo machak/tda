@@ -44,15 +44,15 @@ public class IconFactory {
     public static final int CUSTOM_CATEGORY = 8;
 
     private final Icon[] icons = {
-            TDA.createImageIcon("thread.png"),
-            TDA.createImageIcon("ThreadsWaiting.gif"),
-            TDA.createImageIcon("ThreadsSleeping.gif"),
-            TDA.createImageIcon("locking.png"),
-            TDA.createImageIcon("Deadlock.gif"),
-            TDA.createImageIcon("DiffDumps.gif"),
-            TDA.createImageIcon("monitors.png"),
-            TDA.createImageIcon("monitor_green.png"),
-            TDA.createImageIcon("CustomCat.gif")
+            TDA.createImageIcon(Const.ICON_THREAD),
+            TDA.createImageIcon(Const.ICON_WAITING),
+            TDA.createImageIcon(Const.ICON_SLEEP),
+            TDA.createImageIcon(Const.ICON_LOCKING),
+            TDA.createImageIcon(Const.ICON_DEAD),
+            TDA.createImageIcon(Const.ICON_DIFF_DUMPS),
+            TDA.createImageIcon(Const.ICON_MONITORS),
+            TDA.createImageIcon(Const.ICON_MONITORS_GREEN),
+            TDA.createImageIcon(Const.ICON_CUSTOM_CATEGORY)
     };
 
     public static IconFactory get() {
