@@ -34,11 +34,10 @@ import com.pironet.tda.Category;
 import com.pironet.tda.HistogramInfo;
 import com.pironet.tda.LogFileContent;
 import com.pironet.tda.Logfile;
-import com.pironet.tda.TDA;
 import com.pironet.tda.ThreadInfo;
 
 /**
- * adds icons to tda root tree
+ * adds ICONS to tda root tree
  *
  * @author irockel
  */
@@ -46,6 +45,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = -2215501675736731645L;
 
+    final Color newColor = new Color(0, 0, 0, 0);
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
                                                   boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
@@ -53,28 +53,28 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
         if (leaf && isCategory(value)) {
             setIcon(getIconFromCategory(value));
         } else if (leaf && isThreadInfo(value)) {
-            setIcon(TDA.createImageIcon(Const.ICON_THREAD));
+            setIcon(Const.THREAD);
         } else if (leaf && isHistogramInfo(value)) {
-            setIcon(TDA.createImageIcon(Const.ICON_HISTOGRAM));
+            setIcon(Const.HISTOGRAM);
         } else if (leaf && isLogfile(value)) {
-            setIcon(TDA.createImageIcon(Const.ICON_ROOT));
+            setIcon(Const.ROOT);
         } else if (leaf && isLogFileContent(value)) {
-            setIcon(TDA.createImageIcon(Const.ICON_LOG_FILE));
+            setIcon(Const.LOG_FILE);
         } else if (!leaf) {
             if (((DefaultMutableTreeNode)value).isRoot() || isLogfile(value)) {
-                setIcon(TDA.createImageIcon(Const.ICON_ROOT));
+                setIcon(Const.ROOT);
             } else if (isThreadInfo(value)) {
                 if (((ThreadInfo)((DefaultMutableTreeNode)value).getUserObject()).areALotOfWaiting()) {
-                    setIcon(TDA.createImageIcon(Const.ICON_BLOCKING));
+                    setIcon(Const.BLOCKING);
                 } else {
-                    setIcon(TDA.createImageIcon(Const.ICON_THREAD));
+                    setIcon(Const.THREAD);
                 }
             } else {
-                setIcon(TDA.createImageIcon(Const.ICON_THREAD_DUMP));
+                setIcon(Const.DUMP);
             }
         }
-        this.setBackgroundNonSelectionColor(new Color(0, 0, 0, 0));
 
+        this.setBackgroundNonSelectionColor(newColor);
         return this;
     }
 

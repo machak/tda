@@ -70,7 +70,7 @@ public class InfoDialog extends JDialog {
                 "(C) 2006-2010 by Ingo Rockel &lt;irockel@dev.java.net&gt;,<br>" +
                 "with contributions from Robert Whitehurst &lt;maestoso@dev.java.net&gt;.<br><br>" +
                 "Icons used are based on Benno System Icons by Benno Meyer.<br>" +
-                "Welcome screen uses icons from NuoveXT2 icon set by Alexandre Moore.<br>" +
+                "Welcome screen uses ICONS from NuoveXT2 icon set by Alexandre Moore.<br>" +
                 "Contains classes from JEdit for logfile display.</i></p><br>" +
                 "<p>TDA is free software; you can redistribute it and/or modify it under<br>" +
                 "the terms of the Lesser GNU General Public License as published by<br>" +

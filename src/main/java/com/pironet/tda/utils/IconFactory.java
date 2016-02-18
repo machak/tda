@@ -23,14 +23,12 @@ package com.pironet.tda.utils;
 
 import javax.swing.Icon;
 
-import com.pironet.tda.TDA;
-
 /**
- * icon factory for the tree icons.
+ * icon factory for the tree ICONS.
  *
  * @author irockel
  */
-public class IconFactory {
+public final class IconFactory {
     public static IconFactory iconFactory;
 
     public static final int THREADS = 0;
@@ -40,20 +38,8 @@ public class IconFactory {
     public static final int DEADLOCKS = 4;
     public static final int DIFF_DUMPS = 5;
     public static final int MONITORS = 6;
-    public static final int MONITORS_NOLOCKS = 7;
+    public static final int MONITORS_NO_LOCKS = 7;
     public static final int CUSTOM_CATEGORY = 8;
-
-    private final Icon[] icons = {
-            TDA.createImageIcon(Const.ICON_THREAD),
-            TDA.createImageIcon(Const.ICON_WAITING),
-            TDA.createImageIcon(Const.ICON_SLEEP),
-            TDA.createImageIcon(Const.ICON_LOCKING),
-            TDA.createImageIcon(Const.ICON_DEAD),
-            TDA.createImageIcon(Const.ICON_DIFF_DUMPS),
-            TDA.createImageIcon(Const.ICON_MONITORS),
-            TDA.createImageIcon(Const.ICON_MONITORS_GREEN),
-            TDA.createImageIcon(Const.ICON_CUSTOM_CATEGORY)
-    };
 
     public static IconFactory get() {
         if (iconFactory == null) {
@@ -68,7 +54,7 @@ public class IconFactory {
     }
 
     public Icon getIconFor(int index) {
-        return (icons[index]);
+        return (Const.ICONS[index]);
     }
 
 }

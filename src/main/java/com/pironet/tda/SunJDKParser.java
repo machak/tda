@@ -126,7 +126,7 @@ public class SunJDKParser extends AbstractDumpParser {
                 // TDA#displayCategory and TreeCategory#getCatComponent both
                 // checks these literal strings and the behavior differs.
                 DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
-                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NOLOCKS, false));
+                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
                 DefaultMutableTreeNode catBlockingMonitors = new DefaultMutableTreeNode(new TreeCategory("Threads blocked by Monitors", IconFactory.THREADS_LOCKING, false));
 
                 String title = null;

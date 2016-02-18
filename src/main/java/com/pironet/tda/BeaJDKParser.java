@@ -107,7 +107,7 @@ public class BeaJDKParser extends AbstractDumpParser {
 
                 // create category for monitors with disabled filtering.
                 catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
-                catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NOLOCKS, false));
+                catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
 
                 String title = null;
                 StringBuffer content = null;

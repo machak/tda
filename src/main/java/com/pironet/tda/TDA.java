@@ -972,7 +972,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     }
 
     /**
-     * add a tree listener for enabling/disabling menu and toolbar icons.
+     * add a tree listener for enabling/disabling menu and toolbar ICONS.
      *
      * @param tree
      */
