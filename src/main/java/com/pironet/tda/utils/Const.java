@@ -33,7 +33,7 @@ public final class Const {
     public static final String ICON_PREFERENCES = "Preferences.gif";
     public static final String ICON_ABOUT = "About.gif";
     public static final String ICON_DOCUMENT = "Document.gif";
-    public static final String ICON_TDA = "TDA.gif";
+    public static final String ICON_TDA = "tda.png";
     public static final String ICON_WAITING = "waiting.png";
     public static final String ICON_SLEEP = "sleep.png";
     public static final String ICON_LOCKING = "locking.png";
