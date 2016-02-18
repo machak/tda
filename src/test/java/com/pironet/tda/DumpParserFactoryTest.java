@@ -68,7 +68,7 @@ public class DumpParserFactoryTest extends TestCase {
         System.out.println("getDumpParserForVersion");
 
         InputStream dumpFileStream = getClass().getResourceAsStream("/data/test.log");
-        Map threadStore = null;
+        Map<String, Map<String, String>> threadStore = null;
         DumpParserFactory instance = DumpParserFactory.get();
 
         DumpParser result = instance.getDumpParserForLogfile(dumpFileStream, threadStore, false, 0);

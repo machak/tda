@@ -32,7 +32,7 @@ public class WrappedSunJDKParser extends SunJDKParser {
      * Creates a new instance of WrappedSunJDKParser: A SunJDKParser reading a lot
      * file created by the Tanuki Service Wrapper.
      */
-    public WrappedSunJDKParser(BufferedReader bis, Map threadStore, int lineCounter,
+    public WrappedSunJDKParser(BufferedReader bis, Map<String, Map<String, String>> threadStore, int lineCounter,
                                boolean withCurrentTimeStamp, int startCounter, DateMatcher dm) {
         super(bis, threadStore, lineCounter, withCurrentTimeStamp, startCounter, dm);
     }

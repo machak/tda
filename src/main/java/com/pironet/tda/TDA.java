@@ -437,7 +437,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * @return given elements as table.
      */
     private String getAsTable(String prefix, String[] elements) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int from = elements.length > 4 ? elements.length - 4 : 0;
 
         for (int i = from; i < elements.length; i++) {
@@ -790,7 +790,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     }
 
     private String getInfoText() {
-        StringBuffer info = new StringBuffer("<html><body bgcolor=\"ffffff\"><font face=\"System\" size=+2><b>");
+        StringBuilder info = new StringBuilder("<html><body bgcolor=\"ffffff\"><font face=\"System\" size=+2><b>");
         info.append("<img border=0 src=\"").append(TDA.class.getResource("icons/TDA.gif")).append("\">").append(AppInfo.getAppInfo());
         info.append("</b></font><hr fgcolor=\"#cccccc\"><font face=\"System\"><p>");
         info.append("(C)opyright ");

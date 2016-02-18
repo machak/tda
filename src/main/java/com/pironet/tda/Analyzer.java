@@ -51,7 +51,7 @@ public class Analyzer implements Serializable {
     public String analyzeDump() {
         // check for possible hot spots concerning this thread dump
 
-        StringBuffer statData = new StringBuffer();
+        StringBuilder statData = new StringBuilder();
         int deadlocks = tdi.getDeadlocks() == null ? 0 : tdi.getDeadlocks().getNodeCount();
         int threadCount = tdi.getThreads() == null ? 0 : tdi.getThreads().getNodeCount();
         int waiting = tdi.getWaitingThreads() == null ? 0 : tdi.getWaitingThreads().getNodeCount();

@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.tree.MutableTreeNode;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -66,7 +68,7 @@ public class BeaJDKParserTest extends TestCase {
         try {
             fis = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
             Map dumpMap = new HashMap();
-            Vector topNodes = new Vector();
+            Vector<MutableTreeNode> topNodes = new Vector<>();
             instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof BeaJDKParser);

@@ -322,18 +322,12 @@ public class MBeanDumper {
                 //System.out.println("java.version=" +javaVersion);
                 canDumpLocks = javaVersion.startsWith("1.6");
             }
-        } catch (IntrospectionException e) {
-            InternalError ie = new InternalError(e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        } catch (InstanceNotFoundException e) {
+        } catch (IntrospectionException | InstanceNotFoundException e) {
             InternalError ie = new InternalError(e.getMessage());
             ie.initCause(e);
             throw ie;
         } catch (ReflectionException e) {
-            InternalError ie = new InternalError(e.getMessage());
-            ie.initCause(e);
-            throw ie;
+            throw new InternalError(e.getMessage(), e);
         }
     }
 

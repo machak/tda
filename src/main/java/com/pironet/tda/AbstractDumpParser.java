@@ -139,7 +139,7 @@ public abstract class AbstractDumpParser implements DumpParser {
 
                     if (occurence >= (minOccurence - 1)) {
                         threadCount++;
-                        StringBuffer content = new StringBuffer("<body bgcolor=\"ffffff\"><b><font size=").append(TDA.getFontSizeModifier(-1)).
+                        StringBuilder content = new StringBuilder("<body bgcolor=\"ffffff\"><b><font size=").append(TDA.getFontSizeModifier(-1)).
                                 append('>').append((String)keys.get(0)).append("</b></font><hr><pre><font size=").
                                 append(TDA.getFontSizeModifier(-1)).append('>').
                                 append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(0))).get(threadKey), (String)keys.get(0)));
@@ -196,7 +196,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      * @return
      */
     private String getStatInfo(Vector keys, String prefix, int minOccurence, int threadCount) {
-        StringBuffer statData = new StringBuffer("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
+        StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
 
         statData.append("<b>").append(prefix).append("</b><hr><p><i>");
         for (int i = 0; i < keys.size(); i++) {

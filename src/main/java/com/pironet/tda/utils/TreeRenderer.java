@@ -46,10 +46,6 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = -2215501675736731645L;
 
-    public TreeRenderer() {
-        // empty constructor
-    }
-
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
                                                   boolean expanded, boolean leaf, int row, boolean hasFocus) {
 
@@ -57,21 +53,21 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
         if (leaf && isCategory(value)) {
             setIcon(getIconFromCategory(value));
         } else if (leaf && isThreadInfo(value)) {
-            setIcon(TDA.createImageIcon("Thread.gif"));
+            setIcon(TDA.createImageIcon("thread.png"));
         } else if (leaf && isHistogramInfo(value)) {
             setIcon(TDA.createImageIcon("Histogram.gif"));
         } else if (leaf && isLogfile(value)) {
-            setIcon(TDA.createImageIcon("Root.gif"));
+            setIcon(TDA.createImageIcon("root.png"));
         } else if (leaf && isLogFileContent(value)) {
             setIcon(TDA.createImageIcon("LogfileContent.gif"));
         } else if (!leaf) {
             if (((DefaultMutableTreeNode)value).isRoot() || isLogfile(value)) {
-                setIcon(TDA.createImageIcon("Root.gif"));
+                setIcon(TDA.createImageIcon("root.png"));
             } else if (isThreadInfo(value)) {
                 if (((ThreadInfo)((DefaultMutableTreeNode)value).getUserObject()).areALotOfWaiting()) {
-                    setIcon(TDA.createImageIcon("MonitorRed.gif"));
+                    setIcon(TDA.createImageIcon("blocking.png"));
                 } else {
-                    setIcon(TDA.createImageIcon("Monitor.gif"));
+                    setIcon(TDA.createImageIcon("thread.png"));
                 }
             } else {
                 setIcon(TDA.createImageIcon("ThreadDump.gif"));

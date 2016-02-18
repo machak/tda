@@ -76,8 +76,6 @@ public class HelpOverviewDialog extends JDialog {
         try {
             URL tutURL = HelpOverviewDialog.class.getResource(getFile());
             htmlView = new JEditorPane(tutURL);
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

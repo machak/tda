@@ -245,7 +245,7 @@ public class PrefManager {
         // only add files already in it
         if (!hasInRecentFiles(file, currentFiles)) {
             int start = currentFiles.length == 10 ? 1 : 0;
-            StringBuffer recentSessions = new StringBuffer();
+            StringBuilder recentSessions = new StringBuilder();
 
             for (int i = start; i < currentFiles.length; i++) {
                 recentSessions.append(currentFiles[i]);
@@ -488,7 +488,7 @@ public class PrefManager {
      */
     public void setCategories(DefaultListModel categories) {
         // store into cache
-        StringBuffer catString = new StringBuffer();
+        StringBuilder catString = new StringBuilder();
         for (int i = 0; i < categories.getSize(); i++) {
             if (i > 0) {
                 catString.append(PARAM_DELIM);

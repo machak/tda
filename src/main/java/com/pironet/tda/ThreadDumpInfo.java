@@ -108,7 +108,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      * creates the overview information for this thread dump.
      */
     private void createOverview() {
-        StringBuffer statData = new StringBuffer("<body bgcolor=\"#ffffff\"><font face=System " +
+        StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System " +
                 "><table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
                 ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
         statData.append(getThreads() == null ? 0 : getThreads().getNodeCount());
@@ -154,7 +154,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      * @return a info node for the monitor.
      */
     public static String getMonitorInfo(int locks, int waits, int sleeps) {
-        StringBuffer statData = new StringBuffer("<body bgcolor=\"ffffff\"><table border=0 bgcolor=\"#dddddd\"><tr><td><font face=System" +
+        StringBuilder statData = new StringBuilder("<body bgcolor=\"ffffff\"><table border=0 bgcolor=\"#dddddd\"><tr><td><font face=System" +
                 ">Threads locking monitor</td><td><b><font face=System>");
         statData.append(locks);
         statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td>");
@@ -328,7 +328,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      * @return the thread dump information (one line).
      */
     public String toString() {
-        StringBuffer postFix = new StringBuffer();
+        StringBuilder postFix = new StringBuilder();
         if (logLine > 0) {
             postFix.append(" at line ").append(getLogLine());
         }

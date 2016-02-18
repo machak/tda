@@ -68,17 +68,16 @@ public class DumpParserFactory {
      *                             the current time stamp instead of a parsed one.
      * @return a proper dump parser for the given log file, null if no proper parser was found.
      */
-    public DumpParser getDumpParserForLogfile(InputStream dumpFileStream, Map threadStore, boolean withCurrentTimeStamp, int startCounter) {
-        BufferedReader bis = null;
+    public DumpParser getDumpParserForLogfile(InputStream dumpFileStream, Map<String, Map<String, String>> threadStore, boolean withCurrentTimeStamp, int startCounter) {
         int readAheadLimit = PrefManager.get().getStreamResetBuffer();
-        int lineCounter = 0;
         DumpParser currentDumpParser = null;
 
         try {
-            bis = new BufferedReader(new InputStreamReader(dumpFileStream));
+            BufferedReader bis = new BufferedReader(new InputStreamReader(dumpFileStream));
 
             // reset current dump parser
             DateMatcher dm = new DateMatcher();
+            int lineCounter = 0;
             while (bis.ready() && (currentDumpParser == null)) {
                 bis.mark(readAheadLimit);
                 String line = bis.readLine();

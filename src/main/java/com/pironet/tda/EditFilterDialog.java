@@ -120,7 +120,7 @@ public class EditFilterDialog extends JDialog {
     }
 
     private void addToList(Filter filter) {
-        DefaultListModel dlm = ((DefaultListModel)filterList.getModel());
+        DefaultListModel<Filter> dlm = ((DefaultListModel)filterList.getModel());
 
         dlm.ensureCapacity(dlm.getSize() + 1);
         dlm.addElement(filter);

@@ -129,8 +129,7 @@ public abstract class SwingWorker {
      * and then exit.
      */
     public SwingWorker() {
-        final Runnable doFinished = () -> finished();
-
+        final Runnable doFinished = this::finished;
         Runnable doConstruct = () -> {
             try {
                 setValue(construct());
