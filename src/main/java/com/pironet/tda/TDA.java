@@ -220,7 +220,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     /**
      * initializes tda panel
      *
-     * @param asPlugin specifies if tda is running as plugin
+     * @param asJConsolePlugin specifies if tda is running as plugin
      */
     public void init(boolean asJConsolePlugin, boolean asVisualVMPlugin) {
         // init everything
@@ -234,6 +234,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
             InputStream is = TDA.class.getResourceAsStream("/doc/welcome.html");
 
             htmlPane = new JEditorPane();
+            htmlPane.putClientProperty("AATextInfoPropertyKey", Boolean.TRUE);
             String welcomeText = parseWelcomeURL(is);
             htmlPane.setContentType("text/html");
             htmlPane.setText(welcomeText);
@@ -594,7 +595,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     /**
      * expand or collapse all nodes of the specified tree
      *
-     * @param tree   the tree to expand all/collapse all
+     * @param catTree   the tree to expand all/collapse all
      * @param parent the parent to start with
      * @param expand expand=true, collapse=false
      */
