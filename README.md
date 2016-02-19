@@ -1,9 +1,9 @@
 ## Changes
 
-### few bug fixes
-### small layout improvements (fonts, rendering, optimizations)
-### code cleanup  (NOTE: compiles only JDK8, generics/lambdas)
-### new icons
+#### few bug fixes
+#### small layout improvements (fonts, rendering, optimizations)
+#### code cleanup  (NOTE: compiles only JDK8, generics/lambdas)
+#### new icons
 
 ## Screenshot
 
