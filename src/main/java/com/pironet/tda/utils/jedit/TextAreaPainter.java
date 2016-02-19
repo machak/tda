@@ -87,7 +87,6 @@ public class TextAreaPainter extends JComponent implements TabExpander {
      * will be used to paint tokens with id = <i>n</i>.
      *
      * @param styles The syntax styles
-     * @see org.gjt.sp.jedit.syntax.Token
      */
     public final void setStyles(SyntaxStyle[] styles) {
         this.styles = styles;
@@ -349,12 +348,10 @@ public class TextAreaPainter extends JComponent implements TabExpander {
     /**
      * Repaints the text.
      *
-     * @param g The graphics context
+     * @param gfx The graphics context
      */
     public void paint(Graphics gfx) {
-        tabSize = fm.charWidth(' ') * ((Integer)textArea
-                .getDocument().getProperty(
-                        PlainDocument.tabSizeAttribute)).intValue();
+        tabSize = fm.charWidth(' ') * (Integer)textArea.getDocument().getProperty(PlainDocument.tabSizeAttribute);
 
         Rectangle clipRect = gfx.getClipBounds();
 

@@ -180,7 +180,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     private DropTarget dt = null;
     private DropTarget hdt = null;
     private int dumpCounter;
-
+    private static final Font SANS_SERIF = new Font("SansSerif", Font.PLAIN, Const.FONT_SIZE);
 
     private StatusBar statusBar;
 
@@ -774,7 +774,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                         currentLAFI = plaf1;
                         if (currentLAFI.getName().startsWith(instPlaf)) {
                             UIManager.setLookAndFeel(currentLAFI.getClassName());
-                            // setup font
+                            // setup SANS_SERIF
                             setUIFont(new FontUIResource("SansSerif", Font.PLAIN, Const.FONT_SIZE));
                             break search;
                         }
@@ -786,8 +786,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 setFontSizeModifier(2);
             }
         } catch (Exception except) {
-            // setup font
-            setUIFont(new FontUIResource("SansSerif", Font.PLAIN, 11));
+            setUIFont(new FontUIResource("SansSerif", Font.PLAIN, 12));
         }
     }
 
@@ -1128,6 +1127,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 initJeditView();
             }
             splitPane.setBottomComponent(jeditPane);
+
         }
 
         LogFileContent lfc = (LogFileContent)nodeInfo;
@@ -1149,6 +1149,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         jeditPane.setRightClickPopup(new PopupMenu(jeditPane, this, runningAsVisualVMPlugin));
         jeditPane.getInputHandler().addKeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0), (ActionListener)jeditPane.getRightClickPopup());
         jeditPane.getInputHandler().addKeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK), (ActionListener)jeditPane.getRightClickPopup());
+        jeditPane.setFont(SANS_SERIF);
     }
 
     /**
@@ -1235,40 +1236,40 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
         JPanel histogramView = new JPanel(new BorderLayout());
         JPanel histoStatView = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        Font font = new Font("SansSerif", Font.PLAIN, 10);
+
         JLabel infoLabel = new JLabel(NumberFormat.getInstance().format(htm.getRowCount()) + " classes and base types");
-        infoLabel.setFont(font);
+        infoLabel.setFont(SANS_SERIF);
         histoStatView.add(infoLabel);
         infoLabel = new JLabel(NumberFormat.getInstance().format(htm.getBytes()) + " bytes");
-        infoLabel.setFont(font);
+        infoLabel.setFont(SANS_SERIF);
         histoStatView.add(infoLabel);
         infoLabel = new JLabel(NumberFormat.getInstance().format(htm.getInstances()) + " live objects");
-        infoLabel.setFont(font);
+        infoLabel.setFont(SANS_SERIF);
         histoStatView.add(infoLabel);
         if (htm.isOOM()) {
             infoLabel = new JLabel("<html><b>OutOfMemory found!</b>");
-            infoLabel.setFont(font);
+            infoLabel.setFont(SANS_SERIF);
             histoStatView.add(infoLabel);
         }
         if (htm.isIncomplete()) {
             infoLabel = new JLabel("<html><b>Class Histogram is incomplete! (broken logfile?)</b>");
-            infoLabel.setFont(font);
+            infoLabel.setFont(SANS_SERIF);
             histoStatView.add(infoLabel);
         }
         JPanel filterPanel = new JPanel(new FlowLayout());
         infoLabel = new JLabel("Filter-Expression");
-        infoLabel.setFont(font);
+        infoLabel.setFont(SANS_SERIF);
         filterPanel.add(infoLabel);
 
         filter = new JTextField(30);
-        filter.setFont(font);
+        filter.setFont(SANS_SERIF);
         filter.addCaretListener(new FilterListener(htm));
         filterPanel.add(infoLabel);
         filterPanel.add(filter);
         checkCase = new JCheckBox();
         checkCase.addChangeListener(new CheckCaseListener(htm));
         infoLabel = new JLabel("Ignore Case");
-        infoLabel.setFont(font);
+        infoLabel.setFont(SANS_SERIF);
         filterPanel.add(infoLabel);
         filterPanel.add(checkCase);
         histoStatView.add(filterPanel);
@@ -1729,6 +1730,8 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 chooseFile();
             } else if ("Close selected Logfile".equals(source.getToolTipText())) {
                 closeCurrentDump();
+            } else if ("Get Logfile from clipboard".equals(source.getToolTipText())) {
+                getLogfileFromClipboard();
             } else if ("Preferences".equals(source.getToolTipText())) {
                 showPreferencesDialog();
             } else if ("Find long running threads".equals(source.getToolTipText())) {
@@ -1763,13 +1766,13 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     }
 
     /**
-     * set the ui font for all tda stuff (needs to be done for create of objects)
+     * set the ui SANS_SERIF for all tda stuff (needs to be done for create of objects)
      *
-     * @param f the font to user
+     * @param f the SANS_SERIF to user
      */
     private void setUIFont(FontUIResource f) {
         //
-        // sets the default font for all Swing components.
+        // sets the default SANS_SERIF for all Swing components.
         // ex.
         //  setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.ITALIC,12));
         //

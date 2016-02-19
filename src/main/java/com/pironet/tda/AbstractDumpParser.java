@@ -37,6 +37,8 @@ import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
 import com.pironet.tda.utils.PrefManager;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * abstract dump parser class, contains all generic dump parser
  * stuff, which doesn't have any jdk specific parsing code.
@@ -172,7 +174,7 @@ public abstract class AbstractDumpParser implements DumpParser {
     /**
      * count lines of input string.
      *
-     * @param input
+     * @param input  String
      * @return line count
      */
     private int countLines(String input) {
@@ -193,7 +195,6 @@ public abstract class AbstractDumpParser implements DumpParser {
      * @param prefix       the prefix of the run (either "Merge" or "Long running threads detection"
      * @param minOccurence the minimum occurence of threads
      * @param threadCount  the overall thread count of this run.
-     * @return
      */
     private String getStatInfo(List<String> keys, String prefix, int minOccurence, int threadCount) {
         StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
@@ -335,9 +336,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      * close this dump parser, also closes the passed dump stream
      */
     public void close() throws IOException {
-        if (getBis() != null) {
-            getBis().close();
-        }
+        IOUtils.closeQuietly(getBis());
     }
 
     /**

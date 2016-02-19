@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
+import com.google.common.base.Strings;
 import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.PrefManager;
 import com.pironet.tda.utils.ResourceManager;
@@ -104,6 +105,7 @@ public class MainMenu extends JMenuBar {
     public JButton getFindLRThreadsToolBarButton() {
         return (findLRThreadsButton);
     }
+
 
     /**
      * get the close all file menu item
@@ -182,13 +184,10 @@ public class MainMenu extends JMenuBar {
         menu.add(recentFilesMenu);
 
         menu.addSeparator();
-        menuItem = new JMenuItem(ResourceManager.translate("file.getfromclipboard"),
-                KeyStroke.getKeyStroke(ResourceManager.translate("file.getfromclipboard.mnem")).getKeyCode());
-        menuItem.setIcon(TDA.createImageIcon(Const.ICON_EMPTY));
-        menuItem.getAccessibleContext().setAccessibleDescription(
-                ResourceManager.translate("file.getfromclipboard.description"));
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                ResourceManager.translate("file.getfromclipboard.accel")));
+        menuItem = new JMenuItem(ResourceManager.translate("file.getfromclipboard"), KeyStroke.getKeyStroke(ResourceManager.translate("file.getfromclipboard.mnem")).getKeyCode());
+        menuItem.setIcon(TDA.createImageIcon(Const.ICON_CLIPBOARD));
+        menuItem.getAccessibleContext().setAccessibleDescription(ResourceManager.translate("file.getfromclipboard.description"));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(ResourceManager.translate("file.getfromclipboard.accel")));
         menuItem.addActionListener(listener);
         menu.add(menuItem);
         menu.addSeparator();
@@ -247,13 +246,10 @@ public class MainMenu extends JMenuBar {
         expandAllMenuItem.setEnabled(false);
         menu.add(expandAllMenuItem);
 
-        collapseAllMenuItem = new JMenuItem(ResourceManager.translate("view.collapse"),
-                KeyStroke.getKeyStroke(ResourceManager.translate("view.collapse.mnem")).getKeyCode());
+        collapseAllMenuItem = new JMenuItem(ResourceManager.translate("view.collapse"), KeyStroke.getKeyStroke(ResourceManager.translate("view.collapse.mnem")).getKeyCode());
         collapseAllMenuItem.setIcon(TDA.createImageIcon(Const.ICON_COLLAPSED));
-        collapseAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                ResourceManager.translate("view.collapse.accel")));
-        collapseAllMenuItem.getAccessibleContext().setAccessibleDescription(
-                ResourceManager.translate("view.collapse.description"));
+        collapseAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(ResourceManager.translate("view.collapse.accel")));
+        collapseAllMenuItem.getAccessibleContext().setAccessibleDescription(ResourceManager.translate("view.collapse.description"));
         collapseAllMenuItem.setEnabled(false);
         collapseAllMenuItem.addActionListener(listener);
         menu.add(collapseAllMenuItem);
@@ -337,14 +333,11 @@ public class MainMenu extends JMenuBar {
      * Build help menu in the menu bar.
      */
     private JMenu createHelpMenu() {
-        JMenuItem menuItem;
-        JMenu menu;
-        menu = new JMenu(ResourceManager.translate("help.menu"));
+        final JMenu menu = new JMenu(ResourceManager.translate("help.menu"));
         menu.setMnemonic(KeyStroke.getKeyStroke(ResourceManager.translate("help.menu.mnem")).getKeyCode());
-        menu.getAccessibleContext().setAccessibleDescription(
-                ResourceManager.translate("help.menu.description"));
+        menu.getAccessibleContext().setAccessibleDescription(ResourceManager.translate("help.menu.description"));
 
-        menuItem = new JMenuItem(ResourceManager.translate("help.contents"),
+        JMenuItem menuItem = new JMenuItem(ResourceManager.translate("help.contents"),
                 KeyStroke.getKeyStroke(ResourceManager.translate("help.contents.mnem")).getKeyCode());
         menuItem.setIcon(TDA.createImageIcon(Const.ICON_HELP));
         menuItem.getAccessibleContext().setAccessibleDescription(
@@ -392,7 +385,7 @@ public class MainMenu extends JMenuBar {
         recentFilesMenu.setMnemonic(KeyStroke.getKeyStroke(ResourceManager.translate("file.recentfiles.mnem")).getKeyCode());
         if (recentFiles.length > 1) {
             for (int i = 1; i < recentFiles.length; i++) {
-                if (!recentFiles[i].equals("")) {
+                if (!Strings.isNullOrEmpty(recentFiles[i])) {
                     JMenuItem item = new JMenuItem(recentFiles[i]);
                     ((JMenu)recentFilesMenu).add(item);
                     item.addActionListener(listener);
@@ -411,10 +404,13 @@ public class MainMenu extends JMenuBar {
 
         recentSessionsMenu = new JMenu(ResourceManager.translate("file.recentsessions"));
         recentSessionsMenu.setMnemonic(KeyStroke.getKeyStroke(ResourceManager.translate("file.recentsessions.mnem")).getKeyCode());
-        if (recentFiles.length > 1) {
+        processRecent(recentFiles);
+    }
 
+    private void processRecent(final String[] recentFiles) {
+        if (recentFiles.length > 1) {
             for (int i = 1; i < recentFiles.length; i++) {
-                if (!recentFiles[i].equals("")) {
+                if (!Strings.isNullOrEmpty(recentFiles[i])) {
                     JMenuItem item = new JMenuItem(recentFiles[i]);
                     ((JMenu)recentSessionsMenu).add(item);
                     item.addActionListener(listener);
@@ -465,6 +461,11 @@ public class MainMenu extends JMenuBar {
         findLRThreadsButton = createToolBarButton("Find long running threads", Const.ICON_LR_THREADS);
         findLRThreadsButton.setEnabled(false);
         toolBar.add(findLRThreadsButton);
+        //
+        final JButton clipButton = createToolBarButton(ResourceManager.translate("file.getfromclipboard"), Const.ICON_CLIPBOARD);
+        clipButton.setEnabled(true);
+        toolBar.add(clipButton);
+        toolBar.addSeparator();
 
         toolBar.add(createToolBarButton("Filters", Const.ICON_FILTERS));
         toolBar.add(createToolBarButton("Custom Categories", Const.ICON_CUSTOM_CATEGORY));

@@ -45,6 +45,8 @@ import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.HistogramTableModel;
 import com.pironet.tda.utils.IconFactory;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * Parses SunJDK Thread Dumps. Also parses SAP and HP Dumps.
  * Needs to be closed after use (so inner stream is closed).
@@ -911,10 +913,9 @@ public class SunJDKParser extends AbstractDumpParser {
                 }
             }
 
-            String blockingStackFrame = threads[MonitorMap.LOCK_THREAD_POS].get(threadLine);
+            final String blockingStackFrame = threads[MonitorMap.LOCK_THREAD_POS].get(threadLine);
             tmi.setContent(blockingStackFrame);
-            mmi.setContent("This monitor (" + linkifyMonitor(monitor)
-                    + ") is held in the following stack frame:\n\n" + blockingStackFrame);
+            mmi.setContent("This monitor (" + linkifyMonitor(monitor) + ") is held in the following stack frame:\n\n" + blockingStackFrame);
 
             // If no-one is blocked on or waiting for this monitor, don't show it
             if (monitorNode.getChildCount() > 0) {
@@ -978,9 +979,8 @@ public class SunJDKParser extends AbstractDumpParser {
      * @param root            the root node of the dumps.
      */
     public void parseLoggcFile(InputStream loggcFileStream, DefaultMutableTreeNode root) {
-        BufferedReader bis = new BufferedReader(new InputStreamReader(loggcFileStream));
-        List<HistogramTableModel> histograms = new Vector<>();
-
+        final BufferedReader bis = new BufferedReader(new InputStreamReader(loggcFileStream));
+        final List<HistogramTableModel> histograms = new Vector<>();
         try {
             while (bis.ready()) {
                 bis.mark(getMarkSize());
@@ -1000,6 +1000,8 @@ public class SunJDKParser extends AbstractDumpParser {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(bis);
         }
     }
 
