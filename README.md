@@ -7,7 +7,7 @@
 
 ## Screenshot
 
-![Java Thread Analyzer](https://raw.githubusercontent.com/machak/tda/master/analyzer.png"Screenshot")
+![Java Thread Analyzer](https://raw.githubusercontent.com/machak/tda/master/analyzer.png "Screenshot")
 
 
 
