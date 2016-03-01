@@ -1362,6 +1362,9 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
             tree.setSelectionPath(selPath);
             tree.scrollPathToVisible(selPath);
+            if (selPath == null) {
+                return;
+            }
 
             Enumeration childs = ((DefaultMutableTreeNode)selPath.getLastPathComponent()).children();
             boolean found = false;
