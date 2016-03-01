@@ -28,6 +28,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.pironet.tda.ThreadInfo;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
 /**
  * table model for displaying thread overview.
  *
@@ -76,18 +78,28 @@ public class ThreadsTableModel extends AbstractTableModel {
         String[] columns = ti.getTokens();
         if (getColumnCount() > 3) {
             if (columnIndex > 1 && columnIndex < 5) {
-                return new Long(columns[columnIndex]);
+                return parseLong(columns[columnIndex]);
             } else {
                 return columns[columnIndex];
             }
         } else {
             if (columnIndex == 1) {
-                return new Long(columns[columnIndex]);
+                return parseLong(columns[columnIndex]);
             } else {
                 return columns[columnIndex];
             }
 
         }
+    }
+
+    private Long parseLong(final String column) {
+        try {
+            return new Long(column);
+        } catch (NumberFormatException ignore) {
+            // ignore
+        }
+        return 0L;
+
     }
 
     /**
