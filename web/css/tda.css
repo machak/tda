@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  padding: 0;
+  padding-top: 20px;
+}
+
+.left {
+  float: left;
+  width: 35%;
+}
+
+.right {
+  float: right;
+  width: 65%;
+}
+
+.bottom {
+  clear: both;
+  width: 100%;
+}
+
+.left-body {
+  background-color: #ffffff;
+}
+
+.right-body {
+  background-color: #2ca02c;
+}
+
+.bottom-body {
+  background-color: #0b97c4;
+}
