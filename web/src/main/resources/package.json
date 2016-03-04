@@ -1,0 +1,11 @@
+{
+  "name": "tda-js",
+  "version": "1.0.0",
+  "devDependencies": {
+    "grunt": "0.4.5",
+    "grunt-bowercopy": "1.2.3",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-watch": "0.6.1",
+    "grunt-stripcomments": "^0.4.0"
+  }
+}
