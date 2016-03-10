@@ -36,7 +36,8 @@ import com.pironet.tda.utils.PrefManager;
  *
  * @author irockel
  */
-public class DumpParserFactory {
+public final class DumpParserFactory {
+
     private static DumpParserFactory instance = null;
 
     /**

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="SYSOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%-5p - [%-80m] - at %c.%M(%F:%L)%n"/>
+    </Console>
+    <Async name="CONSOLE" includeLocation="true">
+      <AppenderRef ref="SYSOUT"/>
+    </Async>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="CONSOLE"/>
+    </Root>
+    <logger name="io.vertx" level="DEBUG"/>
+    <logger name="com.machak" level="DEBUG"/>
+    <Root level="INFO">
+      <AppenderRef ref="CONSOLE"/>
+    </Root>
+  </Loggers>
+</Configuration>

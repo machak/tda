@@ -2,6 +2,8 @@
 
 package com.machak.tda.vertx;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,8 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 
 @RunWith(VertxUnitRunner.class)
 public class RestVerticleTest {
+
+    private static final Logger log = LogManager.getLogger(RestVerticleTest.class);
     public static final int TEST_PORT = 8282;
     private Vertx vertx;
 
@@ -31,11 +35,12 @@ public class RestVerticleTest {
 
 
     @Test
-    public void testMyApplication(TestContext context) {
+    public void testResolving(TestContext context) {
+        log.info("TEST RESOLVING");
         final Async async = context.async();
         vertx.createHttpClient().getNow(TEST_PORT, "localhost", "/",
                 response -> response.handler(body -> {
-                    context.assertTrue(body.toString().contains("dummy"));
+                    context.assertTrue(body.toString().contains("TDA"));
                     async.complete();
                 }));
     }

@@ -11,7 +11,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <commons-io.version>2.1</commons-io.version>
     <guava.version>19.0</guava.version>
-    <vertx-core.version>3.2.0</vertx-core.version>
+    <vertx-core.version>3.2.1</vertx-core.version>
+    <log4j-core.version>2.1</log4j-core.version>
+    <jackson.version>2.6.5</jackson.version>
   </properties>
   <packaging>pom</packaging>
   <modules>
@@ -48,9 +50,39 @@
       </dependency>
       <dependency>
         <groupId>io.vertx</groupId>
+        <artifactId>vertx-web</artifactId>
+        <version>${vertx-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.vertx</groupId>
         <artifactId>vertx-unit</artifactId>
         <version>${vertx-core.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
       </dependency>
 
     </dependencies>

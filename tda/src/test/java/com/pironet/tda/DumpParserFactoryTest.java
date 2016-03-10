@@ -55,8 +55,6 @@ public class DumpParserFactoryTest extends TestCase {
      * Test of get method, of class com.pironet.tda.DumpParserFactory.
      */
     public void testGet() {
-        System.out.println("get");
-
         DumpParserFactory result = DumpParserFactory.get();
         assertNotNull(result);
     }
@@ -65,7 +63,6 @@ public class DumpParserFactoryTest extends TestCase {
      * Test of getDumpParserForVersion method, of class com.pironet.tda.DumpParserFactory.
      */
     public void testGetDumpParserForSunLogfile() throws FileNotFoundException {
-        System.out.println("getDumpParserForVersion");
 
         InputStream dumpFileStream = getClass().getResourceAsStream("/data/test.log");
         Map<String, Map<String, String>> threadStore = null;
@@ -81,7 +78,6 @@ public class DumpParserFactoryTest extends TestCase {
      * Test of getDumpParserForVersion method, of class com.pironet.tda.DumpParserFactory.
      */
     public void testGetDumpParserForBeaLogfile() throws FileNotFoundException {
-        System.out.println("getDumpParserForVersion");
 
         InputStream dumpFileStream = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
 
