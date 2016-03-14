@@ -16,6 +16,12 @@ body {
 .bottom {
   clear: both;
   width: 100%;
+  min-height: 100px;
+  height: 100px;
+}
+.bottom-body{
+  min-height: 100px;
+  height: 100px;
 }
 
 .left-body {

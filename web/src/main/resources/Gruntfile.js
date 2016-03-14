@@ -9,7 +9,7 @@ module.exports = function(grunt) {
           destPrefix: 'js/'
         },
         files: {
-          //'jquery.js': 'jquery/dist/jquery.min.js',
+          'jquery.js': 'jquery/dist/jquery.min.js',
           'angular.js': 'angular/angular.min.js',
           'angular-route.js': 'angular-route/angular-route.min.js',
           'angular-animate.js': 'angular-animate/angular-animate.min.js',
@@ -25,7 +25,8 @@ module.exports = function(grunt) {
           'ng-wig.js': 'ngWig/dist/ng-wig.min.js',
           'd3.js': 'd3/d3.min.js',
           'angular-tree-control.js': 'angular-tree-control/angular-tree-control.js',
-          'nvd3.js': 'nvd3/build/nv.d3.min.js'
+          'jstree.js': 'jstree/dist/jstree.min.js',
+          'ngJsTree.js': 'ng-js-tree/dist/ngJsTree.min.js'
         }
       }
     },
@@ -43,7 +44,7 @@ module.exports = function(grunt) {
       js_common: {
         src: [
           // JQUERY
-          //'js/jquery.js',
+          'js/jquery.js',
           'js/angular.js',
           'js/angular-route.js',
           'js/angular-animate.js',
@@ -58,7 +59,8 @@ module.exports = function(grunt) {
           'js/ng-dialog.js',
           'js/angularjs-datepicker.js',
           'js/notification-bar.js',
-          'js/angular-tree-control.js'
+          'js/jstree.js',
+          'js/ngJsTree.js'
 
 
           /*'js/loading-bar.js',*/

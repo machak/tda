@@ -182,7 +182,7 @@ public abstract class AbstractCategory extends AbstractInfo implements Category 
         this.filterEnabled = filterEnabled;
     }
 
-    protected DefaultMutableTreeNode getRootNode() {
+    public DefaultMutableTreeNode getRootNode() {
         return rootNode;
     }
 

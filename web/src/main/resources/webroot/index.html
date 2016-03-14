@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="tda.module">
   <head>
     <title>TDA: Thread Dump Analyzer</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -11,24 +11,21 @@
     <script src="js/common.js"></script>
     <script src="js/tda.js"></script>
   </head>
-  <body ng-app="tda.module" data-ng-cloak="">
+  <body  data-ng-cloak="" ng-controller="HomeCtrl" ng-view="">
     <div class="container">
-      <div class="left" ng-controller="HomeCtrl">
+      <div class="left">
         <div class="left-body">
-          <treecontrol class="tree-classic"
-                       tree-model="dataForTheTree"
-                       options="treeOptions"
-                       on-selection="showSelected(node)"
-                       selected-node="node1">
-            {{node.name}}
-          </treecontrol>
+          <div js-tree="treeConfig"  ng-model="treeData" data-tree-events="changed:changed">
+          </div>
         </div>
       </div>
       <div class="right">
-        <div class="right-body">top-right</div>
+        <div class="right-body">
+
+        </div>
       </div>
       <div class="bottom">
-        <div class="bottom-body">bottom</div>
+        <div class="bottom-body" ng-bind-html="selectedContent | sanitize">[html]</div>
       </div>
     </div>
 

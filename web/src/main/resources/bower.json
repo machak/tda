@@ -3,22 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "angular": "1.4.8",
-    "angular-route": "1.4.8",
+    "angular": "1.5.0",
+    "angular-route": "1.5.0",
     "angular-nvd3": "1.0.2",
     "angularjs-datepicker": "0.2.12",
-    "angular-sanitize": "1.4.8",
+    "angular-sanitize": "1.5.0",
     "ng-notifications-bar": "0.0.15",
     "ng-dialog": "0.5.5",
     "ng-flow": "2.6.1",
-    "angular-cookies": "~1.4.8",
+    "angular-cookies": "~1.5.0",
     "ngWig": "ng-wig#~2.3.3",
     "dragular": "~3.2.0",
-    "angular-animate": "~1.4.8",
-    "angular-tree-control": "0.2.23"
+    "angular-animate": "~1.5.0",
+    "ng-js-tree": "~0.0.8"
   },
   "resolutions": {
-    "angular-sanitize": "1.4.8",
-    "angular": "1.4.8"
+    "angular-sanitize": "1.5.0",
+    "angular": "1.5.0"
   }
 }
