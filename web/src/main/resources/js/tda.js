@@ -7,13 +7,16 @@
       ])
       .config(function($provide, $routeProvider, $httpProvider) {
         $routeProvider
-            .when('/', {
-              templateUrl: '/',
-              controller: 'HomeCtrl'
-            })
+            .when('/thread', {
+              templateUrl: '/thread.html',
+              controller: 'ThreadCtrl'
+            }).when('/', {
+          controller: 'HomeCtrl'
+        })
       })
 
       .controller('HomeCtrl', function($scope, $sce, ngDialog, $rootScope, $http, $log) {
+        $scope.allData = [];
         $scope.header = "TDA";
         $scope.selectedContent = "selected";
         $scope.treeConfig = {
@@ -43,7 +46,28 @@
 
         $http.get("/api/tree").then(function(response) {
           console.log(response.data);
-          $scope.treeData = response.data.children;
+          $scope.allData = response.data.children;
+          $scope.treeData = [];
+          var length = $scope.allData.length;
+          // display only first level
+          for (var i = 0; i < length; i++) {
+            console.log($scope.allData[i]);
+            var root = {'text': $scope.allData[i].text};
+            $scope.treeData.push(root);
+            var children = $scope.allData[i].children;
+            root.children = [];
+            if (children) {
+              for (var j = 0; j < children.length; j++) {
+                var child = children[j];
+                var text = child.text;
+                if(root.text.lastIndexOf(text, 0) === 0){
+                  continue;
+                }
+                root.children.push({'text': text, 'target': child});
+              }
+            }
+          }
+
           $scope.treeConfig.version++;
         });
 
