@@ -33,6 +33,7 @@ import javax.swing.tree.TreePath;
 
 import com.google.common.base.Strings;
 import com.pironet.tda.filter.Filter;
+import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
 import com.pironet.tda.utils.PrefManager;
@@ -143,7 +144,8 @@ public abstract class AbstractDumpParser implements DumpParser {
 
                     if (occurence >= (minOccurence - 1)) {
                         threadCount++;
-                        StringBuilder content = new StringBuilder("<body bgcolor=\"ffffff\"><b><font size=").append(TDA.getFontSizeModifier(-1)).
+                        StringBuilder content = new StringBuilder(Const.BUFFER_CAPACITY);
+                        content.append("<body bgcolor=\"ffffff\"><b><font size=").append(TDA.getFontSizeModifier(-1)).
                                 append('>').append(keys.get(0)).append("</b></font><hr><pre><font size=").
                                 append(TDA.getFontSizeModifier(-1)).append('>').
                                 append(fixMonitorLinks((String)((Map)dumpStore.get(keys.get(0))).get(threadKey), keys.get(0)));
@@ -199,7 +201,8 @@ public abstract class AbstractDumpParser implements DumpParser {
      * @param threadCount  the overall thread count of this run.
      */
     private String getStatInfo(List<String> keys, String prefix, int minOccurence, int threadCount) {
-        StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
+        final StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
+        statData.append("<body bgcolor=\"#ffffff\"><font face=System><b><font face=System> ");
 
         statData.append("<b>").append(prefix).append("</b><hr><p><i>");
         for (int i = 0; i < keys.size(); i++) {

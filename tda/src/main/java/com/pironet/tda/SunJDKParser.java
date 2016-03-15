@@ -42,6 +42,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
 import com.google.common.base.Strings;
+import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.HistogramTableModel;
 import com.pironet.tda.utils.IconFactory;
@@ -232,7 +233,8 @@ public class SunJDKParser extends AbstractDumpParser {
 
                             // Second, initialize state for this new thread
                             title = line;
-                            content = new StringBuffer("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
+                            content = new StringBuffer(Const.BUFFER_CAPACITY);
+                            content.append("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
                             content.append(line);
                             content.append('\n');
                         } else if (line.contains("at ")) {
@@ -557,7 +559,7 @@ public class SunJDKParser extends AbstractDumpParser {
     private boolean checkThreadDumpStatData(ThreadDumpInfo tdi) throws IOException {
         boolean finished = false;
         boolean found = false;
-        StringBuilder hContent = new StringBuilder();
+        StringBuilder hContent = new StringBuilder(Const.BUFFER_CAPACITY);
         int heapLineCounter = 0;
         int lines = 0;
 
@@ -598,7 +600,7 @@ public class SunJDKParser extends AbstractDumpParser {
         boolean found = false;
         int deadlocks = 0;
         int lineCounter = 0;
-        StringBuffer dContent = new StringBuffer();
+        StringBuffer dContent = new StringBuffer(Const.BUFFER_CAPACITY);
         TreeCategory deadlockCat = new TreeCategory(getContext(), "Deadlocks", IconFactory.DEADLOCKS);
         DefaultMutableTreeNode catDeadlocks = new DefaultMutableTreeNode(deadlockCat);
         boolean first = true;
@@ -623,7 +625,7 @@ public class SunJDKParser extends AbstractDumpParser {
                         deadlocks++;
                         addToCategory(catDeadlocks, "Deadlock No. " + (deadlocks), null, dContent.toString(), 0, false);
                     }
-                    dContent = new StringBuffer();
+                    dContent = new StringBuffer(Const.BUFFER_CAPACITY);
                     dContent.append("</pre><b><font size=").append(TDA.getFontSizeModifier(-1)).append('>');
                     dContent.append("Found one Java-level deadlock");
                     dContent.append("</b><hr></font><pre>\n");

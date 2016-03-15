@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 
+import com.pironet.tda.utils.Const;
+
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -91,7 +93,8 @@ public class LogFileContent extends AbstractInfo implements Serializable {
      */
     public void appendToContentBuffer(String append) {
         if (contentBuffer == null) {
-            contentBuffer = new StringBuffer(append);
+            contentBuffer = new StringBuffer(Const.BUFFER_CAPACITY);
+            contentBuffer.append(append);
         } else {
             contentBuffer.append('\n');
             contentBuffer.append(append);
@@ -105,7 +108,7 @@ public class LogFileContent extends AbstractInfo implements Serializable {
      * synchronization is not needed here.
      */
     private void readContent() {
-        final StringBuffer contentReader = new StringBuffer();
+        final StringBuffer contentReader = new StringBuffer(Const.BUFFER_CAPACITY * 10);
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(getLogfile()));

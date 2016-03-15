@@ -208,7 +208,7 @@ public final class PrefManager {
     }
 
     private String regexsToString(ListModel regexs) {
-        StringBuilder elems = new StringBuilder();
+        StringBuilder elems = new StringBuilder(Const.BUFFER_CAPACITY);
         for (int i = 0; i < regexs.getSize(); i++) {
             elems.append(regexs.getElementAt(i));
             if (i + 1 < regexs.getSize()) {
@@ -224,7 +224,7 @@ public final class PrefManager {
         // only add files already in it
         if (!hasInRecentFiles(file, currentFiles)) {
             int start = currentFiles.length == 10 ? 1 : 0;
-            StringBuilder recentFiles = new StringBuilder();
+            StringBuilder recentFiles = new StringBuilder(Const.BUFFER_CAPACITY);
 
             for (int i = start; i < currentFiles.length; i++) {
                 recentFiles.append(currentFiles[i]);
@@ -247,7 +247,7 @@ public final class PrefManager {
         // only add files already in it
         if (!hasInRecentFiles(file, currentFiles)) {
             int start = currentFiles.length == 10 ? 1 : 0;
-            StringBuilder recentSessions = new StringBuilder();
+            StringBuilder recentSessions = new StringBuilder(Const.BUFFER_CAPACITY);
 
             for (int i = start; i < currentFiles.length; i++) {
                 recentSessions.append(currentFiles[i]);
@@ -460,7 +460,7 @@ public final class PrefManager {
 
     public void setFilters(DefaultListModel<Filter> filters) {
         // store into cache
-        final StringBuilder filterString = new StringBuilder();
+        final StringBuilder filterString = new StringBuilder(Const.BUFFER_CAPACITY);
         for (int i = 0; i < filters.getSize(); i++) {
             if (i > 0) {
                 filterString.append(PARAM_DELIM);
@@ -489,7 +489,7 @@ public final class PrefManager {
      */
     public void setCategories(DefaultListModel<CustomCategory> categories) {
         // store into cache
-        StringBuilder catString = new StringBuilder();
+        StringBuilder catString = new StringBuilder(Const.BUFFER_CAPACITY);
         for (int i = 0; i < categories.getSize(); i++) {
             if (i > 0) {
                 catString.append(PARAM_DELIM);

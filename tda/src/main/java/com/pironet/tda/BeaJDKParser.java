@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
+import com.pironet.tda.utils.Const;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
 
@@ -136,7 +137,8 @@ public class BeaJDKParser extends AbstractDumpParser {
                             }
 
                             title = line;
-                            content = new StringBuffer("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
+                            content = new StringBuffer(Const.BUFFER_CAPACITY);
+                            content.append("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
                             content.append(line);
                             content.append('\n');
                         } else if (line.contains("at ")) { // enganado por [fat lock]
@@ -146,7 +148,8 @@ public class BeaJDKParser extends AbstractDumpParser {
                             String newLine = linkifyMonitor(line);
                             content.append(newLine);
                             if (sContent == null) {
-                                sContent = new StringBuffer("<body bgcolor=\"ffffff\"><font size=" + TDA.getFontSizeModifier(-1) + "><b>");
+                                sContent = new StringBuffer(Const.SMALL_CAPACITY);
+                                sContent.append("<body bgcolor=\"ffffff\"><font size=" + TDA.getFontSizeModifier(-1) + "><b>");
                             }
                             sContent.append(newLine);
                             monitorStack.push(line);

@@ -24,6 +24,8 @@ package com.pironet.tda;
 
 import java.io.Serializable;
 
+import com.pironet.tda.utils.Const;
+
 /**
  * analyze the given thread dump.
  *
@@ -53,7 +55,7 @@ public class Analyzer implements Serializable {
     public String analyzeDump() {
         // check for possible hot spots concerning this thread dump
 
-        StringBuilder statData = new StringBuilder();
+        StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
         int deadlocks = tdi.getDeadlocks() == null ? 0 : tdi.getDeadlocks().getNodeCount();
         int threadCount = tdi.getThreads() == null ? 0 : tdi.getThreads().getNodeCount();
         int waiting = tdi.getWaitingThreads() == null ? 0 : tdi.getWaitingThreads().getNodeCount();

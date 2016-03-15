@@ -41,6 +41,8 @@ import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.swing.JOptionPane;
 
+import com.pironet.tda.utils.Const;
+
 /**
  * Request a Thread Dump via the given MBeanServerConnection, can only be
  * call in jconsole with proper jmx stuff available.
@@ -94,7 +96,7 @@ public class MBeanDumper {
      * Prints the thread dump information to System.out.
      */
     public String threadDump() {
-        StringBuilder dump = new StringBuilder();
+        StringBuilder dump = new StringBuilder(Const.BUFFER_CAPACITY);
         int retries = 0;
         while (retries < CONNECT_RETRIES) {
             try {
@@ -205,9 +207,8 @@ public class MBeanDumper {
     }
 
     private void printThread(ThreadInfo ti, StringBuilder dump) {
-        StringBuilder sb = new StringBuilder('"' + ti.getThreadName() + '"' +
-                " nid=" + ti.getThreadId() + " state=" +
-                ti.getThreadState());
+        StringBuilder sb = new StringBuilder(Const.BUFFER_CAPACITY);
+         sb.append('"').append(ti.getThreadName()).append('"').append(" nid=").append(ti.getThreadId()).append(" state=").append(ti.getThreadState());
         if (ti.getLockName() != null && ti.getThreadState() != Thread.State.BLOCKED) {
             String[] lockInfo = ti.getLockName().split("@");
             sb.append('\n').append(INDENT).append("- waiting on <0x").append(lockInfo[1]).append("> (a ").append(lockInfo[0]).append(')');
@@ -255,7 +256,7 @@ public class MBeanDumper {
      * the thread dump information.
      */
     public String findDeadlock() {
-        StringBuilder dump = new StringBuilder();
+        StringBuilder dump = new StringBuilder(Const.BUFFER_CAPACITY);
         long[] tids;
         if (findDeadlocksMethodName.equals("findDeadlockedThreads") &&
                 tmbean.isSynchronizerUsageSupported()) {

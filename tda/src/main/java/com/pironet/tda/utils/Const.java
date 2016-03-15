@@ -60,6 +60,12 @@ public final class Const {
     public static final int FONT_SIZE = 12;
     public static final Dimension EMPTY_DIMENSION = new Dimension(400, 400);
     public static final int MIN_RIGHT_PANE_SIZE = 600;
+    public static final int BUFFER_CAPACITY = 1024 * 10;
+    /**
+     * waiting threads threshold
+     */
+    public static final int WAITING_THRESHOLD = 5;
+    public static final int SMALL_CAPACITY = 64;
     public static int DIVIDER_SIZE = 4;
     static int DEFINED_ROWS = 3;
 

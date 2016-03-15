@@ -21,6 +21,8 @@
  */
 package com.pironet.tda;
 
+import com.pironet.tda.utils.Const;
+
 /**
  * Thread Dump Information Node. It stores structural data about the thread dump
  * and provides methods for generating html information for displaying infos about
@@ -110,7 +112,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      */
     private void createOverview() {
         if (getContext().getEnvironment() == Context.ENV.WEB) {
-            StringBuilder statData = new StringBuilder("{");
+            StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
             statData.append("Overall Thread Count").append(getThreads() == null ? 0 : getThreads().getNodeCount());
             statData.append("Overall Monitor Count").append(getMonitors() == null ? 0 : getMonitors().getNodeCount());
             statData.append("Number of threads waiting for a monitor").append(getWaitingThreads() == null ? 0 : getWaitingThreads().getNodeCount());
@@ -129,7 +131,8 @@ public class ThreadDumpInfo extends AbstractInfo {
 
             setOverview(statData.toString());
         }else {
-            StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System " +
+            StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
+             statData.append("<body bgcolor=\"#ffffff\"><font face=System " +
                     "><table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
                     ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
             statData.append(getThreads() == null ? 0 : getThreads().getNodeCount());
@@ -175,7 +178,8 @@ public class ThreadDumpInfo extends AbstractInfo {
      * @return a info node for the monitor.
      */
     public static String getMonitorInfo(int locks, int waits, int sleeps) {
-        StringBuilder statData = new StringBuilder("<body bgcolor=\"ffffff\"><table border=0 bgcolor=\"#dddddd\"><tr><td><font face=System" +
+        StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
+        statData.append("<body bgcolor=\"ffffff\"><table border=0 bgcolor=\"#dddddd\"><tr><td><font face=System" +
                 ">Threads locking monitor</td><td><b><font face=System>");
         statData.append(locks);
         statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td>");
@@ -219,7 +223,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      * @return true if a lot of threads are waiting.
      */
     public static boolean areALotOfWaiting(int waits) {
-        return (waits > 5);
+        return (waits > Const.WAITING_THRESHOLD);
     }
 
     /**
@@ -349,7 +353,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      * @return the thread dump information (one line).
      */
     public String toString() {
-        StringBuilder postFix = new StringBuilder();
+        StringBuilder postFix = new StringBuilder(Const.SMALL_CAPACITY);
         if (logLine > 0) {
             postFix.append(" at line ").append(getLogLine());
         }

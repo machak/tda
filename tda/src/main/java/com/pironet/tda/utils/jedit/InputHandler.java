@@ -21,6 +21,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 
+import com.pironet.tda.utils.Const;
+
 /**
  * An input handler converts the user's key strokes into concrete actions.
  * It also takes care of macro recording and action repetition.<p>
@@ -968,7 +970,7 @@ public abstract class InputHandler extends KeyAdapter {
             int repeatCount = textArea.getInputHandler().getRepeatCount();
 
             if (textArea.isEditable()) {
-                StringBuilder buf = new StringBuilder();
+                StringBuilder buf = new StringBuilder(Const.BUFFER_CAPACITY);
                 for (int i = 0; i < repeatCount; i++) {
                     buf.append(str);
                 }

@@ -59,6 +59,8 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
+import com.pironet.tda.utils.Const;
+
 /**
  * jEdit's text area component. It is more suited for editing program
  * source code than JEditorPane, because it drops the unnecessary features
@@ -1087,7 +1089,7 @@ public class JEditTextArea extends JComponent {
                 start = tmp;
             }
 
-            StringBuilder buf = new StringBuilder();
+            StringBuilder buf = new StringBuilder(Const.BUFFER_CAPACITY);
             Segment seg = new Segment();
 
             for (int i = selectionStartLine; i <= selectionEndLine; i++) {
@@ -1369,7 +1371,7 @@ public class JEditTextArea extends JComponent {
             String selection = getSelectedText();
 
             int repeatCount = inputHandler.getRepeatCount();
-            StringBuilder buf = new StringBuilder();
+            StringBuilder buf = new StringBuilder(Const.BUFFER_CAPACITY * 10);
             for (int i = 0; i < repeatCount; i++) {
                 buf.append(selection);
             }
@@ -1390,7 +1392,7 @@ public class JEditTextArea extends JComponent {
                 String selection = ((String)clipboard.getContents(this).getTransferData(DataFlavor.stringFlavor)).replace('\r', '\n');
 
                 int repeatCount = inputHandler.getRepeatCount();
-                StringBuilder buf = new StringBuilder();
+                StringBuilder buf = new StringBuilder(Const.BUFFER_CAPACITY * 10);
                 for (int i = 0; i < repeatCount; i++) {
                     buf.append(selection);
                 }

@@ -404,7 +404,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         BufferedReader br = null;
         String resultString = null;
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder(Const.BUFFER_CAPACITY);
 
         try {
             br = new BufferedReader(new InputStreamReader(is));
@@ -450,7 +450,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * @return given elements as table.
      */
     private String getAsTable(String prefix, String[] elements) {
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder(Const.BUFFER_CAPACITY * 10);
         int from = elements.length > 4 ? elements.length - 4 : 0;
 
         for (int i = from; i < elements.length; i++) {
@@ -1075,7 +1075,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         TableSorter ts = (TableSorter)ttsm.getTable().getModel();
 
         int[] rows = ttsm.getTable().getSelectedRows();
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer(Const.BUFFER_CAPACITY);
         for (final int row : rows) {
             appendThreadInfo(sb, ((ThreadsTableModel)ts.getTableModel()).
                     getInfoObjectAtRow(ts.modelIndex(row)));
@@ -1085,7 +1085,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
     }
 
     private void displayThreadInfo(ThreadInfo nodeInfo) {
-        final StringBuffer sb = new StringBuffer("");
+        final StringBuffer sb = new StringBuffer(Const.BUFFER_CAPACITY);
         appendThreadInfo(sb, nodeInfo);
         displayContent(sb.toString());
     }
@@ -1321,7 +1321,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 dumpMap = new HashMap<>();
                 dumpStore.addFileToDumpFiles(fileName, dumpMap);
             }
-            dp = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), dumpFileStream, dumpMap, runningAsJConsolePlugin,
+            dp = DumpParserFactory.get().getDumpParserForLogfile(context, dumpFileStream, dumpMap, runningAsJConsolePlugin,
                     dumpCounter);
             ((Logfile)top.getUserObject()).setUsedParser(dp);
 
