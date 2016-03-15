@@ -2050,7 +2050,9 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
         }
 
         Object[] options = {"Close File", "Cancel close"};
-
+        if (selPath == null) {
+            return;
+        }
         String fileName = ((DefaultMutableTreeNode)selPath.getLastPathComponent()).getUserObject().toString();
         fileName = fileName.substring(fileName.indexOf(File.separator));
 
