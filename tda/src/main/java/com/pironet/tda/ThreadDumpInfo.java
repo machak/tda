@@ -48,7 +48,8 @@ public class ThreadDumpInfo extends AbstractInfo {
     private HeapInfo heapInfo;
 
 
-    ThreadDumpInfo(String name, int lineCount) {
+    ThreadDumpInfo(final Context context, String name, int lineCount) {
+        super(context);
         setName(name);
         this.logLine = lineCount;
     }
@@ -108,41 +109,61 @@ public class ThreadDumpInfo extends AbstractInfo {
      * creates the overview information for this thread dump.
      */
     private void createOverview() {
-        StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System " +
-                "><table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
-                ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
-        statData.append(getThreads() == null ? 0 : getThreads().getNodeCount());
-        statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System" +
-                ">Overall Monitor Count</td><td></td><td><b><font face=System>");
-        statData.append(getMonitors() == null ? 0 : getMonitors().getNodeCount());
-        statData.append("</b></td></tr>\n\n<tr bgcolor=\"#dddddd\"><td><font face=System " +
-                ">Number of threads waiting for a monitor</td><td></td><td><b><font face=System>");
-        statData.append(getWaitingThreads() == null ? 0 : getWaitingThreads().getNodeCount());
-        statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System " +
-                ">Number of threads locking a monitor</td><td></td><td><b><font face=System size>");
-        statData.append(getLockingThreads() == null ? 0 : getLockingThreads().getNodeCount());
-        statData.append("</b></td></tr>\n\n<tr bgcolor=\"#dddddd\"><td><font face=System " +
-                ">Number of threads sleeping on a monitor</td><td></td><td><b><font face=System>");
-        statData.append(getSleepingThreads() == null ? 0 : getSleepingThreads().getNodeCount());
-        statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System " +
-                ">Number of deadlocks</td><td></td><td><b><font face=System>");
-        statData.append(getDeadlocks() == null ? 0 : getDeadlocks().getNodeCount());
-        statData.append("</b></td></tr>\n\n<tr bgcolor=\"#dddddd\"><td><font face=System " +
-                ">Number of Monitors without locking threads</td><td></td><td><b><font face=System>");
-        statData.append(getMonitorsWithoutLocks() == null ? 0 : getMonitorsWithoutLocks().getNodeCount());
-        statData.append("</b></td></tr>");
+        if (getContext().getEnvironment() == Context.ENV.WEB) {
+            StringBuilder statData = new StringBuilder("{");
+            statData.append("Overall Thread Count").append(getThreads() == null ? 0 : getThreads().getNodeCount());
+            statData.append("Overall Monitor Count").append(getMonitors() == null ? 0 : getMonitors().getNodeCount());
+            statData.append("Number of threads waiting for a monitor").append(getWaitingThreads() == null ? 0 : getWaitingThreads().getNodeCount());
+            statData.append("Number of threads locking a monitor").append(getLockingThreads() == null ? 0 : getLockingThreads().getNodeCount());
+            statData.append("Number of threads sleeping on a monitor").append(getSleepingThreads() == null ? 0 : getSleepingThreads().getNodeCount());
+            statData.append("Number of deadlocks").append(getDeadlocks() == null ? 0 : getDeadlocks().getNodeCount());
+            statData.append("Number of Monitors without locking threads").append(getMonitorsWithoutLocks() == null ? 0 : getMonitorsWithoutLocks().getNodeCount());
 
-        // add hints concerning possible hot spots found in this thread dump.
-        statData.append(getDumpAnalyzer().analyzeDump());
 
-        if (getHeapInfo() != null) {
-            statData.append(getHeapInfo());
+            // add hints concerning possible hot spots found in this thread dump.
+            statData.append(getDumpAnalyzer().analyzeDump());
+
+            if (getHeapInfo() != null) {
+                statData.append(getHeapInfo());
+            }
+
+            setOverview(statData.toString());
+        }else {
+            StringBuilder statData = new StringBuilder("<body bgcolor=\"#ffffff\"><font face=System " +
+                    "><table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
+                    ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
+            statData.append(getThreads() == null ? 0 : getThreads().getNodeCount());
+            statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System" +
+                    ">Overall Monitor Count</td><td></td><td><b><font face=System>");
+            statData.append(getMonitors() == null ? 0 : getMonitors().getNodeCount());
+            statData.append("</b></td></tr>\n\n<tr bgcolor=\"#dddddd\"><td><font face=System " +
+                    ">Number of threads waiting for a monitor</td><td></td><td><b><font face=System>");
+            statData.append(getWaitingThreads() == null ? 0 : getWaitingThreads().getNodeCount());
+            statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System " +
+                    ">Number of threads locking a monitor</td><td></td><td><b><font face=System size>");
+            statData.append(getLockingThreads() == null ? 0 : getLockingThreads().getNodeCount());
+            statData.append("</b></td></tr>\n\n<tr bgcolor=\"#dddddd\"><td><font face=System " +
+                    ">Number of threads sleeping on a monitor</td><td></td><td><b><font face=System>");
+            statData.append(getSleepingThreads() == null ? 0 : getSleepingThreads().getNodeCount());
+            statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System " +
+                    ">Number of deadlocks</td><td></td><td><b><font face=System>");
+            statData.append(getDeadlocks() == null ? 0 : getDeadlocks().getNodeCount());
+            statData.append("</b></td></tr>\n\n<tr bgcolor=\"#dddddd\"><td><font face=System " +
+                    ">Number of Monitors without locking threads</td><td></td><td><b><font face=System>");
+            statData.append(getMonitorsWithoutLocks() == null ? 0 : getMonitorsWithoutLocks().getNodeCount());
+            statData.append("</b></td></tr>");
+
+            // add hints concerning possible hot spots found in this thread dump.
+            statData.append(getDumpAnalyzer().analyzeDump());
+
+            if (getHeapInfo() != null) {
+                statData.append(getHeapInfo());
+            }
+
+            statData.append("</table>");
+
+            setOverview(statData.toString());
         }
-
-        statData.append("</table>");
-
-        setOverview(statData.toString());
-
     }
 
     /**
@@ -276,7 +297,7 @@ public class ThreadDumpInfo extends AbstractInfo {
 
     private Analyzer getDumpAnalyzer() {
         if (dumpAnalyzer == null) {
-            setDumpAnalyzer(new Analyzer(this));
+            setDumpAnalyzer(new Analyzer(getContext(), this));
         }
         return dumpAnalyzer;
     }

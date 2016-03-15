@@ -32,22 +32,22 @@ import java.io.Serializable;
 public abstract class AbstractInfo implements Serializable {
     private static final long serialVersionUID = -5806988370387932415L;
     private String name;
+    public final Context context;
 
-    /**
-     * get the name of the node.
-     *
-     * @return
-     */
+    protected AbstractInfo(final Context context) {
+        this.context = context;
+    }
+
     public String getName() {
         return name;
     }
 
-    /**
-     * set the name of the node.
-     *
-     * @param name
-     */
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

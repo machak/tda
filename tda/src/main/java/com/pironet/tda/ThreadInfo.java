@@ -36,7 +36,8 @@ public class ThreadInfo extends AbstractInfo {
     private boolean aLotOfWaiting;
     private int childCount;
 
-    public ThreadInfo(String name, String info, String content, int stackLines, String[] tableTokens) {
+    public ThreadInfo(final Context context, String name, String info, String content, int stackLines, String[] tableTokens) {
+        super(context);
         setName(name);
         this.info = info;
         this.content = content;

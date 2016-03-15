@@ -48,6 +48,10 @@ public abstract class AbstractCategory extends AbstractInfo implements Category 
 
     private int iconID = -1;
 
+    public AbstractCategory(final Context context) {
+        super(context);
+    }
+
     /**
      * sorts the category tree by the given comparator.
      *

@@ -32,9 +32,10 @@ package com.pironet.tda;
  */
 public class HeapInfo {
     private String heapInfo = null;
-
-    public HeapInfo(String value) {
+    private final Context context;
+    public HeapInfo(final Context context, String value) {
         this.heapInfo = value;
+        this.context = context;
     }
 
     /**
@@ -53,6 +54,9 @@ public class HeapInfo {
 
     public String toString() {
 
+        if (context.getEnvironment() == Context.ENV.WEB) {
+            return heapInfo;
+        }
         return ("<tr bgcolor=\"#ffffff\"<td></td></tr>" +
                 "<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System " +
                 "<b><u>Heap Information:</u></b><br/>" +

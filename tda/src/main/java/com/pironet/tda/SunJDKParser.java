@@ -113,28 +113,28 @@ public class SunJDKParser extends AbstractDumpParser {
 
             try {
                 Map<String, String> threads = new HashMap<>();
-                ThreadDumpInfo overallTDI = new ThreadDumpInfo("Dump No. " + counter++, 0);
+                ThreadDumpInfo overallTDI = new ThreadDumpInfo(getContext(), "Dump No. " + counter++, 0);
                 if (withCurrentTimeStamp) {
                     overallTDI.setStartTime((new Date(System.currentTimeMillis())).toString());
                 }
                 DefaultMutableTreeNode threadDump = new DefaultMutableTreeNode(overallTDI);
 
-                DefaultMutableTreeNode catThreads = new DefaultMutableTreeNode(new TableCategory("Threads", IconFactory.THREADS));
+                DefaultMutableTreeNode catThreads = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads", IconFactory.THREADS));
                 threadDump.add(catThreads);
 
-                DefaultMutableTreeNode catWaiting = new DefaultMutableTreeNode(new TableCategory("Threads waiting for Monitors", IconFactory.THREADS_WAITING));
+                DefaultMutableTreeNode catWaiting = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads waiting for Monitors", IconFactory.THREADS_WAITING));
 
-                DefaultMutableTreeNode catSleeping = new DefaultMutableTreeNode(new TableCategory("Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
+                DefaultMutableTreeNode catSleeping = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
 
-                DefaultMutableTreeNode catLocking = new DefaultMutableTreeNode(new TableCategory("Threads locking Monitors", IconFactory.THREADS_LOCKING));
+                DefaultMutableTreeNode catLocking = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads locking Monitors", IconFactory.THREADS_LOCKING));
 
                 // create category for monitors with disabled filtering.
                 // NOTE:  These strings are "magic" in that the methods
                 // TDA#displayCategory and TreeCategory#getCatComponent both
                 // checks these literal strings and the behavior differs.
-                DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
-                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
-                DefaultMutableTreeNode catBlockingMonitors = new DefaultMutableTreeNode(new TreeCategory("Threads blocked by Monitors", IconFactory.THREADS_LOCKING, false));
+                DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory(getContext(), "Monitors", IconFactory.MONITORS, false));
+                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory(getContext(), "Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
+                DefaultMutableTreeNode catBlockingMonitors = new DefaultMutableTreeNode(new TreeCategory(getContext(), "Threads blocked by Monitors", IconFactory.THREADS_LOCKING, false));
 
                 String title = null;
                 String dumpKey = null;
@@ -581,7 +581,7 @@ public class SunJDKParser extends AbstractDumpParser {
             }
         }
         if (hContent.length() > 0) {
-            tdi.setHeapInfo(new HeapInfo(hContent.toString()));
+            tdi.setHeapInfo(new HeapInfo(getContext(), hContent.toString()));
         }
 
 
@@ -599,7 +599,7 @@ public class SunJDKParser extends AbstractDumpParser {
         int deadlocks = 0;
         int lineCounter = 0;
         StringBuffer dContent = new StringBuffer();
-        TreeCategory deadlockCat = new TreeCategory("Deadlocks", IconFactory.DEADLOCKS);
+        TreeCategory deadlockCat = new TreeCategory(getContext(), "Deadlocks", IconFactory.DEADLOCKS);
         DefaultMutableTreeNode catDeadlocks = new DefaultMutableTreeNode(deadlockCat);
         boolean first = true;
 
@@ -688,7 +688,7 @@ public class SunJDKParser extends AbstractDumpParser {
         while (iter.hasNext()) {
             String monitor = (String)iter.next();
             Map<String, String>[] threads = mmap.getFromMonitorMap(monitor);
-            ThreadInfo mi = new ThreadInfo(monitor, null, "", 0, null);
+            ThreadInfo mi = new ThreadInfo(getContext(), monitor, null, "", 0, null);
             DefaultMutableTreeNode monitorNode = new DefaultMutableTreeNode(mi);
 
             // first the locks
@@ -897,10 +897,10 @@ public class SunJDKParser extends AbstractDumpParser {
 
             // Only one thread can really be holding this monitor, so find the thread
             String threadLine = getLockingThread(threads);
-            ThreadInfo tmi = new ThreadInfo("Thread - " + threadLine, null, "", 0, null);
+            ThreadInfo tmi = new ThreadInfo(getContext(), "Thread - " + threadLine, null, "", 0, null);
             DefaultMutableTreeNode threadNode = new DefaultMutableTreeNode(tmi);
 
-            ThreadInfo mmi = new ThreadInfo("Monitor - " + monitor, null, "", 0, null);
+            ThreadInfo mmi = new ThreadInfo(getContext(), "Monitor - " + monitor, null, "", 0, null);
             DefaultMutableTreeNode monitorNode = new DefaultMutableTreeNode(mmi);
             threadNode.add(monitorNode);
 

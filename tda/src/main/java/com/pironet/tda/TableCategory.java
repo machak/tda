@@ -49,14 +49,15 @@ public class TableCategory extends AbstractCategory {
     /**
      * Creates a new instance of TableCategory
      */
-    public TableCategory(String name, int iconID) {
-        this(name, iconID, true);
+    public TableCategory(final Context context, String name, int iconID) {
+        this(context, name, iconID, true);
     }
 
     /**
      * Creates a new instance of TableCategory
      */
-    public TableCategory(String name, int iconID, boolean filtering) {
+    public TableCategory(final Context context, String name, int iconID, boolean filtering) {
+        super(context);
         setName(name);
         setFilterEnabled(filtering);
         setIconID(iconID);

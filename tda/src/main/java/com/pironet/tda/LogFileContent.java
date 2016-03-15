@@ -50,7 +50,8 @@ public class LogFileContent extends AbstractInfo implements Serializable {
     /**
      * Creates a new instance of LogFileContent
      */
-    public LogFileContent(String logFile) {
+    public LogFileContent(final Context context, String logFile) {
+        super(context);
         setLogFile(logFile);
     }
 

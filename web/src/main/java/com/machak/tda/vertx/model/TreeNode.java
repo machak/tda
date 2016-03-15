@@ -21,6 +21,7 @@ public class TreeNode {
 
     private static int next = 0;
     private static final Logger log = LogManager.getLogger(TreeNode.class);
+    private String overview;
     private String content;
     @JsonProperty("text")
     private String name;
@@ -40,6 +41,7 @@ public class TreeNode {
             final Object userObject = mutableTreeNode.getUserObject();
             if (userObject instanceof ThreadDumpInfo) {
                 final ThreadDumpInfo threadDumpInfo = (ThreadDumpInfo)userObject;
+                overview = threadDumpInfo.getOverview();
                 this.addNode(new TreeNode(threadDumpInfo));
             } else if (userObject instanceof TableCategory) {
                 final TableCategory tableCategory = (TableCategory)userObject;
@@ -135,6 +137,14 @@ public class TreeNode {
 
     public void setContent(final String content) {
         this.content = content;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(final String overview) {
+        this.overview = overview;
     }
 
     @Override

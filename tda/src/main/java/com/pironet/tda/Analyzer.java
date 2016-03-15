@@ -31,6 +31,7 @@ import java.io.Serializable;
  */
 public class Analyzer implements Serializable {
     private static final long serialVersionUID = 3435608532221419575L;
+    private final Context context;
     ThreadDumpInfo tdi;
 
     /**
@@ -38,7 +39,8 @@ public class Analyzer implements Serializable {
      *
      * @param tdi the thread dump to analyze.
      */
-    public Analyzer(ThreadDumpInfo tdi) {
+    public Analyzer(final Context context, ThreadDumpInfo tdi) {
+        this.context = context;
         this.tdi = tdi;
     }
 
@@ -59,6 +61,7 @@ public class Analyzer implements Serializable {
 
         int overallThreadsWaitingWithoutLocks = tdi.getOverallThreadsWaitingWithoutLocksCount();
         int monitorsWithoutLocksCount = tdi.getMonitorsWithoutLocks() == null ? 0 : tdi.getMonitorsWithoutLocks().getNodeCount();
+
 
         // check if a lot of threads are in state "waiting"
         if ((deadlocks == 0) && (threadCount > 0) && ((waiting / (threadCount / 100.0)) > 10.0)) {

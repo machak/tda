@@ -47,14 +47,15 @@ public class TreeCategory extends AbstractCategory implements Serializable {
     /**
      * Creates a new instance of TreeCategory
      */
-    public TreeCategory(String name, int iconID) {
-        this(name, iconID, true);
+    public TreeCategory(final Context context, String name, int iconID) {
+        this(context, name, iconID, true);
     }
 
     /**
      * Creates a new instance of TreeCategory
      */
-    public TreeCategory(String name, int iconID, boolean filtering) {
+    public TreeCategory(final Context context,String name, int iconID, boolean filtering) {
+        super(context);
         setName(name);
         setFilterEnabled(filtering);
         setIconID(iconID);

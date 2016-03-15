@@ -123,7 +123,7 @@ public abstract class AbstractDumpParser implements DumpParser {
         }
 
         String info = prefix + " between " + keys.get(0) + " and " + keys.get(keys.size() - 1);
-        DefaultMutableTreeNode catMerge = new DefaultMutableTreeNode(new TableCategory(info, IconFactory.DIFF_DUMPS));
+        DefaultMutableTreeNode catMerge = new DefaultMutableTreeNode(new TableCategory(context, info, IconFactory.DIFF_DUMPS));
         root.add(catMerge);
         int threadCount = 0;
 
@@ -252,7 +252,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      * @see ThreadInfo
      */
     protected void createNode(DefaultMutableTreeNode top, String title, String info, String content, int lineCount) {
-        DefaultMutableTreeNode threadInfo = new DefaultMutableTreeNode(new ThreadInfo(title, info, content, lineCount, getThreadTokens(title)));
+        DefaultMutableTreeNode threadInfo = new DefaultMutableTreeNode(new ThreadInfo(context, title, info, content, lineCount, getThreadTokens(title)));
         top.add(threadInfo);
     }
 
@@ -269,7 +269,7 @@ public abstract class AbstractDumpParser implements DumpParser {
      */
     protected void addToCategory(DefaultMutableTreeNode category, String title, StringBuffer info, String content, int lineCount,
                                  boolean parseTokens) {
-        DefaultMutableTreeNode threadInfo = new DefaultMutableTreeNode(new ThreadInfo(title, info != null ? info.toString() : null, content, lineCount,
+        DefaultMutableTreeNode threadInfo = new DefaultMutableTreeNode(new ThreadInfo(context, title, info != null ? info.toString() : null, content, lineCount,
                 parseTokens ? getThreadTokens(title) : null));
         ((Category)category.getUserObject()).addToCatNodes(threadInfo);
     }
@@ -404,7 +404,7 @@ public abstract class AbstractDumpParser implements DumpParser {
         Category threads = tdi.getThreads();
         ListModel cats = PrefManager.get().getCategories();
         for (int i = 0; i < cats.getSize(); i++) {
-            final Category cat = new TableCategory(((CustomCategory)cats.getElementAt(i)).getName(), IconFactory.CUSTOM_CATEGORY);
+            final Category cat = new TableCategory(context, ((CustomCategory)cats.getElementAt(i)).getName(), IconFactory.CUSTOM_CATEGORY);
             for (int j = 0; j < threads.getNodeCount(); j++) {
                 Iterator filterIter = ((CustomCategory)cats.getElementAt(i)).iterOfFilters();
                 boolean matches = true;

@@ -82,19 +82,19 @@ public class BeaJDKParser extends AbstractDumpParser {
 
             try {
                 Map<String, String> threads = new HashMap<>();
-                ThreadDumpInfo overallTDI = new ThreadDumpInfo("Dump No. " + counter++, 0);
+                ThreadDumpInfo overallTDI = new ThreadDumpInfo(getContext(), "Dump No. " + counter++, 0);
                 DefaultMutableTreeNode threadDump = new DefaultMutableTreeNode(overallTDI);
-                DefaultMutableTreeNode catThreads = new DefaultMutableTreeNode(new TableCategory("Threads", IconFactory.THREADS));
+                DefaultMutableTreeNode catThreads = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads", IconFactory.THREADS));
                 threadDump.add(catThreads);
-                DefaultMutableTreeNode catWaiting = new DefaultMutableTreeNode(new TableCategory("Threads waiting for Monitors", IconFactory.THREADS_WAITING));
+                DefaultMutableTreeNode catWaiting = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads waiting for Monitors", IconFactory.THREADS_WAITING));
 
-                DefaultMutableTreeNode catSleeping = new DefaultMutableTreeNode(new TableCategory("Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
+                DefaultMutableTreeNode catSleeping = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads sleeping on Monitors", IconFactory.THREADS_SLEEPING));
 
-                DefaultMutableTreeNode catLocking = new DefaultMutableTreeNode(new TableCategory("Threads locking Monitors", IconFactory.THREADS_LOCKING));
+                DefaultMutableTreeNode catLocking = new DefaultMutableTreeNode(new TableCategory(getContext(), "Threads locking Monitors", IconFactory.THREADS_LOCKING));
 
                 // create category for monitors with disabled filtering.
-                DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory("Monitors", IconFactory.MONITORS, false));
-                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory("Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
+                DefaultMutableTreeNode catMonitors = new DefaultMutableTreeNode(new TreeCategory(getContext(), "Monitors", IconFactory.MONITORS, false));
+                DefaultMutableTreeNode catMonitorsLocks = new DefaultMutableTreeNode(new TreeCategory(getContext(), "Monitors without locking thread", IconFactory.MONITORS_NO_LOCKS, false));
 
                 String title = null;
                 StringBuffer content = null;

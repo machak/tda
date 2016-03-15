@@ -35,7 +35,8 @@ public class Logfile extends AbstractInfo {
     /**
      * Creates a new instance of Logfile
      */
-    public Logfile(String value) {
+    public Logfile(final Context context, final String value) {
+        super(context);
         content = value;
         setName(value);
     }
