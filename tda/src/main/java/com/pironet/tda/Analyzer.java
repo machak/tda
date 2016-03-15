@@ -82,7 +82,11 @@ public class Analyzer implements Serializable {
             statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System" + "><p>").append((int)(sleeping / (threadCount / 100.0))).append("% of all threads are sleeping on a monitor.</p><br>");
             statData.append("This might indicate they are waiting for some external resource (e.g. database) which is overloaded<br>");
             statData.append("or not available or are just waiting to get to do something (idle threads).<br>");
-            statData.append("You should check the <a href=\"sleep://\">sleeping threads</a> with a filter excluding all idle threads.</td></tr>");
+            if (context.getEnvironment() == Context.ENV.DESKTOP) {
+                statData.append("You should check the <a href=\"sleep://\">sleeping threads</a> with a filter excluding all idle threads.</td></tr>");
+            }else{
+                statData.append("You should check the <a data-ng-click=\"loadSleeping()\">sleeping threads</a> with a filter excluding all idle threads.</td></tr>");
+            }
         }
 
         // display an info if there are monitors without locking threads

@@ -212,7 +212,7 @@ public abstract class AbstractDumpParser implements DumpParser {
             }
         }
         statData.append("</i></p><br>" +
-                "<table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
+                "<table width=100% border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
                 ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
         statData.append(threadCount);
         statData.append("</b></td></tr>");

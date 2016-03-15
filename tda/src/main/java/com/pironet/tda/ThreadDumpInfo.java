@@ -111,7 +111,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      * creates the overview information for this thread dump.
      */
     private void createOverview() {
-        if (getContext().getEnvironment() == Context.ENV.WEB) {
+        /*if (getContext().getEnvironment() == Context.ENV.WEB) {
             StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
             statData.append("Overall Thread Count").append(getThreads() == null ? 0 : getThreads().getNodeCount());
             statData.append("Overall Monitor Count").append(getMonitors() == null ? 0 : getMonitors().getNodeCount());
@@ -130,9 +130,9 @@ public class ThreadDumpInfo extends AbstractInfo {
             }
 
             setOverview(statData.toString());
-        }else {
+        }else*/ {
             StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
-             statData.append("<body bgcolor=\"#ffffff\"><font face=System " +
+             statData.append("<body width=100% bgcolor=\"#ffffff\"><font face=System " +
                     "><table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
                     ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
             statData.append(getThreads() == null ? 0 : getThreads().getNodeCount());

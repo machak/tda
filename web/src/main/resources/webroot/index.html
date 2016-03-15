@@ -15,7 +15,7 @@
     <div class="container">
       <div class="left">
         <div class="left-body">
-          <div js-tree="treeConfig"  ng-model="treeData" data-tree-events="changed:changed">
+          <div js-tree="treeConfig"  ng-model="treeData" data-tree="treeInstance" data-tree-events="changed:changed">
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
 
         </div>
       </div>
-      <div class="bottom" ng-view="bottom">
+      <div class="bottom">
         <div class="bottom-body" ng-bind-html="selectedContent | sanitize">[html]</div>
       </div>
     </div>
