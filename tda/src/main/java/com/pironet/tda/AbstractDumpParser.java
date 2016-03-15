@@ -50,6 +50,7 @@ import org.apache.commons.io.IOUtils;
  */
 public abstract class AbstractDumpParser implements DumpParser {
     private static final Pattern MONITOR_PATTERN = Pattern.compile("monitor://");
+    private final Context context;
     private BufferedReader bis = null;
 
     private int markSize = 16384;
@@ -58,7 +59,8 @@ public abstract class AbstractDumpParser implements DumpParser {
     private DateMatcher dm = null;
 
 
-    protected AbstractDumpParser(BufferedReader bis, DateMatcher dm) {
+    protected AbstractDumpParser(final Context context, BufferedReader bis, DateMatcher dm) {
+        this.context = context;
         maxCheckLines = PrefManager.get().getMaxRows();
         markSize = PrefManager.get().getStreamResetBuffer();
         millisTimeStamp = PrefManager.get().getMillisTimeStamp();
@@ -421,5 +423,10 @@ public abstract class AbstractDumpParser implements DumpParser {
                 threadDump.add(new DefaultMutableTreeNode(cat));
             }
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return context;
     }
 }

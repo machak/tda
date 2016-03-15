@@ -1323,7 +1323,7 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
                 dumpMap = new HashMap<>();
                 dumpStore.addFileToDumpFiles(fileName, dumpMap);
             }
-            dp = DumpParserFactory.get().getDumpParserForLogfile(dumpFileStream, dumpMap, runningAsJConsolePlugin,
+            dp = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), dumpFileStream, dumpMap, runningAsJConsolePlugin,
                     dumpCounter);
             ((Logfile)top.getUserObject()).setUsedParser(dp);
 

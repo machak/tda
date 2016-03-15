@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -70,8 +71,8 @@ public class SunJDKParser extends AbstractDumpParser {
     /**
      * Creates a new instance of SunJDKParser
      */
-    public SunJDKParser(BufferedReader bis, Map<String, Map<String, String>> threadStore, int lineCounter, boolean withCurrentTimeStamp, int startCounter, DateMatcher dm) {
-        super(bis, dm);
+    public SunJDKParser(final Context context, BufferedReader bis, Map<String, Map<String, String>> threadStore, int lineCounter, boolean withCurrentTimeStamp, int startCounter, DateMatcher dm) {
+        super(context, bis, dm);
         this.threadStore = threadStore;
         this.withCurrentTimeStamp = withCurrentTimeStamp;
         this.lineCounter = lineCounter;
@@ -786,7 +787,7 @@ public class SunJDKParser extends AbstractDumpParser {
 
             for (Iterator iter2 = mmap.iterOfKeys(); iter2.hasNext(); ) {
                 String monitor2 = (String)iter2.next();
-                if (monitor1 == monitor2) {
+                if (Objects.equals(monitor1, monitor2)) {
                     continue;
                 }
 

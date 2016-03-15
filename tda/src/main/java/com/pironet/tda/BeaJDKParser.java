@@ -34,8 +34,6 @@ import javax.swing.tree.MutableTreeNode;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
 
-import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte0.waiting;
-
 /**
  * Parses Bea/JRockit Thread Dumps
  *
@@ -44,7 +42,6 @@ import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStat
 public class BeaJDKParser extends AbstractDumpParser {
     private static final Pattern AT_PATTERN = Pattern.compile("@");
     private MutableTreeNode nextDump = null;
-    private Map threadStore = null;
     private int counter = 1; // Number of the thread dump
     private int lineCounter = 0;
     // private boolean foundClassHistograms = false;
@@ -53,9 +50,8 @@ public class BeaJDKParser extends AbstractDumpParser {
     /**
      * constructs a new instance of a bea jdk parser
      */
-    public BeaJDKParser(BufferedReader bis, Map threadStore, int lineCounter, DateMatcher dm) {
-        super(bis, dm);
-        this.threadStore = threadStore;
+    public BeaJDKParser(final Context context, BufferedReader bis, Map threadStore, int lineCounter, DateMatcher dm) {
+        super(context, bis, dm);
         this.lineCounter = lineCounter;
     }
 
@@ -129,24 +125,14 @@ public class BeaJDKParser extends AbstractDumpParser {
                                 content.append("</pre></pre>");
                                 addToCategory(catThreads, title, null, stringContent, singleLineCounter, true);
                             }
-                            if (wContent != null) {
-                                wContent.append("</b><hr>");
-                                addToCategory(catWaiting, title, null, stringContent, singleLineCounter, true);
-                                wContent = null;
-                            }
                             if (sContent != null) {
                                 sContent.append("</b><hr>");
                                 addToCategory(catSleeping, title, null, stringContent, singleLineCounter, true);
                                 sContent = null;
                             }
-                            if (lContent != null) {
-                                lContent.append("</b><hr>");
-                                addToCategory(catLocking, title, null, stringContent, singleLineCounter, true);
-                                lContent = null;
-                            }
                             singleLineCounter = 0;
                             while (!monitorStack.empty()) {
-                                mmap.parseAndAddThread((String)monitorStack.pop(), title, content.toString());
+                                mmap.parseAndAddThread(monitorStack.pop(), title, content.toString());
                             }
 
                             title = line;

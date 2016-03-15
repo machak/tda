@@ -63,13 +63,16 @@ public final class DumpParserFactory {
      * parses the given logfile for thread dumps and return a proper jdk parser (either for Sun VM's or
      * for JRockit/Bea VM's) and initializes the DumpParser with the stream.
      *
+     *
+     * @param context
      * @param dumpFileStream       the file stream to use for dump parsing.
      * @param threadStore          the map to store the found thread dumps.
      * @param withCurrentTimeStamp only used by SunJDKParser for running in JConsole-Plugin-Mode,  it then uses
      *                             the current time stamp instead of a parsed one.
      * @return a proper dump parser for the given log file, null if no proper parser was found.
      */
-    public DumpParser getDumpParserForLogfile(InputStream dumpFileStream, Map<String, Map<String, String>> threadStore, boolean withCurrentTimeStamp, int startCounter) {
+    public DumpParser getDumpParserForLogfile(final Context context, InputStream dumpFileStream, Map<String, Map<String, String>> threadStore, boolean withCurrentTimeStamp, int startCounter) {
+
         int readAheadLimit = PrefManager.get().getStreamResetBuffer();
         DumpParser currentDumpParser = null;
 
@@ -84,11 +87,11 @@ public final class DumpParserFactory {
                 String line = bis.readLine();
                 dm.checkForDateMatch(line);
                 if (WrappedSunJDKParser.checkForSupportedThreadDump(line)) {
-                    currentDumpParser = new WrappedSunJDKParser(bis, threadStore, lineCounter, withCurrentTimeStamp, startCounter, dm);
+                    currentDumpParser = new WrappedSunJDKParser(context, bis, threadStore, lineCounter, withCurrentTimeStamp, startCounter, dm);
                 } else if (SunJDKParser.checkForSupportedThreadDump(line)) {
-                    currentDumpParser = new SunJDKParser(bis, threadStore, lineCounter, withCurrentTimeStamp, startCounter, dm);
+                    currentDumpParser = new SunJDKParser(context, bis, threadStore, lineCounter, withCurrentTimeStamp, startCounter, dm);
                 } else if (BeaJDKParser.checkForSupportedThreadDump(line)) {
-                    currentDumpParser = new BeaJDKParser(bis, threadStore, lineCounter, dm);
+                    currentDumpParser = new BeaJDKParser(context, bis, threadStore, lineCounter, dm);
                 }
                 lineCounter++;
             }

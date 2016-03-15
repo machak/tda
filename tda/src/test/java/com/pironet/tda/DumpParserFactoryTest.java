@@ -21,7 +21,6 @@
  */
 package com.pironet.tda;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
@@ -68,7 +67,7 @@ public class DumpParserFactoryTest extends TestCase {
         Map<String, Map<String, String>> threadStore = null;
         DumpParserFactory instance = DumpParserFactory.get();
 
-        DumpParser result = instance.getDumpParserForLogfile(dumpFileStream, threadStore, false, 0);
+        DumpParser result = instance.getDumpParserForLogfile(new Context(Context.ENV.WEB), dumpFileStream, threadStore, false, 0);
         assertNotNull(result);
 
         assertTrue(result instanceof com.pironet.tda.SunJDKParser);
@@ -83,7 +82,7 @@ public class DumpParserFactoryTest extends TestCase {
 
         DumpParserFactory instance = DumpParserFactory.get();
 
-        DumpParser result = instance.getDumpParserForLogfile(dumpFileStream, null, false, 0);
+        DumpParser result = instance.getDumpParserForLogfile(new Context(Context.ENV.WEB), dumpFileStream, null, false, 0);
         assertNotNull(result);
 
         assertTrue(result instanceof com.pironet.tda.BeaJDKParser);

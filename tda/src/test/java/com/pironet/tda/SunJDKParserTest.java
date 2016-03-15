@@ -21,8 +21,6 @@
  */
 package com.pironet.tda;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -72,7 +70,7 @@ public class SunJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/test.log");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
 
@@ -98,7 +96,7 @@ public class SunJDKParserTest extends TestCase {
         try {
             fis = getClass().getResourceAsStream("/data/testwithhistogram.log");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             Vector<MutableTreeNode> topNodes = new Vector<>();
             while (instance.hasMoreDumps()) {
@@ -123,7 +121,7 @@ public class SunJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/test64bit.log");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
 
@@ -148,7 +146,7 @@ public class SunJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/sapdump.log");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
 
@@ -173,7 +171,7 @@ public class SunJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/hpdump.log");
             final Map<String, Map<String, String>> dumpMap = new HashMap<>();
             List<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
 
@@ -198,7 +196,7 @@ public class SunJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/visualvmremote.log");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
 
@@ -223,7 +221,7 @@ public class SunJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/urlthread.log");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof SunJDKParser);
 

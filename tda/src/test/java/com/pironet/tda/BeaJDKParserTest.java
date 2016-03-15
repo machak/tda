@@ -20,8 +20,6 @@
 
 package com.pironet.tda;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -70,7 +68,7 @@ public class BeaJDKParserTest extends TestCase {
             fis = getClass().getResourceAsStream("/data/jrockit_15_dump.txt");
             Map<String, Map<String, String>> dumpMap = new HashMap<>();
             Vector<MutableTreeNode> topNodes = new Vector<>();
-            instance = DumpParserFactory.get().getDumpParserForLogfile(fis, dumpMap, false, 0);
+            instance = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), fis, dumpMap, false, 0);
 
             assertTrue(instance instanceof BeaJDKParser);
 

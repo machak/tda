@@ -50,4 +50,6 @@ public interface DumpParser extends Closeable {
     void parseLoggcFile(InputStream loggcFileStream, DefaultMutableTreeNode root);
 
     void setDumpHistogramCounter(int value);
+
+    Context getContext();
 }

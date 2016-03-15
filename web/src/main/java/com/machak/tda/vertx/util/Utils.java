@@ -9,6 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.machak.tda.vertx.model.Tree;
+import com.pironet.tda.Context;
 import com.pironet.tda.DumpParser;
 import com.pironet.tda.DumpParserFactory;
 
@@ -42,7 +43,7 @@ public final class Utils {
         final Map<String, Map<String, String>> dumpMap = new HashMap<>();
         final int dumpCounter = 0;
         final InputStream stream = clazz.getResourceAsStream(resourcePath);
-        final DumpParser dp = DumpParserFactory.get().getDumpParserForLogfile(stream, dumpMap, false, dumpCounter);
+        final DumpParser dp = DumpParserFactory.get().getDumpParserForLogfile(new Context(Context.ENV.WEB), stream, dumpMap, false, dumpCounter);
         final DefaultMutableTreeNode node = new DefaultMutableTreeNode();
         while ((dp != null) && dp.hasMoreDumps()) {
             node.add(dp.parseNext());
