@@ -2,10 +2,31 @@
 
 package com.machak.tda.vertx.model;
 
+import com.pironet.tda.ThreadInfo;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 public class NodeInfo {
-   private String threadId;
-   private String title;
-   private String threadState;
+    private static final Logger log = LogManager.getLogger(NodeInfo.class);
+    private String threadId;
+    private String title;
+    private String threadState;
+
+    public NodeInfo(final ThreadInfo threadInfo) {
+        if (threadInfo != null) {
+            final String[] tokens = threadInfo.getTokens();
+            if (tokens != null && tokens.length == 3) {
+                title = tokens[0];
+                threadId = tokens[1];
+                threadState = tokens[2];
+            } else {
+                log.warn("Invalid tokens {}", (Object[])tokens);
+            }
+
+        }
+    }
 
     public String getThreadId() {
         return threadId;

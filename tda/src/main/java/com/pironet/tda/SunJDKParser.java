@@ -234,7 +234,11 @@ public class SunJDKParser extends AbstractDumpParser {
                             // Second, initialize state for this new thread
                             title = line;
                             content = new StringBuffer(Const.BUFFER_CAPACITY);
-                            content.append("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
+                            if (getContext().getEnvironment() == Context.ENV.DESKTOP) {
+                                content.append("<body bgcolor=\"ffffff\"><pre><font size=" + TDA.getFontSizeModifier(-1) + '>');
+                            }else{
+                                content.append("<pre>");
+                            }
                             content.append(line);
                             content.append('\n');
                         } else if (line.contains("at ")) {

@@ -1,4 +1,4 @@
-function rightInfo(){
+function rightInfo() {
   console.log("global");
 }
 (function() {
@@ -6,7 +6,7 @@ function rightInfo(){
   angular.module('tda.module', [
         'ngRoute', 'nvd3', 'flow', 'ngDialog',
         'ngNotificationsBar', 'ngSanitize',
-        'dragularModule', 'ngJsTree' ,'angularResizable'
+        'dragularModule', 'ngJsTree', 'angularResizable'
       ])
       .config(function($provide, $routeProvider, $httpProvider) {
         $routeProvider
@@ -52,13 +52,32 @@ function rightInfo(){
             var children = original.target.children[0].children;
             $scope.selectedRight = "";
             $scope.rightReferences = [];
-            for (var i = 0; i < children.length; i++) {
+            var length = children.length;
+            for (var i = 0; i < length; i++) {
               var child = children[i];
-              //console.log(child);
-              $scope.rightReferences[i] = child.children ? child.children[0].content : "";
-              $scope.selectedRight += "<div><a data-ng-click=\"rightInfo(" + i + ")\" >";
-              $scope.selectedRight += child.text;
-              $scope.selectedRight += "</a></div>";
+              var rawData = child.children[0];
+              var nodeInfo = child.nodeInfo;
+              if (nodeInfo) {
+                if (i == 0) {
+                  $scope.selectedRight += "<table class='thread-table'>"
+                }
+                $scope.rightReferences[i] = child.children ? rawData.content : "";
+                $scope.selectedRight += "<tr><td class='col-thread-title' data-ng-click=\"rightInfo(" + i + ")\" >";
+                $scope.selectedRight += nodeInfo.title + "</td>";
+                $scope.selectedRight += "<td class='col-thread-id'>" + nodeInfo.threadId + "</td>";
+                $scope.selectedRight += "<td class='col-thread-state'>" + nodeInfo.threadState + "</td>";
+                $scope.selectedRight += "</tr>";
+                if (i == length - 1) {
+
+                  $scope.selectedRight += "</table>"
+                }
+              } else {
+
+                $scope.rightReferences[i] = child.children ? rawData.content : "";
+                $scope.selectedRight += "<div><a data-ng-click=\"rightInfo(" + i + ")\" >";
+                $scope.selectedRight += child.text;
+                $scope.selectedRight += "</a></div>";
+              }
             }
             $scope.selectedContent = "";
             $scope.$apply();
@@ -75,8 +94,6 @@ function rightInfo(){
           $scope.$apply();
         };
         $scope.rightInfo = function(idx) {
-          console.log("====================");
-          console.log(idx);
           $scope.selectedContent = $scope.rightReferences[idx];
         };
         $scope.trust = function(data) {

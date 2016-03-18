@@ -77,10 +77,17 @@ public class TreeNode {
             final Enumeration children = rootNode.children();
             while (children.hasMoreElements()) {
                 final DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)children.nextElement();
-                addNode(new TreeNode(treeNode));
+                final TreeNode node = new TreeNode(treeNode);
+                addNode(node);
+                final ThreadInfo threadInfo = (ThreadInfo)treeNode.getUserObject();
+
+                final NodeInfo nodeInfo = new NodeInfo(threadInfo);
+                node.setNodeInfo(nodeInfo);
+                log.info("nodeInfo {}", nodeInfo);
             }
 
         }
+
         log.info("category {}", category);
     }
 
@@ -146,6 +153,14 @@ public class TreeNode {
 
     public void setOverview(final String overview) {
         this.overview = overview;
+    }
+
+    public NodeInfo getNodeInfo() {
+        return nodeInfo;
+    }
+
+    public void setNodeInfo(final NodeInfo nodeInfo) {
+        this.nodeInfo = nodeInfo;
     }
 
     @Override
