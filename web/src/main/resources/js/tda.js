@@ -6,7 +6,7 @@ function rightInfo(){
   angular.module('tda.module', [
         'ngRoute', 'nvd3', 'flow', 'ngDialog',
         'ngNotificationsBar', 'ngSanitize',
-        'dragularModule', 'ngJsTree'
+        'dragularModule', 'ngJsTree' ,'angularResizable'
       ])
       .config(function($provide, $routeProvider, $httpProvider) {
         $routeProvider

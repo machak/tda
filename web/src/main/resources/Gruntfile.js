@@ -26,6 +26,7 @@ module.exports = function(grunt) {
           'd3.js': 'd3/d3.min.js',
           'angular-tree-control.js': 'angular-tree-control/angular-tree-control.js',
           'jstree.js': 'jstree/dist/jstree.min.js',
+          'angular-resizable.js': 'angular-resizable/angular-resizable.min.js',
           'ngJsTree.js': 'ng-js-tree/dist/ngJsTree.min.js'
         }
       }
@@ -60,7 +61,8 @@ module.exports = function(grunt) {
           'js/angularjs-datepicker.js',
           'js/notification-bar.js',
           'js/jstree.js',
-          'js/ngJsTree.js'
+          'js/ngJsTree.js',
+          'js/angular-resizable.js'
 
 
           /*'js/loading-bar.js',*/
