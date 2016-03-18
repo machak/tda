@@ -1,3 +1,6 @@
+function rightInfo(){
+  console.log("global");
+}
 (function() {
   "use strict";
   angular.module('tda.module', [
@@ -15,7 +18,7 @@
         })
       })
 
-      .controller('HomeCtrl', function($scope, $sce, ngDialog, $rootScope, $http, $log) {
+      .controller('HomeCtrl', function($scope, $sce, ngDialog, $rootScope, $http, $log, $compile) {
         $scope.allData = [];
         $scope.header = "TDA";
         $scope.selectedContent = "bottom";
@@ -51,9 +54,9 @@
             $scope.rightReferences = [];
             for (var i = 0; i < children.length; i++) {
               var child = children[i];
-              console.log(child);
+              //console.log(child);
               $scope.rightReferences[i] = child.children ? child.children[0].content : "";
-              $scope.selectedRight += "<div><a href='javascript:void(0)' ng-click=\"rightInfo(" + i + ")\" >";
+              $scope.selectedRight += "<div><a data-ng-click=\"rightInfo(" + i + ")\" >";
               $scope.selectedRight += child.text;
               $scope.selectedRight += "</a></div>";
             }
@@ -72,13 +75,13 @@
           $scope.$apply();
         };
         $scope.rightInfo = function(idx) {
+          console.log("====================");
           console.log(idx);
           $scope.selectedContent = $scope.rightReferences[idx];
         };
         $scope.trust = function(data) {
           return $sce.trustAsHtml(data);
         };
-
         $http.get("/api/tree").then(function(response) {
           console.log(response.data);
           $scope.allData = response.data.children;
@@ -110,6 +113,20 @@
     return function(htmlCode) {
       return $sce.trustAsHtml(htmlCode);
     }
-  })
+  }).directive('compile', [
+    '$compile', function($compile) {
+      return function(scope, element, attrs) {
+        scope.$watch(
+            function(scope) {
+              return scope.$eval(attrs.compile);
+            },
+            function(value) {
+              element.html(value);
+              $compile(element.contents())(scope);
+            }
+        )
+      };
+    }
+  ])
 
 })();

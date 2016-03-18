@@ -3,12 +3,19 @@ body {
   padding: 20px 0 0;
 }
 
+a {
+  color: #0a6aa1;
+  height: 25px;
+  cursor: pointer;
+}
+
 .left, .right {
   display: flex;
   height: 25%;
   max-height: 25% !important;
   overflow: scroll;
 }
+
 .left {
   float: left;
   width: 35%;
@@ -18,7 +25,7 @@ body {
 .right {
   float: right;
   width: 65%;
-  margin:0;
+  margin: 0;
 }
 
 .bottom {
@@ -27,20 +34,21 @@ body {
   min-height: 100px;
   height: 100px;
 }
-.bottom-body{
+
+.bottom-body {
   min-height: 100px;
   height: 100px;
 }
 
 .left-body {
-  background-color: #fff;
+  background-color: #ffffff;
 }
 
 .right-body {
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 10px;
 }
 
 .bottom-body {
-  background-color: #fff;
+  background-color: #ffffff;
 }

@@ -28,6 +28,7 @@ public class TreeNode {
     private String id;
     private List<TreeNode> children = new ArrayList<>();
     private static boolean added = false;
+    private NodeInfo nodeInfo;
 
     public TreeNode() {
         this.id = "id" + next++;

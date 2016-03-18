@@ -11,19 +11,19 @@
     <script src="js/common.js"></script>
     <script src="js/tda.js"></script>
   </head>
-  <body  data-ng-cloak="" ng-controller="HomeCtrl">
+  <body  data-ng-cloak="" data-ng-controller="HomeCtrl">
     <div class="container">
       <div class="left">
         <div class="left-body">
-          <div js-tree="treeConfig"  ng-model="treeData" data-tree="treeInstance" data-tree-events="changed:changed">
+          <div js-tree="treeConfig"  data-ng-model="treeData" data-tree="treeInstance" data-tree-events="changed:changed">
           </div>
         </div>
       </div>
       <div class="right">
-        <div class="right-body" ng-bind-html="selectedRight | sanitize">[html]></div>
+        <div class="right-body" data-compile="selectedRight">[html]></div>
       </div>
       <div class="bottom">
-        <div class="bottom-body" ng-bind-html="selectedContent | sanitize">[html]</div>
+        <div class="bottom-body" data-ng-bind-html="selectedContent | sanitize">[html]</div>
       </div>
     </div>
   </body>
