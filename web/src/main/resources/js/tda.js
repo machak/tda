@@ -18,7 +18,8 @@
       .controller('HomeCtrl', function($scope, $sce, ngDialog, $rootScope, $http, $log) {
         $scope.allData = [];
         $scope.header = "TDA";
-        $scope.selectedContent = "selected";
+        $scope.selectedContent = "bottom";
+        $scope.selectedRight = "right";
         $scope.treeConfig = {
           core: {
             multiple: false,
@@ -37,10 +38,29 @@
           console.log("Load sleeping threads");
           console.log("==============================");
         };
+
         $scope.changed = function(e, data) {
           console.log(data);
           data.instance.toggle_node(data.node);
           var original = data.node.original;
+          if (original.target) {
+            console.log("target");
+            console.log(original.target);
+            var children = original.target.children[0].children;
+            $scope.selectedRight = "";
+            $scope.rightReferences = [];
+            for (var i = 0; i < children.length; i++) {
+              var child = children[i];
+              console.log(child);
+              $scope.rightReferences[i] = child.children ? child.children[0].content : "";
+              $scope.selectedRight += "<div><a href='javascript:void(0)' ng-click=\"rightInfo(" + i + ")\" >";
+              $scope.selectedRight += child.text;
+              $scope.selectedRight += "</a></div>";
+            }
+            $scope.selectedContent = "";
+            $scope.$apply();
+            return;
+          }
           if (original.overview) {
             $scope.selectedContent = original.overview;
           }
@@ -50,6 +70,10 @@
             $scope.selectedContent = data.node.text;
           }
           $scope.$apply();
+        };
+        $scope.rightInfo = function(idx) {
+          console.log(idx);
+          $scope.selectedContent = $scope.rightReferences[idx];
         };
         $scope.trust = function(data) {
           return $sce.trustAsHtml(data);
@@ -63,7 +87,7 @@
           // display only first level
           for (var i = 0; i < length; i++) {
             console.log($scope.allData[i]);
-            var root = {'text': $scope.allData[i].text,'overview': $scope.allData[i].overview};
+            var root = {'text': $scope.allData[i].text, 'overview': $scope.allData[i].overview};
             $scope.treeData.push(root);
             var children = $scope.allData[i].children;
             root.children = [];

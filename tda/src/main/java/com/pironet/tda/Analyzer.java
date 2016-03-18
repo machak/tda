@@ -68,18 +68,18 @@ public class Analyzer implements Serializable {
         // check if a lot of threads are in state "waiting"
         if ((deadlocks == 0) && (threadCount > 0) && ((waiting / (threadCount / 100.0)) > 10.0)) {
             statData.append("<tr bgcolor=\"#ffffff\"<td></td></tr>");
-            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System " + "><p>").append((int)(waiting / (threadCount / 100.0))).append("% of all threads are waiting for a monitor to become available again.</p><br>");
+            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=3><font face=System " + "><p>").append((int)(waiting / (threadCount / 100.0))).append("% of all threads are waiting for a monitor to become available again.</p><br>");
             statData.append("This might indicate a congestion or even a deadlock. If a monitor doesn't have a locking thread, it might be<br>");
             statData.append("hold by some external resource or system thread. You should check the <a href=\"wait://\">waiting threads</a>.<br></td></tr>");
         } else if (deadlocks > 0) {
             statData.append("<tr bgcolor=\"#ffffff\"<td></td></tr>");
-            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System " + "><p>The JVM has detected ").append(deadlocks).append(" deadlock(s) in the thread dump. You should check the <br><a href=\"dead://\">deadlocks</a> for further information.</p><br>");
+            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=3><font face=System " + "><p>The JVM has detected ").append(deadlocks).append(" deadlock(s) in the thread dump. You should check the <br><a href=\"dead://\">deadlocks</a> for further information.</p><br>");
         }
 
         // check if a lot of threads are in state "waiting"
         if ((threadCount > 0) && ((sleeping / (threadCount / 100.0)) > 25.0)) {
             statData.append("<tr bgcolor=\"#ffffff\"<td></td></tr>");
-            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System" + "><p>").append((int)(sleeping / (threadCount / 100.0))).append("% of all threads are sleeping on a monitor.</p><br>");
+            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=3><font face=System" + "><p>").append((int)(sleeping / (threadCount / 100.0))).append("% of all threads are sleeping on a monitor.</p><br>");
             statData.append("This might indicate they are waiting for some external resource (e.g. database) which is overloaded<br>");
             statData.append("or not available or are just waiting to get to do something (idle threads).<br>");
             if (context.getEnvironment() == Context.ENV.DESKTOP) {
@@ -92,7 +92,7 @@ public class Analyzer implements Serializable {
         // display an info if there are monitors without locking threads
         if (monitorsWithoutLocksCount > 0) {
             statData.append("<tr bgcolor=\"#ffffff\"<td></td></tr>");
-            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System" +
+            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=3><font face=System" +
                     "><p>This thread dump contains monitors without a locking thread information.<br>");
             statData.append("This means, the monitor is hold by a system thread or some external resource.</p<br>");
             statData.append("You should check the monitors without locking threads for more information.<br></td></tr>");
@@ -101,7 +101,7 @@ public class Analyzer implements Serializable {
         // check for indications for running garbage collector
         if ((threadCount > 0) && (overallThreadsWaitingWithoutLocks / (threadCount / 100.0) > 50.0)) {
             statData.append("<tr bgcolor=\"#ffffff\"<td></td></tr>");
-            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=2><font face=System " + "<p>").append((int)(overallThreadsWaitingWithoutLocks / (threadCount / 100.0))).append("% of all threads are waiting for a monitor without a application ");
+            statData.append("<tr bgcolor=\"#cccccc\"><td colspan=3><font face=System " + "<p>").append((int)(overallThreadsWaitingWithoutLocks / (threadCount / 100.0))).append("% of all threads are waiting for a monitor without a application ");
             statData.append("thread holding it.<br> This indicates a congestion. It is very likely the garbage collector is running ");
             statData.append("and is blocking the monitors.</p<br>");
             statData.append("You should check the monitors without locking threads for more information on the blocked threads.<br>");

@@ -132,8 +132,8 @@ public class ThreadDumpInfo extends AbstractInfo {
             setOverview(statData.toString());
         }else*/ {
             StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
-             statData.append("<body width=100% bgcolor=\"#ffffff\"><font face=System " +
-                    "><table border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
+             statData.append("<body  bgcolor=\"#ffffff\"><font face=System " +
+                    "><table width=100% border=0><tr bgcolor=\"#dddddd\"><td><font face=System " +
                     ">Overall Thread Count</td><td width=\"150\"></td><td><b><font face=System>");
             statData.append(getThreads() == null ? 0 : getThreads().getNodeCount());
             statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td><font face=System" +
@@ -179,7 +179,7 @@ public class ThreadDumpInfo extends AbstractInfo {
      */
     public static String getMonitorInfo(int locks, int waits, int sleeps) {
         StringBuilder statData = new StringBuilder(Const.BUFFER_CAPACITY);
-        statData.append("<body bgcolor=\"ffffff\"><table border=0 bgcolor=\"#dddddd\"><tr><td><font face=System" +
+        statData.append("<body bgcolor=\"ffffff\"><table width=\"100%\" border=0 bgcolor=\"#dddddd\"><tr><td><font face=System" +
                 ">Threads locking monitor</td><td><b><font face=System>");
         statData.append(locks);
         statData.append("</b></td></tr>\n\n<tr bgcolor=\"#eeeeee\"><td>");

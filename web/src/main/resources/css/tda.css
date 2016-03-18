@@ -3,14 +3,22 @@ body {
   padding: 20px 0 0;
 }
 
+.left, .right {
+  display: flex;
+  height: 25%;
+  max-height: 25% !important;
+  overflow: scroll;
+}
 .left {
   float: left;
   width: 35%;
+
 }
 
 .right {
   float: right;
   width: 65%;
+  margin:0;
 }
 
 .bottom {
@@ -25,13 +33,14 @@ body {
 }
 
 .left-body {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .right-body {
-  background-color: #2ca02c;
+  background-color: #fff;
+  padding: 10px;
 }
 
 .bottom-body {
-  background-color: #0b97c4;
+  background-color: #fff;
 }
