@@ -107,9 +107,9 @@ main {
 
 .row.resizable {
   -webkit-box-flex: 0;
-  -webkit-flex: 0 0 300px;
-  -ms-flex: 0 0 300px;
-  flex: 0 0 300px;
+  -webkit-flex: 0 0 450px;
+  -ms-flex: 0 0 450px;
+  flex: 0 0 450px;
 }
 
 section {
@@ -124,9 +124,9 @@ section {
 
 section.resizable {
   -webkit-box-flex: 0;
-  -webkit-flex: 0 0 300px;
-  -ms-flex: 0 0 300px;
-  flex: 0 0 300px;
+  -webkit-flex: 0 0 450px;
+  -ms-flex: 0 0 450px;
+  flex: 0 0 450px;
 }
 
 .resizable {
@@ -211,6 +211,8 @@ section.resizable {
 
 
 .left{
-  width: 300px;
-  min-width: 300px;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 450px;
+  -ms-flex: 0 0 450px;
+  flex: 0 0 450px;
 }
