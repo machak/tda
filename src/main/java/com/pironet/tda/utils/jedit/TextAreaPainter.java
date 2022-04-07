@@ -25,6 +25,7 @@ import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 import javax.swing.text.Utilities;
 
+
 /**
  * The text area repaint manager. It performs double buffering and paints
  * lines of text.

@@ -67,30 +67,7 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.KeyStroke;
-import javax.swing.ProgressMonitorInputStream;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
@@ -2293,6 +2270,11 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
      * event-dispatching thread.
      */
     private static void createAndShowGUI() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            // ignore
+        }
         //Create and set up the window.
         frame = new JFrame("TDA - Thread Dump Analyzer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -2335,8 +2317,11 @@ public class TDA extends JPanel implements ListSelectionListener, TreeSelectionL
 
         frame.setLocation(PrefManager.get().getWindowPos());
 
-        //Display the window.
+        final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.pack();
+        frame.setSize(screenSize.width, screenSize.height);
+        //Display the window.
+
 
         // restore old window settings.
         frame.setExtendedState(PrefManager.get().getWindowState());

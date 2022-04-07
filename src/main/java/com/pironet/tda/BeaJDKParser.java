@@ -34,7 +34,6 @@ import javax.swing.tree.MutableTreeNode;
 import com.pironet.tda.utils.DateMatcher;
 import com.pironet.tda.utils.IconFactory;
 
-import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte0.waiting;
 
 /**
  * Parses Bea/JRockit Thread Dumps
@@ -172,7 +171,7 @@ public class BeaJDKParser extends AbstractDumpParser {
             } catch (Exception e) {
                 System.out.println(e.toString());
             }
-        } while (retry); // Keep parsing until we get a full thread dump, or the file ends 
+        } while (retry); // Keep parsing until we get a full thread dump, or the file ends
         return (null);
         // throw new UnsupportedOperationException("Not supported yet.");
     }

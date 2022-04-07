@@ -1,6 +1,6 @@
 /*
  * ThreadsTableModel.java
-  *
+ *
  * This file is part of TDA - Thread Dump Analysis Tool.
  *
  * TDA is free software; you can redistribute it and/or modify
@@ -28,7 +28,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.pironet.tda.ThreadInfo;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 /**
  * table model for displaying thread overview.
@@ -47,9 +46,9 @@ public class ThreadsTableModel extends AbstractTableModel {
         if (rootNode != null) {
             elements = new Vector<>();
             for (int i = 0; i < rootNode.getChildCount(); i++) {
-                DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)rootNode.getChildAt(i);
+                DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) rootNode.getChildAt(i);
                 elements.add(childNode.getUserObject());
-                ThreadInfo ti = (ThreadInfo)childNode.getUserObject();
+                ThreadInfo ti = (ThreadInfo) childNode.getUserObject();
                 if (columnNames == null) {
                     if (ti.getTokens().length > 3) {
                         columnNames = new String[]{"Name", "Type", "Prio", "Thread-ID", "Native-ID", "State", "Address Range"};
@@ -74,7 +73,7 @@ public class ThreadsTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ThreadInfo ti = ((ThreadInfo)elements.elementAt(rowIndex));
+        ThreadInfo ti = ((ThreadInfo) elements.elementAt(rowIndex));
         String[] columns = ti.getTokens();
         if (getColumnCount() > 3) {
             if (columnIndex > 1 && columnIndex < 5) {
@@ -109,7 +108,7 @@ public class ThreadsTableModel extends AbstractTableModel {
      * @return thread info object at this line.
      */
     public ThreadInfo getInfoObjectAtRow(int rowIndex) {
-        return (rowIndex >= 0 && rowIndex < getRowCount() ? (ThreadInfo)elements.get(rowIndex) : null);
+        return (rowIndex >= 0 && rowIndex < getRowCount() ? (ThreadInfo) elements.get(rowIndex) : null);
     }
 
 
